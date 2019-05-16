@@ -15,8 +15,15 @@ class login: AppCompatActivity() {
 
     fun init(){
         login.setOnClickListener{
+
+            val id = identifier.text.toString()
+            val ps = password.text.toString()
+
+            // 이부분에 if문으로 파이어폭스 접근
+            //아이디 확인
+
             val intent = Intent(this,MainActivity::class.java)
-            intent.putExtra("User","")
+            intent.putExtra("User",id) //현재 사용중인 유저가 누구인가??
             startActivity(intent)
         }
     }
