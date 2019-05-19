@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context=".MainFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-            android:gravity="center"
+             tools:context=".MainFragment"
+             android:orientation="vertical"
+              android:clickable="true"
+              android:focusableInTouchMode="true">
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:text="위쪽 공간"/>
+    <AutoCompleteTextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment"/>
-
-</FrameLayout>
+            android:layout_height="wrap_content"
+              android:id="@+id/search"
+            android:completionThreshold="1"
+            android:layout_margin="20dp"
+            android:paddingLeft="10dp"/>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:text="아래쪽 공간"/>
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/review_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+</LinearLayout>
