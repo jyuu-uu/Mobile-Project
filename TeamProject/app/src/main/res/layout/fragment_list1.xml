@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context=".List1Fragment">
-
-    <!-- TODO: Update blank fragment layout -->
+             tools:context=".List1Fragment"
+android:orientation="vertical">
     <TextView
+            android:text="간단 일정"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment"/>
-
-</FrameLayout>
+            android:layout_height="wrap_content" android:id="@+id/textView15" android:textSize="30sp"
+            android:layout_marginTop="50dp"/>
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/list1View"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+</LinearLayout>

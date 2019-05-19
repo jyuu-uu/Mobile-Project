@@ -45,6 +45,7 @@ class ListActivity : AppCompatActivity() {
         listView.setOnItemClickListener { parent, view, position, id ->
             val w=parent.getItemAtPosition(position) as MyTravel    //클릭한 여행
             var intent0 = Intent(this, ListDetailActivity::class.java)
+            intent0.putExtra("tno",w.tno)
             startActivity(intent0)
             //Toast.makeText(this,w.period,Toast.LENGTH_SHORT).show() //걍 잘받아졌는지 확인하려고..
         }
