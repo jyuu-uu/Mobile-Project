@@ -68,9 +68,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.bookmark -> {
 
             }
-            R.id.nav_manage -> {
+            //R.id.nav_manage -> {
 
-            }
+            //}
             R.id.near_market -> {
 
             }
