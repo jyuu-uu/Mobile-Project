@@ -48,11 +48,10 @@ class ListActivity : AppCompatActivity() {
         }
     }
     fun addTravel(){
-//        addBtn.setOnClickListener {
-//            var intent=Intent(this, addTravelActivity::class.java)
-//            startActivity(intent)
-//
-//        }
+        addBtn.setOnClickListener {
+            var intent=Intent(this, addTravel::class.java)
+            startActivity(intent)
+        }
     }
     fun setItem(list:ArrayList<MyTravel>){
         travels.clear()
