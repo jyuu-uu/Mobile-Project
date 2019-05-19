@@ -59,34 +59,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
+            R.id.my_info -> {
             }
-            R.id.nav_gallery -> {
-
+            R.id.nav_list->{
+                val intent = Intent(this,ListActivity::class.java)
+                startActivity(intent)
             }
-            R.id.nav_slideshow -> {
+            R.id.bookmark -> {
 
             }
             R.id.nav_manage -> {
 
             }
-            R.id.nav_share -> {
+            R.id.near_market -> {
 
             }
-            R.id.nav_send -> {
+            R.id.embassy_phone -> {
 
-            }
-            R.id.nav_list->{
-                val intent = Intent(this,ListActivity::class.java)
-                startActivity(intent)
             }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
-
 
     private var tabLayer: TabLayout?= null
     var User:String?=null
@@ -113,6 +108,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onTabSelected(tab: TabLayout.Tab) {
                   content.currentItem = tab.position}
         })
-
     }
 }

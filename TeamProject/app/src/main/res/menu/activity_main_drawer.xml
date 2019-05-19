@@ -5,37 +5,33 @@
 
     <group android:checkableBehavior="single">
         <item
-                android:id="@+id/nav_camera"
-                android:icon="@drawable/ic_menu_camera"
-                android:title="res->menu"/>
-        <item
-                android:id="@+id/nav_gallery"
-                android:icon="@drawable/ic_menu_gallery"
-                android:title="->acitvity_main_drawer"/>
-        <item
-                android:id="@+id/nav_slideshow"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="에서 변경하기!"/>
-        <item
-                android:id="@+id/nav_manage"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="그룹단위로 묶으면 선이생김"/>
+                android:id="@+id/my_info"
+                android:icon="@drawable/ic_menu_send"
+                android:title="내 정보"/>
         <item
                 android:id="@+id/nav_list"
                 android:icon="@drawable/ic_menu_manage"
                 android:title="내 여행 리스트"/>
+        <item
+                android:id="@+id/bookmark"
+                android:icon="@drawable/ic_menu_share"
+                android:title="후기 : 즐겨찾기"/>
+        <item
+                android:id="@+id/nav_manage"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="그룹단위로 묶으면 선이생김"/>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="도움이 필요해요!">
         <menu>
             <item
-                    android:id="@+id/nav_share"
-                    android:icon="@drawable/ic_menu_share"
-                    android:title="Share"/>
+                    android:id="@+id/near_market"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="근처 마켓 탐색"/>
             <item
-                    android:id="@+id/nav_send"
-                    android:icon="@drawable/ic_menu_send"
-                    android:title="Send"/>
+                    android:id="@+id/embassy_phone"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="대사관 전화번호"/>
         </menu>
     </item>
 

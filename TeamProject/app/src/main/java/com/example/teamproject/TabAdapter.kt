@@ -13,7 +13,7 @@ class TabAdapter(fm: FragmentManager,val num:Int): FragmentPagerAdapter(fm){
     override fun getItem(position: Int): Fragment? {
         when(position){
             0-> return MainFragment()
-            1-> return MainFragment()
+            1-> return MainTripFragment()
         }
         return null
     }
