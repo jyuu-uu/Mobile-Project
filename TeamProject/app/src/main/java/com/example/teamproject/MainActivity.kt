@@ -1,5 +1,6 @@
 package com.example.teamproject
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
@@ -75,6 +76,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_send -> {
 
+            }
+            R.id.nav_list->{
+                val intent = Intent(this,ListActivity::class.java)
+                startActivity(intent)
             }
         }
 
