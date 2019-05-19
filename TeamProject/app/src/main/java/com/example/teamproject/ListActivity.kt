@@ -44,6 +44,8 @@ class ListActivity : AppCompatActivity() {
         //여행 리스트 중 하나 클릭하면 그 여행 정보랑 준비물리스트 보여주는 창으로 넘어감
         listView.setOnItemClickListener { parent, view, position, id ->
             val w=parent.getItemAtPosition(position) as MyTravel    //클릭한 여행
+            var intent0 = Intent(this, ListDetailActivity::class.java)
+            startActivity(intent0)
             //Toast.makeText(this,w.period,Toast.LENGTH_SHORT).show() //걍 잘받아졌는지 확인하려고..
         }
     }
