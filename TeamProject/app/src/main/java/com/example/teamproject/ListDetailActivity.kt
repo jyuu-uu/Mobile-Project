@@ -6,7 +6,7 @@ import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_list_detail.*
-var index=-1
+
 class ListDetailActivity : AppCompatActivity() {
     lateinit var tabLayout:TabLayout
     private val adapter by lazy { TablistAdapter(supportFragmentManager) }
@@ -16,7 +16,7 @@ class ListDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_list_detail)
         var i=intent
         index=i.getIntExtra("tno",-1)
-        //Toast.makeText(this,tno.toString(),Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, index.toString(),Toast.LENGTH_SHORT).show()
 
         init()
     }
