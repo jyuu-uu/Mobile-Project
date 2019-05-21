@@ -16,6 +16,7 @@ class ListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
         init()
+        adapter.notifyDataSetChanged()
         val swipe=findViewById(R.id.swiperefresh) as SwipeRefreshLayout
         swipe.setOnRefreshListener {
             setItem(ArrayList(travels))
