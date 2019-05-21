@@ -86,7 +86,7 @@ class addTravel : AppCompatActivity() {
                 Toast.makeText(this,"빈칸을 모두 채워주세요.",Toast.LENGTH_LONG).show()
             }else{
                 period=period1+" ~ "+period2
-                travels.add(MyTravel(travels.size+1,editWhere.text.toString(),period.toString(),editPeople.text.toString().toInt(),editMoney.toString()))
+                travels.add(MyTravel(travels.size,editWhere.text.toString(),period.toString(),editPeople.text.toString().toInt(),editMoney.toString()))
                 Toast.makeText(this,"여행이 추가되었습니다.",Toast.LENGTH_LONG).show()
                 finish()
             }

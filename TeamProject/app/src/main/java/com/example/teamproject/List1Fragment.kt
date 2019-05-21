@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_list1.*
 
 
@@ -19,6 +20,8 @@ private const val ARG_PARAM2 = "param2"
  *
  */
 class List1Fragment : Fragment() {
+    lateinit var schedules:MutableList<schedule>
+    lateinit var schedule:MutableList<schedule>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,12 +33,24 @@ class List1Fragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        init()
 
+    }
+    fun init(){
+        travels= mutableListOf()
         readData()
-
+        setItem()
     }
 
     fun readData(){
-
+        schedules.add(schedule(0,"1시","자유의여신상"))
+        schedules.add(schedule(1,"5시","동물원"))
+    }
+    fun setItem(){
+        for(i in 0..schedules.size){
+            if(schedules[i].tno==index){
+                schedule.add(schedules[i])
+            }
+        }
     }
 }

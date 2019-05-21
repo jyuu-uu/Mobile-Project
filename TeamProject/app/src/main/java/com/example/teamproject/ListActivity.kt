@@ -9,7 +9,6 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_list.*
 
 lateinit var travels:MutableList<MyTravel>
-
 class ListActivity : AppCompatActivity() {
     lateinit var adapter: MyAdapter
 
@@ -36,8 +35,8 @@ class ListActivity : AppCompatActivity() {
 
     }
     fun readData(){
-        travels.add(MyTravel(1,"미국","2017년 1월 23일 ~ 2017년 2월 11일",2,"500만원"))
-        travels.add(MyTravel(2,"호주","2018년 7월 15일 ~ 2018년 7월 28일",2,"300만원"))
+        travels.add(MyTravel(0,"미국","2017년 1월 23일 ~ 2017년 2월 11일",2,"500만원"))
+        travels.add(MyTravel(1,"호주","2018년 7월 15일 ~ 2018년 7월 28일",2,"300만원"))
 
     }
     fun addListener(){
