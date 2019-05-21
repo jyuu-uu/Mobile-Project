@@ -10,6 +10,10 @@ class login: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_layout)
 
+        val intent = Intent(this, LoadingActivity::class.java)
+        startActivity(intent)
+        // 해당 부분 스레드로 구현 필요
+
         init()
     }
 
@@ -26,6 +30,16 @@ class login: AppCompatActivity() {
             intent.putExtra("User",id) //현재 사용중인 유저가 누구인가??
             startActivity(intent)
         }
+    }
+
+    override fun onBackPressed() {
+        finishAffinity()
+        System.runFinalization()
+        System.exit(0)
+        // 현재 로그인 창은 스플래쉬로 띄워진 상태
+        // 따라서 로그인에서 뒤로버튼을 누르면 메인포함, 전부 없애야 함
+
+//        super.onBackPressed()
     }
 
 }

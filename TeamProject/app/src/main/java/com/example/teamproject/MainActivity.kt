@@ -88,7 +88,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var User:String?=null
 
     fun init(){
-
         User = intent.getStringExtra("User")
         // 사용자 아이디를 저장
         //-----------------
