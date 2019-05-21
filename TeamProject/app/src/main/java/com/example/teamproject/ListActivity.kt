@@ -7,7 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_list.*
-
+var index=-1
 lateinit var travels:MutableList<MyTravel>
 class ListActivity : AppCompatActivity() {
     lateinit var adapter: MyAdapter
