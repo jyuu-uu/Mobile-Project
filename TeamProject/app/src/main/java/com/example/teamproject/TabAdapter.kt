@@ -14,6 +14,7 @@ class TabAdapter(fm: FragmentManager,val num:Int): FragmentPagerAdapter(fm){
         when(position){
             0-> return MainFragment()
             1-> return MainFragment()
+            2-> return ReviewFragment()
         }
         return null
     }

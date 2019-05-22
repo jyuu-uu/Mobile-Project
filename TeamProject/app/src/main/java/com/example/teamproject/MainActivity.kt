@@ -31,6 +31,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         init()
     }
 
+    fun initReview(){
+
+    }
+
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
@@ -94,6 +98,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         tabLayer = findViewById(R.id.layout_tab)
         tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 1"))
         tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 2"))
+        tabLayer?.addTab(tabLayer!!.newTab().setText("리뷰"))
 
         //탭 추가
 

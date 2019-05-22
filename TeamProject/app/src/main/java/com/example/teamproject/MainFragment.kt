@@ -23,10 +23,8 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         make()
     }
-
     fun make(){
 
         auto_adapter = ArrayAdapter(activity, android.R.layout.simple_dropdown_item_1line,list)
