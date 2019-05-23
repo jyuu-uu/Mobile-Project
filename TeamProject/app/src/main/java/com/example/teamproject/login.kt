@@ -26,6 +26,11 @@ class login: AppCompatActivity() {
             // 이부분에 if문으로 파이어폭스 접근
             //아이디 확인
 
+            val sqlite = SQLite(it)
+            sqlite.openDatabase("Bag")
+            // 가방이라는 데이터베이스를 오픈
+
+
             val intent = Intent(this,MainActivity::class.java)
             intent.putExtra("User",id) //현재 사용중인 유저가 누구인가??
             startActivity(intent)
