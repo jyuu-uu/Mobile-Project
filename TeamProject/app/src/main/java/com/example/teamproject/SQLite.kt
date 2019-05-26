@@ -2,14 +2,12 @@ package com.example.teamproject
 
 
 import android.content.Context
-import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.View
 
-class SQLite(val v:View) {
+class SQLite(val v: AppCompatActivity) {
 
     internal var database: SQLiteDatabase? = null
     lateinit var databaseName:String
@@ -38,26 +36,58 @@ class SQLite(val v:View) {
             println("데이터베이스 오픈됨");
         }*/
 
-        val helper = DatabaseHelper(v.context, databaseName+".db", null, 3) //헬퍼를 생성함
+        val helper = DatabaseHelper(v, databaseName+".db", null, 3) //헬퍼를 생성함
 //         DatabaseHelper helper = new DatabaseHelper(this , databaseName, null, 4);
         // 위에거 실행후 이거 실행했을 경우 (이미 해당 디비가있으므로 헬퍼의 update가 호출될것이다.)
         database = helper.writableDatabase  //데이터베이스에 쓸수 있는 권한을 리턴해줌(갖게됨)
 
-        createTable("User")
+        createTable("Login")
         createTable("Schedule")
+    }
+
+    fun AutoLogin():ArrayList<String>?{
+        if (database != null) { // 데이터베이스가 존재하지 않으면
+            val sql = "select * from Login" //조건 기재
+            val cursor = database!!.rawQuery(sql, null) //파라미터는 없으니깐 null 값 넣어주면된다.
+            Log.e("SQLite","조회된 데이터개수 :" + cursor.count)
+
+            if(cursor.count == 1){
+                // 정보가 1개 이상 들어있단 이야기.
+                // 자동로그인이 되어어야함
+                cursor.moveToNext()
+                return arrayListOf(cursor.getString(0),cursor.getString(1))
+                // 정보를 반환
+            }
+            else{  // 정보 없음. 로그인(회원가입) 필요
+                return null //null 반환
+            }
+            cursor.close() //cursor라는것도 실제 데이터베이스 저장소를 접근하는 것이기 때문에 자원이 한정되있다.
+            // 그러므로 웬만하면 마지막에 close를 꼭 해줘야한다.
+        }
+        return null // 생성 필요. null 반환
     }
 
     fun createTable(tableName: String) {
         Log.e("SQLite","createTable() 호출됨.")
 
         if (database != null) {
+            when(tableName) {
+                "Login"->{
+                    val sql =
+                        "create table if not exists $tableName(id text PRIMARY KEY, pw text)"
+                    // 테이블 만들기 이름(속성들)
+                    database!!.execSQL(sql)
+                }
+                "Schedule"->{
+                    val sql =
+                        "create table if not exists $tableName(_id integer PRIMARY KEY autoincrement, name text, age integer, mobile text)"
+                    // 테이블 만들기 이름(속성들)
+                    database!!.execSQL(sql)
+                }
+            }
 
-            val sql =
-                "create table if not exists $tableName(_id integer PRIMARY KEY autoincrement, name text, age integer, mobile text)"
-                // 테이블 만들기 이름(속성들)
-            database!!.execSQL(sql)
 
-            Log.e("SQLite","테이블 생성됨.")
+            Log.e("SQLite","$tableName 테이블 생성됨.")
         } else {
             Log.e("SQLite","데이터베이스를 먼저 오픈하십쇼")
         }
@@ -135,7 +165,7 @@ class SQLite(val v:View) {
 
             //여기 예제에서는 그냥 삭제했지만 보통의 Alter로 수정을 한다거나 할 수도 있다.
             if (newVersion > 1) {
-                val tableName = "customer"
+                val tableName = "USER"
                 db.execSQL("drop table if exists $tableName")
                 Log.e("SQLite","테이블 삭제함")
 

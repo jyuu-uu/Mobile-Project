@@ -1,5 +1,6 @@
 package com.example.teamproject
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -7,6 +8,7 @@ import android.support.design.widget.TabLayout
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
@@ -29,6 +31,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         init()
+        loading()
     }
 
     fun initReview(){
@@ -90,6 +93,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private var tabLayer: TabLayout?= null
     var User:String?=null
+    val code = 100
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        // 로그인창으로 부터 정보전달
+        if (resultCode == code) {
+            if (resultCode == Activity.RESULT_OK) { // 결과로 보내준 상태가 OK 코드면
+                User = data?.getStringExtra("id") //값을 받아옴
+                Log.e("Main","$User")
+            }
+            else{
+                finish() //받은 정보가 없으면 에러. 강종
+            }
+        }
+    }
+
+    fun loading(){
+        val intent = Intent(this, login::class.java)
+        startActivityForResult(intent, code)
+    }
 
     fun init(){
         User = intent.getStringExtra("User")
