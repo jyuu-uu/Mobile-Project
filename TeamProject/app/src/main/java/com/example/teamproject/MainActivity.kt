@@ -98,13 +98,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         // 로그인창으로 부터 정보전달
-        if (resultCode == code) {
+        if (requestCode == code) {
             if (resultCode == Activity.RESULT_OK) { // 결과로 보내준 상태가 OK 코드면
                 User = data?.getStringExtra("id") //값을 받아옴
                 Log.e("Main","$User")
             }
             else{
-                finish() //받은 정보가 없으면 에러. 강종
+                finish() //받은 정보가 없으면 로그인 실패
+                // 종료
             }
         }
     }

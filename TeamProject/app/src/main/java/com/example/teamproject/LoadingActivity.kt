@@ -32,13 +32,10 @@ class LoadingActivity : AppCompatActivity() {
 //        (splashThread as Thread).start()
 
         startLoading()
-
         val sqlite = SQLite(this)
         sqlite.openDatabase("USER")
         // 데이터베이스를 오픈
         val auto = sqlite.AutoLogin()
-
-
 
         if(auto != null){
             // 뭔가 값이 반환됬다면, 자동로그인
@@ -53,7 +50,9 @@ class LoadingActivity : AppCompatActivity() {
             setResult(Activity.RESULT_CANCELED,s)
         }
 
- //       (this as Object).wait(10000)
+
+
+        //       (this as Object).wait(10000)
 //        splashThread?.let {
 //            synchronized(it) {
 //                (splashThread as Object).notifyAll()

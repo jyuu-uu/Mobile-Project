@@ -42,11 +42,17 @@ class login: AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        finishAffinity()
-        System.runFinalization()
-        System.exit(0)
+//        finishAffinity()
+//        System.runFinalization()
+//        System.exit(0)
+        // 해당 방법을 쓸려했더니, 화면이 까매지면서 강종되는 느낌이 강함
+        // so, 방법을 바꾸려고 함.
         // 현재 로그인 창은 스플래쉬로 띄워진 상태
         // 따라서 로그인에서 뒤로버튼을 누르면 메인포함, 전부 없애야 함
+
+        Log.e("login","로그인창 종료")
+        Out()
+
 
 //        super.onBackPressed()
     }
@@ -54,7 +60,7 @@ class login: AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         // 로딩창에서 가능한 정보를 모두 불러올 거고, 정보를 받는 경우, 이쪽에서 결정
-        if (resultCode == code) {
+        if (requestCode == code) {
             if (resultCode == Activity.RESULT_OK) { // 결과로 보내준 상태가 OK 코드면
                 val id = data?.getStringExtra("id") //값을 받아옴
                 val pw = data?.getStringExtra("pw")
@@ -71,6 +77,12 @@ class login: AppCompatActivity() {
         val s = Intent()
         s.putExtra("id", i_id)
         setResult(Activity.RESULT_OK,s)
+        finish()
+    }
+
+    fun Out(){ // 로그인 거부 시
+        val s = Intent()
+        setResult(Activity.RESULT_CANCELED,s)
         finish()
     }
 }
