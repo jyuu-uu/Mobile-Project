@@ -1,17 +1,31 @@
 package com.example.teamproject
 
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main_first.*
 
 class MainFragment : Fragment() {
 
-    lateinit var auto_adapter: ArrayAdapter<String>
-    val list = arrayListOf("ababab","babca","cabse","dsefsw","esesw")
+    companion object {
+        // static 메소드에 해당하는 기능을 수행
+        fun newFragment():MainFragment{
+            // 값을 받아서 지정하고,
+            // 해당 값으로 초기화된 fragment를 반환
+
+            val mainFrag = MainFragment()
+            // 값 넣어줄거 여기서 처리
+
+            return mainFrag // 해당 객체 반환
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,20 +37,35 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        make()
+        init()
     }
-    fun make(){
 
-        auto_adapter = ArrayAdapter(activity, android.R.layout.simple_dropdown_item_1line,list)
-        // 어뎁터 사용 전 초기화 (대상 객체, 사용할 리스트방식, 연동할 데이터)
+    private var tabLayer: TabLayout?= null
 
-        search.setAdapter(auto_adapter) // 해당 위젯(객체)에 어뎁터 연결
-        // 이후 autoCompleteTextView의 속성 중, completionThreshold 값을 지정해줘야 함
+    fun init() {
+        if (activity != null) {
+            tabLayer = activity?.findViewById(R.id.layout_tab)
+            tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 1"))
+            tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 2"))
+ //           tabLayer?.addTab(tabLayer!!.newTab().setText("리뷰"))
 
-        search.setOnItemClickListener { parent, view, position, id ->
-            val item = parent.getItemAtPosition(position).toString()
-            // 부모로부터 선택된 위치의 내용을 받아와 문자열로 변환
-       //     Toast.makeText(activity, "선택 항목 : $item", Toast.LENGTH_LONG)
+            //탭 추가
+
+            val adapter = TabAdapter(activity!!.supportFragmentManager, tabLayer!!.tabCount)
+            content.adapter = adapter
+
+            content.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayer))
+
+            tabLayer!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabReselected(p0: TabLayout.Tab?) {}
+                override fun onTabUnselected(p0: TabLayout.Tab?) {}
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    content.currentItem = tab.position
+                }
+            })
+
         }
+        else
+            Log.e("main_first", "액티비티가 안붙었어요")
     }
 }

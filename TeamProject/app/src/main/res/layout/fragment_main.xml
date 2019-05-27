@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".MainFragment"
-             android:orientation="vertical"
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+              tools:context=".MainFragment"
+              android:orientation="vertical"
               android:clickable="true"
               android:focusableInTouchMode="true">
-    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:text="위쪽 공간"/>
-    <AutoCompleteTextView
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-              android:id="@+id/search"
-            android:completionThreshold="1"
-            android:layout_margin="20dp"
-            android:paddingLeft="10dp"/>
-    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:text="아래쪽 공간"/>
-    <android.support.v7.widget.RecyclerView
-            android:id="@+id/review_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-</LinearLayout>
+            android:layout_height="match_parent"
+
+            android:orientation="vertical">
+
+        <android.support.v4.view.ViewPager
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/content"
+                android:layout_weight="8"/>
+
+        <android.support.design.widget.TabLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabGravity="fill"
+                android:id="@+id/layout_tab"
+                app:tabMode="fixed"
+                app:tabTextColor="#000000"
+                app:tabSelectedTextColor="@color/colorPrimary"
+                app:tabIndicatorColor="@color/colorPrimary"
+                android:layout_marginBottom="7dp"/>
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

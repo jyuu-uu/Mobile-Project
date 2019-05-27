@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.design.widget.TabLayout
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -13,7 +12,6 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -32,6 +30,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         init()
         loading()
+        makeMain()
     }
 
     fun initReview(){
@@ -91,7 +90,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    private var tabLayer: TabLayout?= null
     var User:String?=null
     val code = 100
 
@@ -116,27 +114,54 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun init(){
-        User = intent.getStringExtra("User")
-        // 사용자 아이디를 저장
-        //-----------------
-        tabLayer = findViewById(R.id.layout_tab)
-        tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 1"))
-        tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 2"))
-        tabLayer?.addTab(tabLayer!!.newTab().setText("리뷰"))
-
-        //탭 추가
-
-        val adapter = TabAdapter(supportFragmentManager, tabLayer!!.tabCount)
-        content.adapter = adapter
-
-        content.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayer))
-
-        tabLayer!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(p0: TabLayout.Tab?) {}
-            override fun onTabUnselected(p0: TabLayout.Tab?) {}
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                  content.currentItem = tab.position}
-        })
 
     }
+
+
+    // 메인 만들기
+    fun makeMain(){
+        // 메인 프레그먼트를 만드는 함수
+
+        val fragment = supportFragmentManager.findFragmentById(R.id.frame)
+            // 해당 view에 fragment가 부착되어 있으면 해당 fragment를 반환
+        if(fragment == null) {  // 부착된게 없으면
+            val imageTransaction = supportFragmentManager.beginTransaction()
+                // 서포트프레그먼트매니저를 통해 프레임 생성/교체하는 작업을 시작
+
+            val imageFrag = MainFragment.newFragment() // 프레그먼트 객체 생성
+            imageTransaction.replace(R.id.frame,imageFrag,"mainFrag")
+                // 이미지 교체 작업까지 완료
+// 만들어진 프레그먼트에 대해서 태그를 붙여서 넘김
+// cause, 동적 방식에선 id 값이 지정되지 않기 때문
+
+            imageTransaction.commit() // 실제 수행
+            //m_imageFrag = true // 이미지 프레그먼트 부착 완료
+        }
+        else{ // 부착된 프레그먼트가 이미 존재
+            val imageFragment = supportFragmentManager.findFragmentByTag("mainFrag")
+                // 이미지 프레그먼트의 tag값 을 통해 프레그먼트 획득 시도
+            if(imageFragment == null){
+                // 부착된 프레그먼트가 메인 프레그먼트가 아닌 경우
+
+                val imageTransaction = supportFragmentManager.beginTransaction()
+                // 서포트프레그먼트매니저를 통해 프레임 생성/교체하는 작업을 시작
+
+                val imageFrag = MainFragment.newFragment()
+                    // 2. fragment에 해당하는 객체를 마음대로 생성하지 않고
+                    // 생성해주는 함수를 만들어놓고, 해당 함수를 통해 객체를 '받는' 방식이 가능
+                    // 더 일반적인 방법이며, 해당 방법을 위해선 자바의 static 기능이 필요
+                    // so, 생성할 fragment 내부에 companion object 를 통한 함수 선언
+
+                imageTransaction.replace(R.id.frame,imageFrag,"mainFrag")
+                // 이미지 교체 작업까지 완료
+                imageTransaction.commit() // 실제 수행
+  //              m_imageFrag = true // 이미지 프레그먼트 부착 완료
+            }
+            else{ // 동일한 프레그먼트
+                // 무시
+            }
+        }
+    }
+
+
 }
