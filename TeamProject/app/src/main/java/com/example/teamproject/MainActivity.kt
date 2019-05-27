@@ -12,6 +12,12 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import android.support.annotation.NonNull
+import android.support.v4.app.FragmentActivity
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -106,6 +112,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // 종료
             }
         }
+
+        addDB()
     }
 
     fun loading(){
@@ -164,4 +172,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
+    //************************************************************
+    fun addDB() {
+//클라우드 파이어스토에 쓰기 하도록 하자.
+        val db = FirebaseFirestore.getInstance()
+        //데이터준비
+        if (db != null) {
+            var user: MutableMap<String, String>? = null
+            user = mutableMapOf()
+            user["u_id"] = "check"
+            user["u_pw"] = "input"
+
+            // Add a new document with a generated ID
+
+//        val newCount = String.format("%03d", count + 1)
+            db!!.collection("User").document("check")
+                .set(user)
+                .addOnSuccessListener { Log.e("database", "DocumentSnapshot successfully written!") }
+                .addOnFailureListener { e -> Log.e("database", "Error writing document") }
+        }
+    }
 }

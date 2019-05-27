@@ -7,12 +7,10 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.EditText
 import kotlinx.android.synthetic.main.login_layout.*
-import android.content.ClipData.Item
-import android.support.v4.app.FragmentActivity
-import android.text.method.TextKeyListener.clear
-import android.widget.Toast
 import com.google.firebase.firestore.*
-import java.nio.file.Files.size
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.text.Typography.quote
+
 
 class login: AppCompatActivity() {
 
@@ -107,7 +105,7 @@ class login: AppCompatActivity() {
                 .addSnapshotListener(object : EventListener<QuerySnapshot> {
                     override fun onEvent(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
                         if (e != null) {
-                            Log.e("login", "database Listen failed.")
+                            Log.e("database", "database Listen failed.")
                             return
                         }
 
@@ -115,23 +113,35 @@ class login: AppCompatActivity() {
                        // list.clear()//일딴 초기화 해줘야 한다. 안 그럼 기존 데이터에 반복해서 뒤에 추가된다.
                         if (value != null) {
                             for (doc in value) {
-                                if (doc.get("quote") != null) {
-                                    Log.e("login","$doc 이 존재합니다")
+                                if (doc.get("id") != null) {
+                                    Log.e("database","$doc 이 존재합니다")
                                         //makeText(this,"$doc 이 존재합니다",Toast.LENGTH_LONG).show()
                                 }
                             }
                         }
                         //어답터 갱신
                     }
-
-//                    fun onEvent(
-//                        @Nullable value: QuerySnapshot,
-//                        @Nullable e: FirebaseFirestoreException?
-//                    ) {
-//
-//
-//                    }
                 })
+        }
+    }
+
+    fun addDB() {
+//클라우드 파이어스토에 쓰기 하도록 하자.
+        db = FirebaseFirestore.getInstance()
+        //데이터준비
+        if (db != null) {
+            var user: MutableMap<String, String>? = null
+            user = mutableMapOf()
+            user.put("id", "check")
+            user.put("pw", "input")
+
+            // Add a new document with a generated ID
+
+//        val newCount = String.format("%03d", count + 1)
+            db!!.collection("User").document("check")
+                .set(quote)
+                .addOnSuccessListener { Log.e("database", "DocumentSnapshot successfully written!") }
+                .addOnFailureListener { e -> Log.e("database", "Error writing document") }
         }
     }
 }
