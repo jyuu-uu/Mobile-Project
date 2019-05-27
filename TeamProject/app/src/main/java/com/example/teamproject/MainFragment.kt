@@ -47,7 +47,7 @@ class MainFragment : Fragment() {
             tabLayer = activity?.findViewById(R.id.layout_tab)
             tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 1"))
             tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 2"))
- //           tabLayer?.addTab(tabLayer!!.newTab().setText("리뷰"))
+            tabLayer?.addTab(tabLayer!!.newTab().setText("리뷰"))
 
             //탭 추가
 

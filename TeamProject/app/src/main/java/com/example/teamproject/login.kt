@@ -7,10 +7,17 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.EditText
 import kotlinx.android.synthetic.main.login_layout.*
+import android.content.ClipData.Item
+import android.support.v4.app.FragmentActivity
+import android.text.method.TextKeyListener.clear
+import android.widget.Toast
+import com.google.firebase.firestore.*
+import java.nio.file.Files.size
 
 class login: AppCompatActivity() {
 
     val code = 101
+    var db:FirebaseFirestore? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +38,8 @@ class login: AppCompatActivity() {
             val pw = password.text.toString()
             // 이부분에 if문으로 파이어폭스 접근
             //아이디 확인
+
+            getDB()
 
             if(true) { // id,pw 확인해서 맞으면
                 //
@@ -83,5 +92,46 @@ class login: AppCompatActivity() {
         val s = Intent()
         setResult(Activity.RESULT_CANCELED,s)
         finish()
+    }
+
+    fun getDB() {
+        Log.e("login", "DB 접속시도")
+
+        db = FirebaseFirestore.getInstance()
+
+        Log.e("login", "DB 객체 생성")
+        if (db != null) {
+
+            Log.e("login", "NULL은 아님")
+            db!!.collection("User")
+                .addSnapshotListener(object : EventListener<QuerySnapshot> {
+                    override fun onEvent(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
+                        if (e != null) {
+                            Log.e("login", "database Listen failed.")
+                            return
+                        }
+
+                        val count = value?.size()
+                       // list.clear()//일딴 초기화 해줘야 한다. 안 그럼 기존 데이터에 반복해서 뒤에 추가된다.
+                        if (value != null) {
+                            for (doc in value) {
+                                if (doc.get("quote") != null) {
+                                    Log.e("login","$doc 이 존재합니다")
+                                        //makeText(this,"$doc 이 존재합니다",Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        }
+                        //어답터 갱신
+                    }
+
+//                    fun onEvent(
+//                        @Nullable value: QuerySnapshot,
+//                        @Nullable e: FirebaseFirestoreException?
+//                    ) {
+//
+//
+//                    }
+                })
+        }
     }
 }
