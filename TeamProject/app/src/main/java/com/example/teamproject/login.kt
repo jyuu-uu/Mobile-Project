@@ -32,9 +32,10 @@ class login: AppCompatActivity() {
             // 이부분에 if문으로 파이어폭스 접근
             //아이디 확인
 
-            if(true)
+            if(true) { // id,pw 확인해서 맞으면
+                //
                 In(id) // 있다면 정보를 넘기고 종료
-            else{ // 아이디가 없으면 다시 시도
+            }else{ // 아이디가 없으면 다시 시도
                 val space= findViewById<EditText>(R.id.password)
                 space.setText(null) // 비밀번호 칸은 초기화
             }
@@ -52,8 +53,6 @@ class login: AppCompatActivity() {
 
         Log.e("login","로그인창 종료")
         Out()
-
-
 //        super.onBackPressed()
     }
 

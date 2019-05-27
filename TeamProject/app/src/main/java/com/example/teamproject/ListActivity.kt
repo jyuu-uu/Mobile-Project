@@ -9,6 +9,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_list.*
 var index=-1
 lateinit var travels:MutableList<MyTravel>
+lateinit var schedules:MutableList<schedule>
 class ListActivity : AppCompatActivity() {
     lateinit var adapter: MyAdapter
 
@@ -27,6 +28,7 @@ class ListActivity : AppCompatActivity() {
     }
     fun init(){
         Toast.makeText(this,"a",Toast.LENGTH_SHORT).show()
+        schedules= mutableListOf()
         travels= mutableListOf()
         readData()
         addListener()
@@ -38,7 +40,8 @@ class ListActivity : AppCompatActivity() {
     fun readData(){
         travels.add(MyTravel(0,"미국","2017년 1월 23일 ~ 2017년 2월 11일",2,"500만원"))
         travels.add(MyTravel(1,"호주","2018년 7월 15일 ~ 2018년 7월 28일",2,"300만원"))
-
+        schedules.add(schedule(0,0,"1시","자유의여신상",false))
+        schedules.add(schedule(1,1,"5시","동물원",false))
     }
     fun addListener(){
         //여행 리스트 중 하나 클릭하면 그 여행 정보랑 준비물리스트 보여주는 창으로 넘어감

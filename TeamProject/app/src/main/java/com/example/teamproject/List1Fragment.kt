@@ -1,6 +1,12 @@
 package com.example.teamproject
 
 
+import android.app.AlertDialog
+import android.app.Notification
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -11,9 +17,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.android.synthetic.main.fragment_list1.*
+import kotlinx.android.synthetic.main.fragment_list1_card.*
+import android.widget.EditText
+import android.content.DialogInterface
+import android.support.v4.widget.SwipeRefreshLayout
+import android.util.Log
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -26,7 +41,6 @@ private const val ARG_PARAM2 = "param2"
  *
  */
 class List1Fragment : Fragment() {
-    lateinit var schedules:MutableList<schedule>
     lateinit var schedule:MutableList<schedule>
     lateinit var adapter:CardAdapter
     override fun onCreateView(
@@ -41,10 +55,15 @@ class List1Fragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         schedule= mutableListOf()
-        schedules= mutableListOf()
         init()
         initLayout()
         initSwipe()
+        val swipe=activity!!.findViewById(R.id.swiperefresh) as SwipeRefreshLayout
+        swipe.setOnRefreshListener {
+            setItem()
+            initLayout()
+            swipe.setRefreshing(false);
+        }
     }
     fun init(){
         textView15.setText(travels[index].where.toString()+"의 일정")
@@ -52,14 +71,36 @@ class List1Fragment : Fragment() {
         readData()
         setItem()
         //textView15.setText(schedules[1].todo)
+        //val icon=activity!!.findViewById<ImageView>(R.id.listicon)
+        add_schedule.setOnClickListener {
+            val dialogView=layoutInflater.inflate(R.layout.add_schedule_dialog, null)
+            val dialogwhat = dialogView.findViewById<EditText>(R.id.schedule_what)
+            val dialogwhen = dialogView.findViewById<EditText>(R.id.schedule_when)
+            val ad = AlertDialog.Builder(context)
+            ad.setView(dialogView)
+                .setPositiveButton("확인") { dialogInterface, i ->
+                    if(dialogwhat.text.toString()!=""&&dialogwhen.text.toString()!=""){
+                        schedules.add(schedule(schedules.size,index,dialogwhen.text.toString(),dialogwhat.text.toString(),false))
+                        Toast.makeText(activity,"일정 추가 완료! 새로고침하려면 밑으로 스와이프",Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(activity,"일정 추가 실패",Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .setNegativeButton("취소") { dialogInterface, i ->
+                    /* 취소일 때 아무 액션이 없으므로 빈칸 */
+                }
+                .show()
+
+        }
+
     }
 
     fun readData(){
-        schedules.add(schedule(0,"1시","자유의여신상"))
-        schedules.add(schedule(1,"5시","동물원"))
+
     }
     fun setItem(){
         var i=0
+        schedule.clear()
         while (i<schedules.size){
             if(schedules[i].tno==index){
                 schedule.add(schedules[i])
@@ -95,7 +136,7 @@ class List1Fragment : Fragment() {
     fun initLayout(){
         var layoutManager= LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         list1View.layoutManager=layoutManager
-        adapter=CardAdapter(ArrayList(schedule))
+        adapter=CardAdapter(context!!,ArrayList(schedule))
         list1View.adapter=adapter
 //        spinner_wifi.onItemSelectedListener=object : AdapterView.OnItemSelectedListener{
 //            override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -119,7 +160,20 @@ class List1Fragment : Fragment() {
 //        }
     }
 
+    fun setpush(){
+        var notificationManager: NotificationManager =context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        var pushintent = Intent(context, MainActivity::class.java)
+        var builder = Notification.Builder(context)
+        pushintent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        var pendingNotificationIntent =
+            PendingIntent.getActivity(context, 0, pushintent, PendingIntent.FLAG_UPDATE_CURRENT)
+        builder.setTicker("HETT").setWhen(System.currentTimeMillis())
+            .setNumber(1).setContentTitle("푸쉬 제목").setContentText("푸쉬내용")
+            .setDefaults(Notification.DEFAULT_SOUND or Notification.DEFAULT_VIBRATE)
+            .setContentIntent(pendingNotificationIntent).setAutoCancel(true).setOngoing(true)
+        val notification = builder.build()
+        notificationManager.notify(2, notification)
+        //notificationManager.notify(1, builder.build()) // Notification send
+    }
 
 }
-
-
