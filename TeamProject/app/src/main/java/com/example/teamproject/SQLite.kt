@@ -7,15 +7,12 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 
-class SQLite(val v: AppCompatActivity) {
+class SQLite(val v: AppCompatActivity, val tableName: String) {
 
     internal var database: SQLiteDatabase? = null
     lateinit var databaseName:String
-    lateinit var tableName: String
 
-    fun SQLite(v:AppCompatActivity,databaseName: String){
-        openDatabase("USER")
-    }
+
 //            openDatabase(databaseName)
 //            createTable(tableName)
 //
@@ -44,8 +41,8 @@ class SQLite(val v: AppCompatActivity) {
         // 위에거 실행후 이거 실행했을 경우 (이미 해당 디비가있으므로 헬퍼의 update가 호출될것이다.)
         database = helper.writableDatabase  //데이터베이스에 쓸수 있는 권한을 리턴해줌(갖게됨)
 
-        createTable("Login")
-        createTable("Schedule")
+//        createTable("Login")
+//        createTable("Schedule")
     }
 
     fun AutoLogin():ArrayList<String>?{
@@ -101,7 +98,10 @@ class SQLite(val v: AppCompatActivity) {
 
         if (database != null) {
 
-//            val c = database!!.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name="+table+"'", null)
+            val c = database!!.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='"+tableName+"'", null)
+
+            if(c == null)
+                createTable(tableName) // 테이블이없으면 생성
 
             val sql = "insert into " +
                     /*삽입할 테이블 이름*/ "Login" + "(id, pw) values(?, ?)"
@@ -120,10 +120,13 @@ class SQLite(val v: AppCompatActivity) {
 
         if (database != null) {
 
-//            val c = database!!.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name="+table+"'", null)
+            val c = database!!.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='"+tableName+"'", null)
+
+            if(c == null)
+                createTable(tableName) // 테이블이없으면 생성
 
             val sql = "insert into " +
-                    /*삽입할 테이블 이름*/ "" + "(name, age, mobile) values(?, ?, ?)"
+                    /*삽입할 테이블 이름*/ "Schedule" + "(name, age, mobile) values(?, ?, ?)"
             val params = arrayOf(name, age, mobile)
             database!!.execSQL(sql, params)
             //이런식으로 두번쨰 파라미터로 이런식으로 객체를 전달하면 sql문의 ?를 이 params에 있는 데이터를 물음표를 대체해준다.

@@ -31,9 +31,9 @@ class LoadingActivity : AppCompatActivity() {
 //        }
 //        (splashThread as Thread).start()
 
-        startLoading()
-        val sqlite = SQLite(this)
+        val sqlite = SQLite(this,"Login")
         // 데이터베이스를 오픈
+        sqlite.openDatabase("USER")
         val auto = sqlite.AutoLogin()
 
         if(auto != null){
@@ -49,7 +49,7 @@ class LoadingActivity : AppCompatActivity() {
             setResult(Activity.RESULT_CANCELED,s)
         }
 
-
+        startLoading()
 
         //       (this as Object).wait(10000)
 //        splashThread?.let {

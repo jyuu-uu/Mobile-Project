@@ -121,7 +121,8 @@ class login: AppCompatActivity() {
 
                         if(flag) { // id,pw 확인해서 맞으면
                             Log.e("login","해당 계정 있음")
-                            var sqlite = SQLite(this@login)
+                            var sqlite = SQLite(this@login,"Login")
+                            sqlite.openDatabase("USER")
                             sqlite.insertData(_id,_pw)
                             In(_id) // 있다면 정보를 넘기고 종료
                         }else{ // 아이디가 없으면 다시 시도
