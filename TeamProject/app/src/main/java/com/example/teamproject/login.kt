@@ -9,6 +9,7 @@ import android.widget.EditText
 import kotlinx.android.synthetic.main.login_layout.*
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.*
 import kotlin.text.Typography.quote
 
 
@@ -37,15 +38,7 @@ class login: AppCompatActivity() {
             // 이부분에 if문으로 파이어폭스 접근
             //아이디 확인
 
-            getDB()
-
-            if(true) { // id,pw 확인해서 맞으면
-                //
-                In(id) // 있다면 정보를 넘기고 종료
-            }else{ // 아이디가 없으면 다시 시도
-                val space= findViewById<EditText>(R.id.password)
-                space.setText(null) // 비밀번호 칸은 초기화
-            }
+            getDB(id,pw)
         }
     }
 
@@ -92,34 +85,50 @@ class login: AppCompatActivity() {
         finish()
     }
 
-    fun getDB() {
+    fun getDB(_id: String,_pw:String) {
         Log.e("login", "DB 접속시도")
 
         db = FirebaseFirestore.getInstance()
 
         Log.e("login", "DB 객체 생성")
         if (db != null) {
-
             Log.e("login", "NULL은 아님")
+
+
             db!!.collection("User")
                 .addSnapshotListener(object : EventListener<QuerySnapshot> {
                     override fun onEvent(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
+
                         if (e != null) {
                             Log.e("database", "database Listen failed.")
                             return
                         }
-
                         val count = value?.size()
-                       // list.clear()//일딴 초기화 해줘야 한다. 안 그럼 기존 데이터에 반복해서 뒤에 추가된다.
+                        var flag = false
+                        // list.clear()//일딴 초기화 해줘야 한다. 안 그럼 기존 데이터에 반복해서 뒤에 추가된다.
                         if (value != null) {
                             for (doc in value) {
-                                if (doc.get("id") != null) {
-                                    Log.e("database","$doc 이 존재합니다")
-                                        //makeText(this,"$doc 이 존재합니다",Toast.LENGTH_LONG).show()
+                                Log.e("database", "$doc 읽는 중")
+                                if (doc.get("u_id").toString() == _id) {
+                                    if (doc.get("u_pw").toString() == _pw) {
+                                        Log.e("database", "해당 데이터 존재합니다")
+                                        flag = true
+                                        break
+                                    }
                                 }
                             }
+                        } //value!=null
+
+                        if(flag) { // id,pw 확인해서 맞으면
+                            Log.e("login","해당 계정 있음")
+                            var sqlite = SQLite(this@login)
+                            sqlite.insertData(_id,_pw)
+                            In(_id) // 있다면 정보를 넘기고 종료
+                        }else{ // 아이디가 없으면 다시 시도
+                            Log.e("login","해당 계정 없음")
+                            val space= findViewById<EditText>(R.id.password)
+                            space.setText(null) // 비밀번호 칸은 초기화
                         }
-                        //어답터 갱신
                     }
                 })
         }

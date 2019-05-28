@@ -33,7 +33,6 @@ class LoadingActivity : AppCompatActivity() {
 
         startLoading()
         val sqlite = SQLite(this)
-        sqlite.openDatabase("USER")
         // 데이터베이스를 오픈
         val auto = sqlite.AutoLogin()
 

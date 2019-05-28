@@ -13,6 +13,9 @@ class SQLite(val v: AppCompatActivity) {
     lateinit var databaseName:String
     lateinit var tableName: String
 
+    fun SQLite(v:AppCompatActivity,databaseName: String){
+        openDatabase("USER")
+    }
 //            openDatabase(databaseName)
 //            createTable(tableName)
 //
@@ -90,6 +93,25 @@ class SQLite(val v: AppCompatActivity) {
             Log.e("SQLite","$tableName 테이블 생성됨.")
         } else {
             Log.e("SQLite","데이터베이스를 먼저 오픈하십쇼")
+        }
+    }
+
+    fun insertData(i_id: String, i_pw: String) {
+        Log.e("SQLite","insertData() 호출됨.")
+
+        if (database != null) {
+
+//            val c = database!!.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name="+table+"'", null)
+
+            val sql = "insert into " +
+                    /*삽입할 테이블 이름*/ "Login" + "(id, pw) values(?, ?)"
+            val params = arrayOf(i_id, i_pw)
+            database!!.execSQL(sql, params)
+            //이런식으로 두번쨰 파라미터로 이런식으로 객체를 전달하면 sql문의 ?를 이 params에 있는 데이터를 물음표를 대체해준다.
+            Log.e("SQLite", "데이터 추가함")
+
+        } else {
+            Log.e("SQLite", "데이터베이스를 먼저 오픈하시오")
         }
     }
 
