@@ -13,7 +13,6 @@ class TablistAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm)  {
         return when(position){
             0-> List1Fragment()
             1-> List2Fragment()
-            2-> List2Fragment()
             else-> null
         }
     }
