@@ -35,9 +35,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        init()
-        loading()
         makeMain()
+        Loading()
     }
 
     fun initReview(){
@@ -90,6 +89,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.embassy_phone -> {
 
             }
+            R.id.logout->{
+                sqlite?.dropDB()
+                Loading() //로그인창 재호출
+            }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
@@ -121,15 +124,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    fun loading(){
+    fun Loading(){
         val intent = Intent(this, login::class.java)
         startActivityForResult(intent, code)
     }
-
-    fun init(){
-
-    }
-
 
     // 메인 만들기
     fun makeMain(){
@@ -175,8 +173,4 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
-
-
-    //************************************************************
-
 }
