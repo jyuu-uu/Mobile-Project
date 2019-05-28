@@ -9,7 +9,6 @@ import android.widget.EditText
 import kotlinx.android.synthetic.main.login_layout.*
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.*
 import kotlin.text.Typography.quote
 
 
