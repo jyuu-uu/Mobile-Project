@@ -100,6 +100,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var User:String?=null
     val code = 100
     var sqlite : SQLite? = null
+    var firestore :Firestore? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -108,16 +109,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (resultCode == Activity.RESULT_OK) { // 결과로 보내준 상태가 OK 코드면
                 User = data?.getStringExtra("id") //값을 받아옴
                 Log.e("Main","$User")
-
                 sqlite = SQLite(this,"Schedule")
                 // 만들어둔 테이블 정보
+
+                firestore = Firestore.create()
             }
             else{
                 finish() //받은 정보가 없으면 로그인 실패
                 // 종료
             }
         }
-        addDB()
     }
 
     fun loading(){
@@ -177,23 +178,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     //************************************************************
-    fun addDB() {
-//클라우드 파이어스토에 쓰기 하도록 하자.
-        val db = FirebaseFirestore.getInstance()
-        //데이터준비
-        if (db != null) {
-            var user: MutableMap<String, String>? = null
-            user = mutableMapOf()
-            user["u_id"] = "wv"
-            user["u_pw"] = "ew"
 
-            // Add a new document with a generated ID
-
-//        val newCount = String.format("%03d", count + 1)
-            db!!.collection("User").document("check")
-                .set(user)
-                .addOnSuccessListener { Log.e("database", "DocumentSnapshot successfully written!") }
-                .addOnFailureListener { e -> Log.e("database", "Error writing document") }
-        }
-    }
 }
