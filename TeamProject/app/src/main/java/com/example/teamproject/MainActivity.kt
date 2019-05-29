@@ -2,6 +2,7 @@ package com.example.teamproject
 
 import android.app.Activity
 import android.content.Intent
+import android.database.sqlite.SQLiteQuery
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -34,9 +35,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        init()
-        loading()
         makeMain()
+        Loading()
     }
 
     fun initReview(){
@@ -89,6 +89,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.embassy_phone -> {
 
             }
+            R.id.logout->{
+                sqlite?.dropDB()
+                Loading() //로그인창 재호출
+            }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
@@ -98,6 +102,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     var User:String?=null
     val code = 100
+    var sqlite : SQLite? = null
+    var firestore :Firestore? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -106,25 +112,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (resultCode == Activity.RESULT_OK) { // 결과로 보내준 상태가 OK 코드면
                 User = data?.getStringExtra("id") //값을 받아옴
                 Log.e("Main","$User")
+                sqlite = SQLite(this,"Schedule")
+                // 만들어둔 테이블 정보
+
+                firestore = Firestore.create()
             }
             else{
                 finish() //받은 정보가 없으면 로그인 실패
                 // 종료
             }
         }
-
-        addDB()
     }
 
-    fun loading(){
+    fun Loading(){
         val intent = Intent(this, login::class.java)
         startActivityForResult(intent, code)
     }
-
-    fun init(){
-
-    }
-
 
     // 메인 만들기
     fun makeMain(){
@@ -168,28 +171,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             else{ // 동일한 프레그먼트
                 // 무시
             }
-        }
-    }
-
-
-    //************************************************************
-    fun addDB() {
-//클라우드 파이어스토에 쓰기 하도록 하자.
-        val db = FirebaseFirestore.getInstance()
-        //데이터준비
-        if (db != null) {
-            var user: MutableMap<String, String>? = null
-            user = mutableMapOf()
-            user["u_id"] = "check"
-            user["u_pw"] = "input"
-
-            // Add a new document with a generated ID
-
-//        val newCount = String.format("%03d", count + 1)
-            db!!.collection("User").document("check")
-                .set(user)
-                .addOnSuccessListener { Log.e("database", "DocumentSnapshot successfully written!") }
-                .addOnFailureListener { e -> Log.e("database", "Error writing document") }
         }
     }
 }

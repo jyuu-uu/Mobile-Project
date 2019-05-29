@@ -15,7 +15,7 @@ import kotlin.text.Typography.quote
 class login: AppCompatActivity() {
 
     val code = 101
-    var db:FirebaseFirestore? = null
+    var db:Firestore? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +37,7 @@ class login: AppCompatActivity() {
             // 이부분에 if문으로 파이어폭스 접근
             //아이디 확인
 
+            db = Firestore.create()
             getDB(id,pw)
         }
     }
@@ -87,14 +88,12 @@ class login: AppCompatActivity() {
     fun getDB(_id: String,_pw:String) {
         Log.e("login", "DB 접속시도")
 
-        db = FirebaseFirestore.getInstance()
-
         Log.e("login", "DB 객체 생성")
         if (db != null) {
             Log.e("login", "NULL은 아님")
 
 
-            db!!.collection("User")
+            db!!.db!!.collection("User")
                 .addSnapshotListener(object : EventListener<QuerySnapshot> {
                     override fun onEvent(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
 
@@ -120,7 +119,8 @@ class login: AppCompatActivity() {
 
                         if(flag) { // id,pw 확인해서 맞으면
                             Log.e("login","해당 계정 있음")
-                            var sqlite = SQLite(this@login)
+                            var sqlite = SQLite(this@login,"Login")
+                            sqlite.openDatabase("USER")
                             sqlite.insertData(_id,_pw)
                             In(_id) // 있다면 정보를 넘기고 종료
                         }else{ // 아이디가 없으면 다시 시도
@@ -130,26 +130,6 @@ class login: AppCompatActivity() {
                         }
                     }
                 })
-        }
-    }
-
-    fun addDB() {
-//클라우드 파이어스토에 쓰기 하도록 하자.
-        db = FirebaseFirestore.getInstance()
-        //데이터준비
-        if (db != null) {
-            var user: MutableMap<String, String>? = null
-            user = mutableMapOf()
-            user.put("id", "check")
-            user.put("pw", "input")
-
-            // Add a new document with a generated ID
-
-//        val newCount = String.format("%03d", count + 1)
-            db!!.collection("User").document("check")
-                .set(quote)
-                .addOnSuccessListener { Log.e("database", "DocumentSnapshot successfully written!") }
-                .addOnFailureListener { e -> Log.e("database", "Error writing document") }
         }
     }
 }

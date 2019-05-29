@@ -31,4 +31,12 @@
         </menu>
     </item>
 
+    <item android:title="계정 관리">
+        <menu>
+                <item
+                        android:id="@+id/logout"
+                        android:icon="@drawable/ic_menu_slideshow"
+                        android:title="로그아웃"/>
+        </menu>
+    </item>
 </menu>

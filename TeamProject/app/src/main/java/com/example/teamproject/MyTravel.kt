@@ -3,5 +3,5 @@ package com.example.teamproject
 
 import java.io.Serializable
 
-data class MyTravel (val tno:Int, val where:String, val period:String, val people:Int, val money:String):Serializable{
+data class MyTravel (val tno:Int,val uno:Int, val where:String, val period:String, val people:Int, val money:String):Serializable{
 }
