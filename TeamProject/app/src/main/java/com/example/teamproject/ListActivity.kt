@@ -43,10 +43,10 @@ class ListActivity : AppCompatActivity() {
 
     }
     fun readData(){
-
+        //나중에 u_id 비교해서 로그인한 user의 Travel만 불러오도록해야함
         val db = FirebaseFirestore.getInstance()
         var t_id:Int
-        var u_id:Int
+        var u_id:String
         var t_when:String
         var t_where:String
         var t_who:Int
@@ -69,7 +69,7 @@ class ListActivity : AppCompatActivity() {
                         for (doc in value) {
                             Log.e("database", "$doc 읽는 중2")
                             t_id=doc.get("t_id").toString().toInt()
-                            u_id=doc.get("u_id").toString().toInt()
+                            u_id=doc.get("u_id").toString()
                             t_when=doc.get("t_when").toString()
                             t_where=doc.get("t_where").toString()
                             t_who=doc.get("t_who").toString().toInt()
@@ -80,8 +80,8 @@ class ListActivity : AppCompatActivity() {
                     }
                 }
             })
-//        travels.add(MyTravel(0,-1,"미국","2017년 1월 23일 ~ 2017년 2월 11일",2,"500만원"))
-//        travels.add(MyTravel(1,-1,"호주","2018년 7월 15일 ~ 2018년 7월 28일",2,"300만원"))
+//        travels.add(MyTravel(0,-1,"미국","2017/1/23일~2017/2/11일",2,"500만원"))
+//        travels.add(MyTravel(1,-1,"호주","2018/7/15일~2018/7/28일",2,"300만원"))
 //        schedules.add(schedule(0,0,"1시","자유의여신상",false))
 //        schedules.add(schedule(1,1,"5시","동물원",false))
     }

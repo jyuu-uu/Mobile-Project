@@ -39,7 +39,7 @@ class addTravel : AppCompatActivity() {
                 return DatePickerDialog(
                     this, // 현재화면의 제어권자
                     OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        period1=year.toString() + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일"
+                        period1=year.toString() + "/" + (monthOfYear + 1) + "/" + dayOfMonth + "/"
                         Toast.makeText(
                             applicationContext,
                             period1,
@@ -55,7 +55,7 @@ class addTravel : AppCompatActivity() {
                 return DatePickerDialog(
                     this, // 현재화면의 제어권자
                     OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        period2=year.toString() + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일"
+                        period2=year.toString() + "/" + (monthOfYear + 1) + "/" + dayOfMonth + "/"
                         Toast.makeText(
                             applicationContext,
                             period2,
@@ -85,8 +85,8 @@ class addTravel : AppCompatActivity() {
             if(editWhere.text.toString()==""||editMoney.text.toString()==""||editPeople.text.toString()==""||check1==false||check2==false){
                 Toast.makeText(this,"빈칸을 모두 채워주세요.",Toast.LENGTH_LONG).show()
             }else{
-                period=period1+" ~ "+period2
-                travels.add(MyTravel(travels.size,-1,editWhere.text.toString(),period.toString(),editPeople.text.toString().toInt(),editMoney.toString()))
+                period=period1+"~"+period2
+                travels.add(MyTravel(travels.size,"check",editWhere.text.toString(),period.toString(),editPeople.text.toString().toInt(),editMoney.toString()))
                 Toast.makeText(this,"여행이 추가되었습니다.",Toast.LENGTH_LONG).show()
                 finish()
             }
