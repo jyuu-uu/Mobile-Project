@@ -26,6 +26,10 @@ import android.widget.EditText
 import android.content.DialogInterface
 import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
+import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.QuerySnapshot
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -46,6 +50,12 @@ class List1Fragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         schedule= mutableListOf()
+        for (i in 0..travels.size){
+            if(travels[i].tno==index){
+                index=i
+                break
+            }
+        }
         init()
         initLayout()
         initSwipe()
@@ -57,6 +67,7 @@ class List1Fragment : Fragment() {
         }
     }
     fun init(){
+
         textView15.setText(travels[index].where.toString()+"의 일정")
 
         readData()
@@ -87,13 +98,46 @@ class List1Fragment : Fragment() {
     }
 
     fun readData(){
+        val db = FirebaseFirestore.getInstance()
+        var s_id:Int
+        var t_id:Int
+        var s_todo:String
+        var s_time:String
+        var s_alarm:Boolean
+        db!!.collection("Schedule")
+            .addSnapshotListener(object : EventListener<QuerySnapshot> {
+                override fun onEvent(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
+                    Log.e("database", "aa")
+                    if (e != null) {
+                        Log.e("database", "database Listen failed.2")
+                        return
+                    }
+                    val count = value?.size()
+                    var flag = false
+                    // list.clear()//일딴 초기화 해줘야 한다. 안 그럼 기존 데이터에 반복해서 뒤에 추가된다.
+                    if (value==null)Log.e("database", "bb")
+                    if (value != null) {
+                        Log.e("database", "cc")
+                        for (doc in value) {
+                            Log.e("database", "$doc 읽는 중2")
+                            t_id=doc.get("t_id").toString().toInt()
+                            s_id=doc.get("s_id").toString().toInt()
+                            s_todo=doc.get("s_todo").toString().toInt().toString()
+                            s_time=doc.get("s_time").toString().toInt().toString()
+                            s_alarm=doc.get("s_alarm").toString().toBoolean()
 
+                            schedules.add(schedule(s_id,t_id,s_time,s_todo,s_alarm))
+                        }
+//                     adapter.notifyDataSetChanged()
+                    }
+                }
+            })
     }
     fun setItem(){
         var i=0
         schedule.clear()
         while (i<schedules.size){
-            if(schedules[i].tno==index){
+            if(i==index){
                 schedule.add(schedules[i])
             }
             i++

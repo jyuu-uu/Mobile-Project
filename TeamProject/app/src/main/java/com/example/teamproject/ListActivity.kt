@@ -82,8 +82,8 @@ class ListActivity : AppCompatActivity() {
             })
 //        travels.add(MyTravel(0,-1,"미국","2017/1/23일~2017/2/11일",2,"500만원"))
 //        travels.add(MyTravel(1,-1,"호주","2018/7/15일~2018/7/28일",2,"300만원"))
-//        schedules.add(schedule(0,0,"1시","자유의여신상",false))
-//        schedules.add(schedule(1,1,"5시","동물원",false))
+        schedules.add(schedule(2,1,"2019/6/1/10:00","공원",false))
+        schedules.add(schedule(3,2,"2018/12/11/12:00","동물원",false))
     }
     fun addListener(){
         //여행 리스트 중 하나 클릭하면 그 여행 정보랑 준비물리스트 보여주는 창으로 넘어감

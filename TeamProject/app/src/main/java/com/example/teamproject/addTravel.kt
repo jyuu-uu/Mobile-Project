@@ -39,7 +39,7 @@ class addTravel : AppCompatActivity() {
                 return DatePickerDialog(
                     this, // 현재화면의 제어권자
                     OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        period1=year.toString() + "/" + (monthOfYear + 1) + "/" + dayOfMonth + "/"
+                        period1=year.toString() + "/" + (monthOfYear + 1) + "/" + dayOfMonth
                         Toast.makeText(
                             applicationContext,
                             period1,
@@ -55,7 +55,7 @@ class addTravel : AppCompatActivity() {
                 return DatePickerDialog(
                     this, // 현재화면의 제어권자
                     OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        period2=year.toString() + "/" + (monthOfYear + 1) + "/" + dayOfMonth + "/"
+                        period2=year.toString() + "/" + (monthOfYear + 1) + "/" + dayOfMonth
                         Toast.makeText(
                             applicationContext,
                             period2,
