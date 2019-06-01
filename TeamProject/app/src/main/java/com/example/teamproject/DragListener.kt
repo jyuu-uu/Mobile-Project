@@ -22,6 +22,9 @@ class DragListener:View.OnDragListener {
             R.id.listView2 -> {
                 area = "area2"
             }
+            else->{
+                area = v!!.id.toString()
+            }
         }
         when (event?.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
