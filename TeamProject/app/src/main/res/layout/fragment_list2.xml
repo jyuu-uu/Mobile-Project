@@ -3,13 +3,23 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="horizontal">
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
             android:id="@+id/pane1"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_margin="10dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <TextView
+                android:text="기존"
+                android:gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
         <android.support.v7.widget.RecyclerView
                 android:id="@+id/listView1"
@@ -22,12 +32,19 @@
             android:layout_weight="1"
             android:layout_margin="10dp"
             android:layout_width="0dp"
-            android:layout_height="match_parent">
-
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <TextView
+                android:text="추가"
+                android:gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         <android.support.v7.widget.RecyclerView
                 android:id="@+id/listView2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
     </LinearLayout>>
+</LinearLayout>
 
 </LinearLayout>
