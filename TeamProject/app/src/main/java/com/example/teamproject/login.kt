@@ -37,8 +37,13 @@ class login: AppCompatActivity() {
             // 이부분에 if문으로 파이어폭스 접근
             //아이디 확인
 
-            db = Firestore.create()
+            db = Firestore.create(applicationContext)
             getDB(id,pw)
+        }
+
+        join.setOnClickListener {
+            var i = Intent(this,JoinActivity::class.java)
+            startActivity(i)
         }
     }
 

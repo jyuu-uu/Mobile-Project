@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 sqlite = SQLite(this,"Schedule")
                 // 만들어둔 테이블 정보
 
-                firestore = Firestore.create()
+                firestore = Firestore.create(applicationContext)
             }
             else{
                 finish() //받은 정보가 없으면 로그인 실패
