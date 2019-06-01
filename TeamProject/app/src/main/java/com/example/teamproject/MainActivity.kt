@@ -2,6 +2,7 @@ package com.example.teamproject
 
 import android.app.Activity
 import android.content.Intent
+import android.database.sqlite.SQLiteQuery
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -12,6 +13,12 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import android.support.annotation.NonNull
+import android.support.v4.app.FragmentActivity
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -28,9 +35,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        init()
-        loading()
         makeMain()
+        Loading()
     }
 
     fun initReview(){
@@ -83,6 +89,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.embassy_phone -> {
 
             }
+            R.id.logout->{
+                sqlite?.dropDB()
+                Loading() //로그인창 재호출
+            }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
@@ -92,6 +102,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     var User:String?=null
     val code = 100
+    var sqlite : SQLite? = null
+    var firestore :Firestore? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -100,6 +112,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (resultCode == Activity.RESULT_OK) { // 결과로 보내준 상태가 OK 코드면
                 User = data?.getStringExtra("id") //값을 받아옴
                 Log.e("Main","$User")
+                sqlite = SQLite(this,"Schedule")
+                // 만들어둔 테이블 정보
+
+                firestore = Firestore.create(applicationContext)
             }
             else{
                 finish() //받은 정보가 없으면 로그인 실패
@@ -108,15 +124,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    fun loading(){
+    fun Loading(){
         val intent = Intent(this, login::class.java)
         startActivityForResult(intent, code)
     }
-
-    fun init(){
-
-    }
-
 
     // 메인 만들기
     fun makeMain(){
@@ -162,6 +173,4 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
-
-
 }

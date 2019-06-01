@@ -26,20 +26,15 @@ import android.widget.EditText
 import android.content.DialogInterface
 import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
+import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.QuerySnapshot
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- *
- */
 class List1Fragment : Fragment() {
     lateinit var schedule:MutableList<schedule>
     lateinit var adapter:CardAdapter
@@ -53,8 +48,14 @@ class List1Fragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         schedule= mutableListOf()
+        Log.e("index", index.toString())
+        for (i in 0..travels.size){
+            if(travels[i].tno==index){
+                index=i
+                break
+            }
+        }
         init()
         initLayout()
         initSwipe()
@@ -66,7 +67,10 @@ class List1Fragment : Fragment() {
         }
     }
     fun init(){
-        textView15.setText(travels[index].where.toString()+"의 일정")
+        Log.e("index", index.toString())
+        Log.e("index", travels[index].tno.toString())
+        Log.e("index", travels.size.toString())
+        textView15.setText(travels[index].where+"의 일정")
 
         readData()
         setItem()
@@ -80,7 +84,27 @@ class List1Fragment : Fragment() {
             ad.setView(dialogView)
                 .setPositiveButton("확인") { dialogInterface, i ->
                     if(dialogwhat.text.toString()!=""&&dialogwhen.text.toString()!=""){
-                        schedules.add(schedule(schedules.size,index,dialogwhen.text.toString(),dialogwhat.text.toString(),false))
+                        val db = FirebaseFirestore.getInstance()
+                        //데이터준비
+                        if (db != null) {
+                            var new: MutableMap<String, Any>? = null
+                            new = mutableMapOf()
+                            new["s_id"] = schedules.size
+                            new["s_todo"] =dialogwhat.text.toString()
+                            new["s_time"] = dialogwhen.text.toString()
+                            new["s_alarm"] =false
+                            new["t_id"] =travels[index].tno
+                            // Add a new document with a generated ID
+
+//        val newCount = String.format("%03d", count + 1)
+                            db!!.collection("Schedule").document("schedule"+ (schedules.size+1).toString())
+                                .set(new)
+                                .addOnSuccessListener { Log.e("database", "DocumentSnapshot successfully written!") }
+                                .addOnFailureListener { e -> Log.e("database", "Error writing document") }
+                            //travels.add(newtravel)
+                        }
+
+                        //schedules.add(schedule(schedules.size,travels[index].tno,dialogwhen.text.toString(),dialogwhat.text.toString(),false))
                         Toast.makeText(activity,"일정 추가 완료! 새로고침하려면 밑으로 스와이프",Toast.LENGTH_SHORT).show()
                     }else{
                         Toast.makeText(activity,"일정 추가 실패",Toast.LENGTH_SHORT).show()
@@ -96,13 +120,45 @@ class List1Fragment : Fragment() {
     }
 
     fun readData(){
-
+        val db = FirebaseFirestore.getInstance()
+        var s_id:Int
+        var t_id:Int
+        var s_todo:String
+        var s_time:String
+        var s_alarm:Boolean
+        db!!.collection("Schedule")
+            .addSnapshotListener(object : EventListener<QuerySnapshot> {
+                override fun onEvent(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
+                    Log.e("database", "schedulea")
+                    if (e != null) {
+                        Log.e("database", "database Listen failed.2")
+                        return
+                    }
+                    val count = value?.size()
+                    var flag = false
+                    // list.clear()//일딴 초기화 해줘야 한다. 안 그럼 기존 데이터에 반복해서 뒤에 추가된다.
+                    if (value==null)Log.e("database", "scheduleb")
+                    if (value != null) {
+                        Log.e("database", "schedulec")
+                        for (doc in value) {
+                            Log.e("database", "$doc 읽는 중2")
+                            t_id=doc.get("t_id").toString().toInt()
+                            s_id=doc.get("s_id").toString().toInt()
+                            s_todo=doc.get("s_todo").toString()
+                            s_time=doc.get("s_time").toString()
+                            s_alarm=doc.get("s_alarm").toString().toBoolean()
+                            schedules.add(schedule(s_id,t_id,s_time,s_todo,s_alarm))
+                        }
+//                     adapter.notifyDataSetChanged()
+                    }
+                }
+            })
     }
     fun setItem(){
         var i=0
         schedule.clear()
         while (i<schedules.size){
-            if(schedules[i].tno==index){
+            if(schedules[i].tno== travels[index].tno){
                 schedule.add(schedules[i])
             }
             i++

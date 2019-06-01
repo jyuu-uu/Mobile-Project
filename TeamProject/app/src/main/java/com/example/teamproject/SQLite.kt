@@ -7,11 +7,11 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 
-class SQLite(val v: AppCompatActivity) {
+class SQLite(val v: AppCompatActivity, val tableName: String) {
 
     internal var database: SQLiteDatabase? = null
     lateinit var databaseName:String
-    lateinit var tableName: String
+
 
 //            openDatabase(databaseName)
 //            createTable(tableName)
@@ -47,11 +47,18 @@ class SQLite(val v: AppCompatActivity) {
 
     fun AutoLogin():ArrayList<String>?{
         if (database != null) { // 데이터베이스가 존재하지 않으면
+
+//            Log.e("SQLite","$tableName 으로 자동로그인 시도")
+//            val c = database?.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='"+tableName+"'", null)
+//            Log.e("SQLite","$c")
+//            if(c. == null)
+//                createTable(tableName) // 테이블이없으면 생성
+
             val sql = "select * from Login" //조건 기재
             val cursor = database!!.rawQuery(sql, null) //파라미터는 없으니깐 null 값 넣어주면된다.
             Log.e("SQLite","조회된 데이터개수 :" + cursor.count)
 
-            if(cursor.count == 1){
+            if(cursor?.count == 1){
                 // 정보가 1개 이상 들어있단 이야기.
                 // 자동로그인이 되어어야함
                 cursor.moveToNext()
@@ -93,15 +100,35 @@ class SQLite(val v: AppCompatActivity) {
         }
     }
 
+    fun insertData(i_id: String, i_pw: String) {
+        Log.e("SQLite","insertData() 호출됨.")
+
+        if (database != null) {
+
+            val sql = "insert into " +
+                    /*삽입할 테이블 이름*/ "Login" + "(id, pw) values(?, ?)"
+            val params = arrayOf(i_id, i_pw)
+            database!!.execSQL(sql, params)
+            //이런식으로 두번쨰 파라미터로 이런식으로 객체를 전달하면 sql문의 ?를 이 params에 있는 데이터를 물음표를 대체해준다.
+            Log.e("SQLite", "데이터 추가함")
+
+        } else {
+            Log.e("SQLite", "데이터베이스를 먼저 오픈하시오")
+        }
+    }
+
     fun insertData(table:String, name: String, age: Int, mobile: String) {
         Log.e("SQLite","insertData() 호출됨.")
 
         if (database != null) {
 
-//            val c = database!!.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name="+table+"'", null)
+//            val c = database?.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='"+tableName+"'", null)
+//
+//            if(c == null)
+//                createTable(tableName) // 테이블이없으면 생성
 
             val sql = "insert into " +
-                    /*삽입할 테이블 이름*/ "" + "(name, age, mobile) values(?, ?, ?)"
+                    /*삽입할 테이블 이름*/ "Schedule" + "(name, age, mobile) values(?, ?, ?)"
             val params = arrayOf(name, age, mobile)
             database!!.execSQL(sql, params)
             //이런식으로 두번쨰 파라미터로 이런식으로 객체를 전달하면 sql문의 ?를 이 params에 있는 데이터를 물음표를 대체해준다.
@@ -131,6 +158,21 @@ class SQLite(val v: AppCompatActivity) {
             }
             cursor.close() //cursor라는것도 실제 데이터베이스 저장소를 접근하는 것이기 때문에 자원이 한정되있다. 그러므로 웬만하면 마지막에 close를 꼭 해줘야한다.
         }
+    }
+
+    fun deleteData(w_id:Int){
+        Log.e("SQLite","deleteData() 호출됨.")
+        if (database != null) {
+            val sql = "delete from Schedule where w_id="+w_id.toString() //조건 기재
+            val cursor = database!!.rawQuery(sql, null) //파라미터는 없으니깐 null 값 넣어주면된다.
+            Log.e("SQLite","delete 성공.")
+        }
+    }
+
+    fun dropDB(){
+        Log.e("SQLite","dropDB() 호출됨.")
+
+        v.deleteDatabase("USER.db")
     }
 
     internal inner class DatabaseHelper(
