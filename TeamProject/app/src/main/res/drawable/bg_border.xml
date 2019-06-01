@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:padding="10dp"
+       android:shape="rectangle">
+    <!-- 테두리 둥근 정도 -->
+    <corners android:bottomLeftRadius="12dp"
+             android:bottomRightRadius="12dp"
+             android:topLeftRadius="12dp"
+             android:topRightRadius="12dp"/>
+    <!-- 테두리 굵기와 색 지정 -->
+    <stroke android:width="2dp"
+            android:color="#BA00A5FA"/>
+    <!--배경색-->
+    <solid android:color="#ffffff" />
+</shape>

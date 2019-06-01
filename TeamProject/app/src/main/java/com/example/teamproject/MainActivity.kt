@@ -13,11 +13,6 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import android.support.annotation.NonNull
-import android.support.v4.app.FragmentActivity
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.firestore.FirebaseFirestore
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -78,7 +73,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(intent)
             }
             R.id.bookmark -> {
-
+                    makeFav()
             }
             //R.id.nav_manage -> {
 
@@ -173,4 +168,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
+
+    fun makeFav() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.frame)
+        // 해당 view에 fragment가 부착되어 있으면 해당 fragment를 반환
+
+        val favFragment = supportFragmentManager.findFragmentByTag("favFrag")
+        // 이미지 프레그먼트의 tag값 을 통해 프레그먼트 획득 시도
+        if (favFragment == null) {
+            // 부착된 프레그먼트가 메인 프레그먼트가 아닌 경우
+
+            val favTransaction = supportFragmentManager.beginTransaction()
+            // 서포트프레그먼트매니저를 통해 프레임 생성/교체하는 작업을 시작
+
+            val favFrag = FavFragment.create(User!!)
+            // 2. fragment에 해당하는 객체를 마음대로 생성하지 않고
+            // 생성해주는 함수를 만들어놓고, 해당 함수를 통해 객체를 '받는' 방식이 가능
+            // 더 일반적인 방법이며, 해당 방법을 위해선 자바의 static 기능이 필요
+            // so, 생성할 fragment 내부에 companion object 를 통한 함수 선언
+
+            favTransaction.replace(R.id.frame, favFrag, "favFrag")
+            // 이미지 교체 작업까지 완료
+            favTransaction.commit() // 실제 수행
+            //              m_imageFrag = true // 이미지 프레그먼트 부착 완료
+        } else { // 동일한 프레그먼트
+            // 무시
+        }
+    }
+
+    fun resetClick(){
+        var info = findViewById<>(R.id.my_info)
+        R.id.nav_list
+        R.id.near_market
+    }
+
 }

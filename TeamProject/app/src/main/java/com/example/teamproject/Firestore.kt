@@ -8,6 +8,11 @@ import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import android.provider.SyncStateContract.Helpers.update
+import com.google.firestore.v1.WriteResult
+import com.google.firebase.firestore.DocumentReference
+
+
 
 class Firestore {
 
@@ -44,9 +49,8 @@ class Firestore {
 
     fun findData(_id: String,_pw: String){
         if(db != null){
-           val isExist = db!!.collection("User").document(_id)
-               .get()
-                .addOnSuccessListener {
+           val isExist = db!!.collection("User").document(_id).get()
+               .addOnSuccessListener {
                     val res = it.get("doc")//a.result//!!.get("doc")
                     Log.e("firebase","$it\n$res")
                     val Exist = if(res != "null") true else false
@@ -61,17 +65,31 @@ class Firestore {
         }
     }
 
-    fun deleteData(_id:String) { // 회원계정 버전
+    fun deleteData(_id:String,flag:Int = 0) { // 회원계정 버전
         //데이터준비
         if (db != null) {
 
+            when(flag){
+                0->{
+                    db!!.collection("User").document(_id)
+                        .delete()
+                        .addOnSuccessListener {
+                            Toast.makeText(activity,"계정 탈퇴에 성공하셨습니다",Toast.LENGTH_SHORT).show()
+                            Log.e("database", "DocumentSnapshot successfully delete!") }
+                        .addOnFailureListener { e -> Log.e("database", "Error delete document") }
+                }
+                1->{
+                    val docRef = db!!.collection("User").document(_id)
+                    Log.e("fire Delete","docRef")
+
+                    /*    delete()
+                        .addOnSuccessListener {
+                            Toast.makeText(activity,"즐겨찾기 삭제",Toast.LENGTH_SHORT).show()
+                            Log.e("database", "DocumentSnapshot successfully delete!") }
+                        .addOnFailureListener { e -> Log.e("database", "Error delete document") }*/
+                }
+            }
 //        val newCount = String.format("%03d", count + 1)
-            db!!.collection("User").document(_id)
-                .delete()
-                .addOnSuccessListener {
-                    Toast.makeText(activity,"계정 탈퇴에 성공하셨습니다",Toast.LENGTH_SHORT).show()
-                    Log.e("database", "DocumentSnapshot successfully delete!") }
-                .addOnFailureListener { e -> Log.e("database", "Error delete document") }
         }
     }
 }

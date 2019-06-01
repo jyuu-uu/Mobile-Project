@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="wrap_content"
+              android:background="@drawable/bg_border"
+              android:orientation="vertical"
+              android:layout_marginVertical="10dp"
+              android:layout_marginHorizontal="15dp"
+android:padding="10dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="horizontal"
+    android:layout_marginBottom="4dp">
+        <ImageView android:layout_width="0dp" android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/ic_1_black"/>
+        <TextView android:layout_width="0dp" android:layout_height="match_parent"
+                  android:layout_weight="7"
+                  android:textFontWeight="7"
+                  android:id="@+id/fav_title"
+                  android:layout_marginLeft="10dp"
+                  android:textSize="22sp" android:text="Title"
+        />
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp"
+    android:layout_weight="2"    android:orientation="horizontal"   >
+        <ImageView android:layout_width="0dp" android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_launcher"
+                   android:id="@+id/fav_img"
+        />
+        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+                      android:orientation="vertical" android:layout_weight="5">
+            <TextView android:layout_width="match_parent" android:layout_height="0dp"
+                      android:gravity="center_vertical"
+            android:layout_weight="1"
+                      android:text="다녀온 도시"
+                      android:textSize="17sp"
+            android:id="@+id/fav_country"/>
+            <TextView android:layout_width="match_parent" android:layout_height="0dp"
+                      android:layout_weight="1"
+                      android:textSize="13sp"
+                      android:text="작성자"
+                      android:gravity="center_vertical"
+            android:id="@+id/fav_writer"
+            />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
