@@ -195,11 +195,4 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             // 무시
         }
     }
-
-    fun resetClick(){
-        var info = findViewById<>(R.id.my_info)
-        R.id.nav_list
-        R.id.near_market
-    }
-
 }
