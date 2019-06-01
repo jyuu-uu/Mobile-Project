@@ -136,7 +136,6 @@ class ListFragment : Fragment() {
         var i=0
         travel.clear()
 
-//        sqlite.openDatabase("USER")
         sqlite.openDatabase("USER")
         val auto = sqlite.AutoLogin()
 
