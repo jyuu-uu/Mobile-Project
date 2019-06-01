@@ -16,6 +16,7 @@ class MyAdapter (context: Context, val resource:Int, var list:ArrayList<MyTravel
             var vi=context.applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             v=vi.inflate(R.layout.list_row, null)
 
+            ApiExplorer().init()
         }
         val p=list.get(position)
         v!!.findViewById<TextView>(R.id.textView).text=p.where

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,13 +74,18 @@ class ReviewFragment: Fragment() {
                     for(i in data){
                         if(i.country == "태국")
                             point_country = i.hashCode()
+                        Log.v("review", point_country.toString())
                     }
                 }
                 "미국"->{
                     for(i in data){
                         if(i.country == "미국")
                             point_country = i.hashCode()
+                        Log.v("review", point_country.toString())
                     }
+                }
+                else->{
+                    Log.v("review", country.text.toString())
                 }
             }
             adapter.moveItem(0, point_country)
