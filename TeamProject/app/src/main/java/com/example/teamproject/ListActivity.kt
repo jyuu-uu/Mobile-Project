@@ -1,6 +1,7 @@
 package com.example.teamproject
 
 
+import android.app.ListActivity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
@@ -17,32 +18,37 @@ lateinit var travels:MutableList<MyTravel>
 lateinit var schedules:MutableList<schedule>
 class ListActivity : AppCompatActivity() {
     lateinit var adapter: MyAdapter
-
+    lateinit var travel:MutableList<MyTravel>
+    val sqlite = SQLite(this@ListActivity,"Login")
+    //lateinit var temp:ArrayList<MyTravel>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
+        travel= mutableListOf()
         init()
-        adapter.notifyDataSetChanged()
         val swipe=findViewById(R.id.swiperefresh) as SwipeRefreshLayout
         swipe.setOnRefreshListener {
-            setItem(ArrayList(travels))
-            adapter = MyAdapter(this, R.layout.list_row, ArrayList(travels))
+            Log.e("travels size", travels.size.toString())
+            setItem()
+            adapter = MyAdapter(this, R.layout.list_row, ArrayList(travel))
             listView.adapter = adapter
             swipe.setRefreshing(false);
         }
     }
+
     fun init(){
         Toast.makeText(this,"a",Toast.LENGTH_SHORT).show()
         schedules= mutableListOf()
         travels= mutableListOf()
         readData()
+        setItem()
         addListener()
         addTravel()
-        adapter=MyAdapter(this,R.layout.list_row,ArrayList(travels))
+        adapter=MyAdapter(this,R.layout.list_row,ArrayList(travel))
         listView.adapter=adapter
-
     }
     fun readData(){
+        Log.e("readData","readdata")
         //나중에 u_id 비교해서 로그인한 user의 Travel만 불러오도록해야함
         val db = FirebaseFirestore.getInstance()
         var t_id:Int
@@ -81,9 +87,9 @@ class ListActivity : AppCompatActivity() {
                 }
             })
 //        travels.add(MyTravel(0,-1,"미국","2017/1/23일~2017/2/11일",2,"500만원"))
-//        travels.add(MyTravel(1,-1,"호주","2018/7/15일~2018/7/28일",2,"300만원"))
-        schedules.add(schedule(2,1,"2019/6/1/10:00","공원",false))
-        schedules.add(schedule(3,2,"2018/12/11/12:00","동물원",false))
+//        travels.add(MyTrael(1,-1,"호주","2018/7/15일~2018/7/28일",2,"300만원"))
+//        schedules.add(schedule(2,1,"2019/6/1/10:00","공원",false))
+//        schedules.add(schedule(3,2,"2018/12/11/12:00","박물관",false))
     }
     fun addListener(){
         //여행 리스트 중 하나 클릭하면 그 여행 정보랑 준비물리스트 보여주는 창으로 넘어감
@@ -101,9 +107,20 @@ class ListActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-    fun setItem(list:ArrayList<MyTravel>){
-        travels.clear()
-        travels.addAll(list)
+    fun setItem(){
+        var i=0
+        travel.clear()
+
+        // 데이터베이스를 오픈
+        sqlite.openDatabase("USER")
+        val auto = sqlite.AutoLogin()
+
+        while (i<travels.size){
+            if(auto!![0]== travels[i].uno){
+                travel.add(travels[i])
+            }
+            i++
+        }
     }
 
 }
