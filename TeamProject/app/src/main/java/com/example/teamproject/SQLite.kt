@@ -2,13 +2,14 @@ package com.example.teamproject
 
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteDatabase.openOrCreateDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 
 class SQLite(val v: AppCompatActivity, val tableName: String) {
-
     internal var database: SQLiteDatabase? = null
     lateinit var databaseName:String
 
@@ -30,15 +31,15 @@ class SQLite(val v: AppCompatActivity, val tableName: String) {
 
     fun openDatabase(databaseName: String) {
         Log.e("SQLite","openDatabase() 호출됨")
-        /*   database = openOrCreateDatabase(databaseName, MODE_PRIVATE, null); //보안때문에 요즘은 대부분 PRIVATE사용,
-         SQLiteDatabase객체가 반환됨
+        //database = openOrCreateDatabase(databaseName, MODE_PRIVATE, null); //보안때문에 요즘은 대부분 PRIVATE사용,
+        //SQLiteDatabase객체가 반환됨
         if (database != null) {
             println("데이터베이스 오픈됨");
-        }*/
-
+        }
         val helper = DatabaseHelper(v, databaseName+".db", null, 3) //헬퍼를 생성함
 //         DatabaseHelper helper = new DatabaseHelper(this , databaseName, null, 4);
         // 위에거 실행후 이거 실행했을 경우 (이미 해당 디비가있으므로 헬퍼의 update가 호출될것이다.)
+
         database = helper.writableDatabase  //데이터베이스에 쓸수 있는 권한을 리턴해줌(갖게됨)
 
         createTable("Login")
