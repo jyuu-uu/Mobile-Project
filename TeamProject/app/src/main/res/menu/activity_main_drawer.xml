@@ -7,7 +7,7 @@
         <item
                 android:id="@+id/my_info"
                 android:icon="@drawable/ic_menu_send"
-                android:title="내 정보"/>
+                android:title="메인 화면"/>
         <item
                 android:id="@+id/nav_list"
                 android:icon="@drawable/ic_menu_manage"

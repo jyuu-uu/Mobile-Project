@@ -23,12 +23,14 @@ class main_first : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        Log.e("순서","메인1")
 
         return inflater.inflate(R.layout.fragment_main_first, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        Log.e("순서","메인1액티븉")
         make()
     }
 

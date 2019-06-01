@@ -1,5 +1,6 @@
 package com.example.teamproject
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
@@ -7,8 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class MainFragment : Fragment() {
 
@@ -31,30 +32,42 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        Log.e("순서","뷰 크리에잇")
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         init()
+        Log.e("순서","액티비티크리에이")
     }
 
-    private var tabLayer: TabLayout?= null
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        Log.e("순서","어테치")
+    }
+
+    //private var tabLayer: TabLayout?= null
 
     fun init() {
         if (activity != null) {
+            var tabLayer: TabLayout? = null
+
             tabLayer = activity?.findViewById(R.id.layout_tab)
-            tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 1"))
-            tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 2"))
-            tabLayer?.addTab(tabLayer!!.newTab().setText("리뷰"))
-            tabLayer?.addTab(tabLayer!!.newTab().setText("Map"))
-            //탭 추가
 
-            val adapter = TabAdapter(activity!!.supportFragmentManager, tabLayer!!.tabCount)
+            if (tabLayer!!.tabCount ==0) {
+                //탭 추가
+                tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 1"))
+                tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 2"))
+                tabLayer?.addTab(tabLayer!!.newTab().setText("리뷰"))
+            }
+
+
+            val adapter = TabAdapter(childFragmentManager, tabLayer!!.tabCount)
+            // 이게 문제였다니
+            Log.e("순서","어댑터 $adapter")
             content.adapter = adapter
-
             content.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayer))
-
             tabLayer!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabReselected(p0: TabLayout.Tab?) {}
                 override fun onTabUnselected(p0: TabLayout.Tab?) {}
@@ -62,6 +75,9 @@ class MainFragment : Fragment() {
                     content.currentItem = tab.position
                 }
             })
+            content!!.adapter!!.notifyDataSetChanged()
+//            content.clearOnPageChangeListeners()
+  //          (tabLayer as FragmentPagerAdapter).notifyDataSetChanged()
 
         }
         else

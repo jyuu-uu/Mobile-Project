@@ -27,7 +27,7 @@ class FavFragment : Fragment() {
     var User: String? = null
     var key = mutableListOf<String>()
     var data = mutableListOf<FavData>()
-    var v :View?=null
+    var v: View? = null
 
     companion object {
         fun create(_User: String): FavFragment {
@@ -73,15 +73,19 @@ class FavFragment : Fragment() {
             ?.addOnSuccessListener {
 
                 var i = 0
-                for (k in it){
+                for (k in it) {
                     Log.e("fav2", "$k")
-                    val e= k.get("t_id")
-                    Log.e("fav 찾기","$e")
-                    if(key[i]=="travel"+e.toString()){
-                        data.add(FavData(key[i],k.get("t_when").toString(),
-                            k.get("t_where").toString(),k.get("t_who").toString()+"명"))
+                    val e = k.get("t_id")
+                    Log.e("fav 찾기", "$e")
+                    if (key[i] == "travel" + e.toString()) {
+                        data.add(
+                            FavData(
+                                key[i], k.get("t_when").toString(),
+                                k.get("t_where").toString(), k.get("t_who").toString() + "명"
+                            )
+                        )
                         i++
-                        if(i == key.size)
+                        if (i == key.size)
                             break;
                     }
                 }
@@ -91,15 +95,17 @@ class FavFragment : Fragment() {
 
 
     fun initAdapter() {
-        //레이아웃을 관리하는 매니저 객체가 필요
-        val layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
-        v!!.fav_list.layoutManager = layoutManager
+        if (activity != null) {
+            //레이아웃을 관리하는 매니저 객체가 필요
+            val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+            v!!.fav_list.layoutManager = layoutManager
 
-        Log.e("fav오댭토","$data")
-        adapter = FavAdapter(data, activity!!.applicationContext, User!!)
-        v!!.fav_list.adapter = adapter //data 정보를 갖는 어댑터를 생성하여 붙여줌
-        // Context 정보, 수평수직 정보, 순서 정보
-        v!!.fav_list.layoutManager = layoutManager
-        // recyclerView를 위한 매니저이므로, 붙여줌
+            Log.e("fav오댭토", "$data")
+            adapter = FavAdapter(data, activity!!.applicationContext, User!!)
+            v!!.fav_list.adapter = adapter //data 정보를 갖는 어댑터를 생성하여 붙여줌
+            // Context 정보, 수평수직 정보, 순서 정보
+            v!!.fav_list.layoutManager = layoutManager
+            // recyclerView를 위한 매니저이므로, 붙여줌
+        }
     }
 }

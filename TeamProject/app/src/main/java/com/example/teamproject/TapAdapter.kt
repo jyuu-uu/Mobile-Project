@@ -6,8 +6,18 @@ import android.support.v4.app.FragmentPagerAdapter
 
 class TabAdapter(fm: FragmentManager,val num:Int): FragmentPagerAdapter(fm){
 
+
     override fun getCount(): Int {
         return num
+    }
+
+    override fun getItemPosition(`object`: Any): Int {
+//        return super.getItemPosition(`object`)
+        return POSITION_NONE;
+    }
+
+    override fun notifyDataSetChanged() {
+        super.notifyDataSetChanged()
     }
 
     override fun getItem(position: Int): Fragment? {
@@ -15,7 +25,6 @@ class TabAdapter(fm: FragmentManager,val num:Int): FragmentPagerAdapter(fm){
             0-> return main_first()
             1-> return main_second()
             2-> return ReviewFragment()
-            3-> return MapsActivity()
         }
         return null
     }
