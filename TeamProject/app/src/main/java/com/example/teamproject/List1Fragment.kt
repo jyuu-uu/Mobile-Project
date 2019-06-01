@@ -47,6 +47,7 @@ class List1Fragment : Fragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+        Log.e("created","created")
         super.onActivityCreated(savedInstanceState)
         schedule= mutableListOf()
         Log.e("index", index.toString())
@@ -101,7 +102,6 @@ class List1Fragment : Fragment() {
                                 .set(new)
                                 .addOnSuccessListener { Log.e("database", "DocumentSnapshot successfully written!") }
                                 .addOnFailureListener { e -> Log.e("database", "Error writing document") }
-                            //travels.add(newtravel)
                         }
 
                         //schedules.add(schedule(schedules.size,travels[index].tno,dialogwhen.text.toString(),dialogwhat.text.toString(),false))
@@ -120,6 +120,8 @@ class List1Fragment : Fragment() {
     }
 
     fun readData(){
+        schedules.clear()
+        Log.e("readData","readdata")
         val db = FirebaseFirestore.getInstance()
         var s_id:Int
         var t_id:Int
@@ -129,6 +131,7 @@ class List1Fragment : Fragment() {
         db!!.collection("Schedule")
             .addSnapshotListener(object : EventListener<QuerySnapshot> {
                 override fun onEvent(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
+                    schedules.clear()
                     Log.e("database", "schedulea")
                     if (e != null) {
                         Log.e("database", "database Listen failed.2")
@@ -194,26 +197,6 @@ class List1Fragment : Fragment() {
         list1View.layoutManager=layoutManager
         adapter=CardAdapter(context!!,ArrayList(schedule))
         list1View.adapter=adapter
-//        spinner_wifi.onItemSelectedListener=object : AdapterView.OnItemSelectedListener{
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//
-//            }
-//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-////                if(position==0)
-////                    wifi=true
-////                else
-////                    wifi=false
-//                wifi = position==0
-//            }
-//        }//spinner
-//        save.setOnClickListener {
-//            if(name.length()>0&&phoneNum.length()>0){   //한글자라도입력
-//                data.add(0,MyCafe(name.text.toString(),phoneNum.text.toString(),wifi))  //0->새로추가되면 맨위
-//                adapter.notifyDataSetChanged()
-//            }
-//        }
     }
 
     fun setpush(){

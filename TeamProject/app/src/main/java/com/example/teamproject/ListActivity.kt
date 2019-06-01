@@ -24,7 +24,6 @@ class ListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
-        travel= mutableListOf()
         init()
         val swipe=findViewById(R.id.swiperefresh) as SwipeRefreshLayout
         swipe.setOnRefreshListener {
@@ -40,6 +39,7 @@ class ListActivity : AppCompatActivity() {
         Toast.makeText(this,"a",Toast.LENGTH_SHORT).show()
         schedules= mutableListOf()
         travels= mutableListOf()
+        travel= mutableListOf()
         readData()
         setItem()
         addListener()
@@ -48,6 +48,7 @@ class ListActivity : AppCompatActivity() {
         listView.adapter=adapter
     }
     fun readData(){
+        travels.clear()
         Log.e("readData","readdata")
         //나중에 u_id 비교해서 로그인한 user의 Travel만 불러오도록해야함
         val db = FirebaseFirestore.getInstance()
@@ -60,6 +61,7 @@ class ListActivity : AppCompatActivity() {
         db!!.collection("Travel")
             .addSnapshotListener(object : EventListener<QuerySnapshot> {
                 override fun onEvent(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
+                    travels.clear()
                     Log.e("database", "aa")
                     if (e != null) {
                         Log.e("database", "database Listen failed.2")
@@ -111,7 +113,6 @@ class ListActivity : AppCompatActivity() {
         var i=0
         travel.clear()
 
-        // 데이터베이스를 오픈
         sqlite.openDatabase("USER")
         val auto = sqlite.AutoLogin()
 
