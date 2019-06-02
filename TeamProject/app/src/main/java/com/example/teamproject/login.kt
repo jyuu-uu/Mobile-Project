@@ -14,7 +14,6 @@ import kotlin.text.Typography.quote
 
 class login: AppCompatActivity() {
 
-    val code = 101
     var db:Firestore? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,8 +22,6 @@ class login: AppCompatActivity() {
 
         init()
 
-        val intent = Intent(this, LoadingActivity::class.java)
-        startActivityForResult(intent, code)
         // 해당 부분 스레드로 구현 필요
 
     }
@@ -61,21 +58,21 @@ class login: AppCompatActivity() {
 //        super.onBackPressed()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        // 로딩창에서 가능한 정보를 모두 불러올 거고, 정보를 받는 경우, 이쪽에서 결정
-        if (requestCode == code) {
-            if (resultCode == Activity.RESULT_OK) { // 결과로 보내준 상태가 OK 코드면
-                val id = data?.getStringExtra("id") //값을 받아옴
-                val pw = data?.getStringExtra("pw")
-                Log.e("login","$id and $pw")
-                In(id!!) // 받아온 정보를 기반으로 자동로그인
-            }
-            else{
-                Log.e("login","need login")
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        // 로딩창에서 가능한 정보를 모두 불러올 거고, 정보를 받는 경우, 이쪽에서 결정
+//        if (requestCode == code) {
+//            if (resultCode == Activity.RESULT_OK) { // 결과로 보내준 상태가 OK 코드면
+//                val id = data?.getStringExtra("id") //값을 받아옴
+//                val pw = data?.getStringExtra("pw")
+//                Log.e("login","$id and $pw")
+//                In(id!!) // 받아온 정보를 기반으로 자동로그인
+//            }
+//            else{
+//                Log.e("login","need login")
+//            }
+//        }
+//    }
 
     fun In(i_id:String){ //정보넘기고 종료함수
         val s = Intent()

@@ -86,11 +86,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 makeMap()
             }
             R.id.embassy_phone -> {
-
+                makeCountry()
             }
             R.id.logout->{
                 sqlite?.dropDB()
-                Loading() //로그인창 재호출
+                val intent = Intent(this, login::class.java)
+                startActivityForResult(intent, code)
             }
         }
 
@@ -122,8 +123,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun Loading(){
-        val intent = Intent(this, login::class.java)
-        startActivityForResult(intent, code)
+        val check = intent.getBooleanExtra("success", false)
+        if(check != null && !check){ //실패했다면
+            val intent = Intent(this, login::class.java)
+            startActivityForResult(intent, code)
+        }
+        else {
+            User = intent.getStringExtra("id") // 아이디 저장
+        }
     }
 
     // 메인 만들기
@@ -249,6 +256,33 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             // 이미지 교체 작업까지 완료
             listTransaction.commit() // 실제 수행
 
+        } else { // 동일한 프레그먼트
+            // 무시
+        }
+    }
+
+    fun makeCountry(){
+        val fragment = supportFragmentManager.findFragmentById(R.id.frame)
+        // 해당 view에 fragment가 부착되어 있으면 해당 fragment를 반환
+
+        val cFragment = supportFragmentManager.findFragmentByTag("cFrag")
+        // 이미지 프레그먼트의 tag값 을 통해 프레그먼트 획득 시도
+        if (cFragment == null) {
+            // 부착된 프레그먼트가 메인 프레그먼트가 아닌 경우
+
+            val cTransaction = supportFragmentManager.beginTransaction()
+            // 서포트프레그먼트매니저를 통해 프레임 생성/교체하는 작업을 시작
+
+            val cFrag = CountryFragment()
+
+            // 2. fragment에 해당하는 객체를 마음대로 생성하지 않고
+            // 생성해주는 함수를 만들어놓고, 해당 함수를 통해 객체를 '받는' 방식이 가능
+            // 더 일반적인 방법이며, 해당 방법을 위해선 자바의 static 기능이 필요
+            // so, 생성할 fragment 내부에 companion object 를 통한 함수 선언
+
+            cTransaction.replace(R.id.frame, cFrag, "cFrag")
+            // 이미지 교체 작업까지 완료
+            cTransaction.commit() // 실제 수행
         } else { // 동일한 프레그먼트
             // 무시
         }

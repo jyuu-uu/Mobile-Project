@@ -82,7 +82,7 @@ class SQLite(val v: AppCompatActivity, val tableName: String) {
             when(tableName) {
                 "Login"->{
                     val sql =
-                        "create table if not exists $tableName(id text PRIMARY KEY, pw text)"
+                        "create table if not exists $tableName(id text, pw text)"
                     // 테이블 만들기 이름(속성들)
                     database!!.execSQL(sql)
                 }
