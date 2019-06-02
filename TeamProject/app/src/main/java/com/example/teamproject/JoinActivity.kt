@@ -66,7 +66,6 @@ class JoinActivity : AppCompatActivity() {
                 // str의 length 값을 조건문으로 활성화 방법도 가능
 
                 checkInput()
-                finish()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -84,7 +83,7 @@ class JoinActivity : AppCompatActivity() {
             Log.e("join","$id\t$pw")
             // 아이디 중복
             // 검사 실시
-            db.findData(id!!,pw!!)
+            findData()
 
         }
         j_cancel.setOnClickListener {
@@ -95,4 +94,24 @@ class JoinActivity : AppCompatActivity() {
     fun checkInput(){
         j_join.isEnabled = (check1 && check2) // 버튼활성화
     }
+
+    fun findData(){
+        if(db != null){
+            val isExist = db!!.db!!.collection("User").document(id!!).get()
+                .addOnSuccessListener {
+                    val res = it.get("doc")//a.result//!!.get("doc")
+                    Log.e("firebase","$it\n$res")
+                    val Exist = if(res != "null") true else false
+                    if(!Exist){
+                        db!!.addData(id!!,pw!!)
+                        finish()
+                    }
+                    else
+                        Toast.makeText(this,"이미 존재하는 아이디입니다",Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {  }
+
+        }
+    }
 }
+

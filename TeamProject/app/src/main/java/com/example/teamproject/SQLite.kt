@@ -103,7 +103,7 @@ class SQLite(val v: AppCompatActivity, val tableName: String) {
 
     fun insertData(i_id: String, i_pw: String) {
         Log.e("SQLite","insertData() 호출됨.")
-
+        Log.e("SQLite","$i_id\t$i_pw.")
         if (database != null) {
 
             val sql = "insert into " +

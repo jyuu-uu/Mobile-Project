@@ -59,7 +59,6 @@ class ListFragment : Fragment() {
     }
 
     fun init(){
-        Toast.makeText(activity!!.applicationContext,"a", Toast.LENGTH_SHORT).show()
         schedules= mutableListOf()
         travels= mutableListOf()
         travel= mutableListOf()
