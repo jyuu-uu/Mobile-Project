@@ -30,8 +30,7 @@ class CIntentActivity : AppCompatActivity() {
     fun readFile() {
         Ion.with(this).load(
             "http://apis.data.go.kr/1262000/ContactService/getContactList?" +
-                    "ServiceKey=Oo7qsSTH9FGc46zjNGEuY4so7EBOkiYNknKqAZjFTcKL3Y904CmGwDctVZehoJYjl" +
-                    "QrDDdzBPP3g%2FXLIWBDioA%3D%3D" +
+                    "ServiceKey=pL5pQCttuhZJvrgbr%2BY6eiEVd80nWpkcbuJGfXc5NbQyFe93iA5ZVwCAmIqqjZDIuyDmi4jO%2Bu%2Fk8eXd%2BX3Dzg%3D%3D" +
                     "&numOfRows=1&pageNo="+(i+1).toString()
         )
             .asInputStream() // inputStream 타입으로 데이터를 받아옴

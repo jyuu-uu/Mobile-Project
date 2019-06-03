@@ -8,8 +8,10 @@ import android.database.sqlite.SQLiteDatabase.openOrCreateDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import java.sql.Date
+import java.sql.Time
 
-class SQLite(val v: AppCompatActivity, val tableName: String) {
+class SQLite(val v:Context, val tableName: String) {
     internal var database: SQLiteDatabase? = null
     lateinit var databaseName:String
 
@@ -95,7 +97,7 @@ class SQLite(val v: AppCompatActivity, val tableName: String) {
                 }
                 "Alarm"->{
                     val sql =
-                        "create table if not exists $tableName(date date, time time, schedule text, what text)"
+                        "create table if not exists $tableName(a_id integer autoincrement, date date, time time, schedule text, what text)"
                     database!!.execSQL(sql)
                 }
 
@@ -147,7 +149,22 @@ class SQLite(val v: AppCompatActivity, val tableName: String) {
             Log.e("SQLite", "데이터베이스를 먼저 오픈하시오")
         }
     }
+    fun insertData(date:Date, time:Time, schedule:String, what:String) {    //alarm
+        Log.e("SQLite","insertData() 호출됨.")
+        Log.e("SQLite","$date\t$time\t$schedule\t$what.")
+        if (database != null) {
 
+            val sql = "insert into " +
+                    /*삽입할 테이블 이름*/ "Alarm" + "(date, time, schedule, what) values(?, ?, ?, ?)"
+            val params = arrayOf(date, time, schedule, what)
+            database!!.execSQL(sql, params)
+            //이런식으로 두번쨰 파라미터로 이런식으로 객체를 전달하면 sql문의 ?를 이 params에 있는 데이터를 물음표를 대체해준다.
+            Log.e("SQLite", "데이터 추가함")
+
+        } else {
+            Log.e("SQLite", "데이터베이스를 먼저 오픈하시오")
+        }
+    }
     fun selectData(tableName: String) {
         Log.e("SQLite","selectData() 호출됨.")
         if (database != null) {
@@ -171,7 +188,7 @@ class SQLite(val v: AppCompatActivity, val tableName: String) {
     fun deleteData(w_id:Int){
         Log.e("SQLite","deleteData() 호출됨.")
         if (database != null) {
-            val sql = "delete from Schedule where w_id="+w_id.toString() //조건 기재
+            val sql = "delete from "+ tableName+" where w_id="+w_id.toString() //조건 기재
             val cursor = database!!.rawQuery(sql, null) //파라미터는 없으니깐 null 값 넣어주면된다.
             Log.e("SQLite","delete 성공.")
         }
