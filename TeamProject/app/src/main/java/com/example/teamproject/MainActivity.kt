@@ -1,22 +1,32 @@
 package com.example.teamproject
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteQuery
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_main.*
 
 lateinit var sqlite :SQLite
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    val REQUEST_PERMISSION = 100
+    val permissionArray = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +44,57 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         makeMain()
         Loading()
+        initPermission()
     }
 
-    fun initReview(){
-
+    fun initPermission(){
+        if(!checkAppPermission (permissionArray)){ //권한이 있는지 확인
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("반드시 파일 접근에 대한 권한이 허용되어야 합니다.")
+                .setTitle("권한 허용")
+                .setIcon(R.drawable.abc_ic_star_black_48dp)
+            builder.setPositiveButton("OK") { _, _ ->
+                askPermission (permissionArray, REQUEST_PERMISSION );
+            }
+            val dialog = builder.create()
+            dialog.show() // 다이얼로그 생성 (권한 승인 요청창)
+        }else{
+            Toast.makeText ( getApplicationContext(),
+                "권한이 승인되었습니다." , Toast . LENGTH_SHORT ). show ();
+        }
     }
+
+    fun checkAppPermission(requestPermission: Array<String>): Boolean {
+        val requestResult = BooleanArray(requestPermission.size)
+        Log.e("권한 검사","checkAppPermission")
+        for (i in requestResult.indices) {
+            requestResult[i] = ContextCompat.checkSelfPermission(this,
+                requestPermission[i])== PackageManager.PERMISSION_GRANTED
+            // 해당 권한을 갖고있는지 확인
+            if (!requestResult[i]) { //권한이 없다면
+                return false
+            }
+        }
+        return true //그 외엔 OK
+    } // checkAppPermission
+
+    fun askPermission(requestPermission: Array<String>, REQ_PERMISSION: Int) {
+        Log.e("권한 검사","askPermission")
+        ActivityCompat.requestPermissions(this, requestPermission, REQ_PERMISSION)
+        // 권한 승인 요청
+    } // askPermission
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_PERMISSION -> if (checkAppPermission(permissions)) { //퍼미션 동의했을 때 할 일
+                Toast.makeText(this, "권한이 승인됨", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "권한이 거절됨", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+    } // onRequestPermissionsResult
 
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
