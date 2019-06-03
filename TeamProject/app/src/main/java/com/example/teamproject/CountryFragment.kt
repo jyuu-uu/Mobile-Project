@@ -1,6 +1,7 @@
 package com.example.teamproject
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,8 +9,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.koushikdutta.ion.Ion
+import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.fragment_country.*
 import kotlinx.android.synthetic.main.fragment_country.view.*
 import org.xmlpull.v1.XmlPullParser
@@ -54,7 +57,8 @@ class CountryFragment : Fragment() {
     }
 
     var dataSet = mutableListOf<CountryData>()
-
+    var autoSet = mutableListOf<String>()
+    var changeSet = mutableMapOf<String,Int>()
 
     fun parsingXML(result: InputStream) {
         var factory = XmlPullParserFactory.newInstance()
@@ -112,7 +116,9 @@ class CountryFragment : Fragment() {
                 XmlPullParser.END_TAG -> {
                     if (status == 8) {
                         // 마지막 정보까지 다 읽었으면
+                        changeSet[krName]=dataSet.size
                         dataSet.add(CountryData(part, enName, krName, countryId, flag))
+                        autoSet.add(krName)
                         status = 3
                     }
                 }
@@ -135,10 +141,25 @@ class CountryFragment : Fragment() {
 //            intent.putExtra( "news" , news.get( keySet.get( position )))
 //            startActivity(intent)
 //
-            var a = dataSet[position]
-            Toast.makeText(activity!!.applicationContext, "$a", Toast.LENGTH_SHORT).show()
+            val i = Intent(activity!!.applicationContext,CIntentActivity::class.java)
+            i.putExtra("data",position)
+            startActivity(i)
+//            Toast.makeText(activity!!.applicationContext, "$a", Toast.LENGTH_SHORT).show()
         }
         if (adapter != null) // 어댑터가 만들어졌으면 리스트뷰에 붙임
             v.country_list.adapter = adapter
+
+        val aAdapter = ArrayAdapter(activity!!.applicationContext,
+            android.R.layout.simple_dropdown_item_1line,autoSet)
+
+        country_auto.setAdapter(aAdapter) // 해당 위젯(객체)에 어뎁터 연결
+        // 이후 autoCompleteTextView의 속성 중, completionThreshold 값을 지정해줘야 함
+
+        country_auto.setOnItemClickListener { parent, view, position, id ->
+            val i = Intent(activity!!.applicationContext,CIntentActivity::class.java)
+            i.putExtra("data",changeSet[parent.getItemAtPosition(position)])
+            startActivity(i)
+        }
+
     }
 }
