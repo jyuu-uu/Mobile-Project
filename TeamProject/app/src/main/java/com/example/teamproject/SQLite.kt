@@ -44,6 +44,7 @@ class SQLite(val v: AppCompatActivity, val tableName: String) {
 
         createTable("Login")
         createTable("Schedule")
+        createTable("Alarm")
     }
 
     fun AutoLogin():ArrayList<String>?{
@@ -92,6 +93,12 @@ class SQLite(val v: AppCompatActivity, val tableName: String) {
                     // 테이블 만들기 이름(속성들)
                     database!!.execSQL(sql)
                 }
+                "Alarm"->{
+                    val sql =
+                        "create table if not exists $tableName(date date, time time, schedule text, what text)"
+                    database!!.execSQL(sql)
+                }
+
             }
 
 

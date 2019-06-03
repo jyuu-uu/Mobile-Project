@@ -1,10 +1,7 @@
 package com.example.teamproject
 
 
-import android.app.AlertDialog
-import android.app.Notification
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -30,12 +27,10 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 
-class List1Fragment : Fragment() {
+class List1Fragment : Fragment(){
     lateinit var schedule:MutableList<schedule>
     lateinit var adapter:CardAdapter
     override fun onCreateView(
@@ -198,21 +193,4 @@ class List1Fragment : Fragment() {
         adapter=CardAdapter(context!!,ArrayList(schedule))
         list1View.adapter=adapter
     }
-
-    fun setpush(){
-        var notificationManager: NotificationManager =context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        var pushintent = Intent(context, MainActivity::class.java)
-        var builder = Notification.Builder(context)
-        pushintent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        var pendingNotificationIntent =
-            PendingIntent.getActivity(context, 0, pushintent, PendingIntent.FLAG_UPDATE_CURRENT)
-        builder.setTicker("HETT").setWhen(System.currentTimeMillis())
-            .setNumber(1).setContentTitle("푸쉬 제목").setContentText("푸쉬내용")
-            .setDefaults(Notification.DEFAULT_SOUND or Notification.DEFAULT_VIBRATE)
-            .setContentIntent(pendingNotificationIntent).setAutoCancel(true).setOngoing(true)
-        val notification = builder.build()
-        notificationManager.notify(2, notification)
-        //notificationManager.notify(1, builder.build()) // Notification send
-    }
-
 }
