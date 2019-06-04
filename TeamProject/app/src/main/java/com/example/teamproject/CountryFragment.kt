@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.example.teamproject.ReviewFragment.Companion.autoSet
 import com.koushikdutta.ion.Ion
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.fragment_country.*
@@ -52,11 +53,9 @@ class CountryFragment : Fragment() {
                 } else
                     Toast.makeText(activity!!.applicationContext, "데이터를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
-
     }
 
     var dataSet = mutableListOf<CountryData>()
-    var autoSet = mutableListOf<String>()
     var changeSet = mutableMapOf<String,Int>()
 
     fun parsingXML(result: InputStream) {
@@ -149,7 +148,7 @@ class CountryFragment : Fragment() {
             v.country_list.adapter = adapter
 
         val aAdapter = ArrayAdapter(activity!!.applicationContext,
-            android.R.layout.simple_dropdown_item_1line,autoSet)
+            android.R.layout.simple_dropdown_item_1line,ReviewFragment.autoSet)
 
         country_auto.setAdapter(aAdapter) // 해당 위젯(객체)에 어뎁터 연결
         // 이후 autoCompleteTextView의 속성 중, completionThreshold 값을 지정해줘야 함

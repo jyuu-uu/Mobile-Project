@@ -22,9 +22,8 @@ class TabAdapter(fm: FragmentManager,val num:Int): FragmentPagerAdapter(fm){
 
     override fun getItem(position: Int): Fragment? {
         when(position){
-            0-> return main_first()
+            0-> return ReviewFragment()
             1-> return main_second()
-            2-> return ReviewFragment()
         }
         return null
     }

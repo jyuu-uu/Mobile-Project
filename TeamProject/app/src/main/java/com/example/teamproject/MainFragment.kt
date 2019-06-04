@@ -1,6 +1,7 @@
 package com.example.teamproject
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
@@ -8,8 +9,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import kotlinx.android.synthetic.main.activity_review.*
+import kotlinx.android.synthetic.main.fragment_country.*
+import kotlinx.android.synthetic.main.fragment_country.view.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserFactory
+import java.io.InputStream
 
 class MainFragment : Fragment() {
 
@@ -38,12 +46,12 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         init()
-        Log.e("순서","액티비티크리에이")
+//        Log.e("순서","액티비티크리에이")
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        Log.e("순서","어테치")
+//        Log.e("순서","어테치")
     }
 
     //private var tabLayer: TabLayout?= null
@@ -56,9 +64,9 @@ class MainFragment : Fragment() {
 
             if (tabLayer!!.tabCount ==0) {
                 //탭 추가
-                tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 1"))
+                tabLayer?.addTab(tabLayer!!.newTab().setText("리뷰 검색"))
                 tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 2"))
-                tabLayer?.addTab(tabLayer!!.newTab().setText("리뷰"))
+//                tabLayer?.addTab(tabLayer!!.newTab().setText("리뷰"))
             }
 
 
