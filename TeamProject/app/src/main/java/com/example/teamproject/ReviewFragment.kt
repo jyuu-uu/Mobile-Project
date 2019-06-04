@@ -24,19 +24,19 @@ import java.util.*
 
 class ReviewFragment: Fragment() {
 
-    companion object{
+    companion object {
         var autoSet = mutableListOf<String>()
     }
 
-    var readfile = false
-    var data:ArrayList<MyCafe> = ArrayList()
-    lateinit var adapter:MyCafeAdapter
+    var data: ArrayList<MyCafe> = ArrayList()
+    lateinit var adapter: MyCafeAdapter
     lateinit var auto_adapter: ArrayAdapter<String>
-    val list = arrayListOf("ababab","babca","cabse","dsefsw","esesw")
+    val list = arrayListOf("ababab", "babca", "cabse", "dsefsw", "esesw")
+    lateinit var db :Firestore
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.activity_review, container, false)
@@ -46,74 +46,47 @@ class ReviewFragment: Fragment() {
         super.onActivityCreated(savedInstanceState)
         init()
     }
-    fun init(){
+
+    fun init() {
+        db = Firestore.create(context!!)
+        readDB()
         initLayout()
         initSwipe()
-        if(readfile == false)   readFile()
         rcClick(review_listView)
         readApiFile()
     }
-    fun rcClick(v:View){    //recycleview 에서 클릭한거 페이지 띄우기
+
+    fun rcClick(v: View) {    //recycleview 에서 클릭한거 페이지 띄우기
     }
 
-    fun initSwipe(){
-        val simpleItemTouchCallBack = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT){
-            override fun onMove(p0: RecyclerView, p1: RecyclerView.ViewHolder, p2: RecyclerView.ViewHolder): Boolean {
-                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                adapter.moveItem(p1.adapterPosition, p2.adapterPosition)
-                return true
-            }
+    fun initSwipe() {
+        val simpleItemTouchCallBack =
+            object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
+                override fun onMove(
+                    p0: RecyclerView,
+                    p1: RecyclerView.ViewHolder,
+                    p2: RecyclerView.ViewHolder
+                ): Boolean {
+                    //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    adapter.moveItem(p1.adapterPosition, p2.adapterPosition)
+                    return true
+                }
 
-            override fun onSwiped(p0: RecyclerView.ViewHolder, p1: Int) {
-                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                adapter.removeItem(p0.adapterPosition)
-            }
-        }   //객체 생성
+                override fun onSwiped(p0: RecyclerView.ViewHolder, p1: Int) {
+                    //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    adapter.removeItem(p0.adapterPosition)
+                }
+            }   //객체 생성
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallBack)
         itemTouchHelper.attachToRecyclerView(review_listView)
     }
 
-    fun initLayout(){
+    fun initLayout() {
         val layoutManager = LinearLayoutManager(super.getContext(), LinearLayoutManager.VERTICAL, false)
 
         review_listView.layoutManager = layoutManager
         adapter = MyCafeAdapter(data)
         review_listView.adapter = adapter
-
-//        save.setOnClickListener {
-//            var point_country = -1;
-//            when(country.text.toString()){
-//                "태국"->{
-//                    for(i in data){
-//                        if(i.country == "태국")
-//                            point_country = i.hashCode()
-//                        Log.v("review", point_country.toString())
-//                    }
-//                }
-//                "미국"->{
-//                    for(i in data){
-//                        if(i.country == "미국")
-//                            point_country = i.hashCode()
-//                        Log.v("review", point_country.toString())
-//                    }
-//                }
-//                else->{
-//                    Log.v("review", country.text.toString())
-//                }
-//            }
-//            adapter.moveItem(0, point_country)
-//        }
-    }
-
-    fun readFile(){ //words, array 초기화
-        var scan = Scanner(resources.openRawResource(R.raw.test_text))
-        while(scan.hasNextLine()){
-            val str = scan.nextLine()
-            val str_result = str.split(',')
-            data.add(0, MyCafe(str_result[0], str_result[5], str_result[1]))
-        }
-        readfile = true
-        scan.close()
     }
 
     fun readApiFile() {
@@ -185,21 +158,31 @@ class ReviewFragment: Fragment() {
 
     fun settingView() {
 
-        autoSet.add("atest")
-
-        val aAdapter = ArrayAdapter(activity!!.applicationContext,
+        val aAdapter = ArrayAdapter(
+            activity!!.applicationContext,
             android.R.layout.simple_dropdown_item_1line, autoSet
         )
         r_auto.setAdapter(aAdapter) // 해당 위젯(객체)에 어뎁터 연결
         // 이후 autoCompleteTextView의 속성 중, completionThreshold 값을 지정해줘야 함
         r_auto.setOnItemClickListener { parent, view, position, id ->
-             r_country.text = parent.getItemAtPosition(position).toString()
+            r_country.text = parent.getItemAtPosition(position).toString()
         }
 
         r_find.setOnClickListener {
-//            val i = Intent(context,)
-            Toast.makeText(context,r_country.text,Toast.LENGTH_SHORT).show()
+            //            val i = Intent(context,)
+            Toast.makeText(context, r_country.text, Toast.LENGTH_SHORT).show()
         }
+    }
 
+    fun readDB() {
+        val isExist = db!!.db?.collection("Travel")?.get()
+            ?.addOnCompleteListener { task ->
+                Log.e("리뷰", "접속")
+                for (k in task.result!!) {
+                    Log.e("리뷰", "$k")
+                    data.add(MyCafe(k.get("t_where").toString(),k.get("t_when").toString(),k.get("t_who").toString()))
+                }
+                adapter.notifyDataSetChanged()
+            }
     }
 }

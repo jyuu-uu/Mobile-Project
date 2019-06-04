@@ -19,13 +19,19 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.fragment_fav.*
 import kotlinx.android.synthetic.main.fragment_fav.view.*
+import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.android.gms.tasks.Task
+import android.support.annotation.NonNull
+import com.google.android.gms.tasks.OnCompleteListener
+
+
 
 class FavFragment : Fragment() {
 
     var db: Firestore? = null
     var adapter: FavAdapter? = null
     var User: String? = null
-    var key = mutableListOf<String>()
+    var key = mutableListOf<Int>()
     var data = mutableListOf<FavData>()
     var v: View? = null
 
@@ -56,43 +62,37 @@ class FavFragment : Fragment() {
         if (db != null) {
             val isExist = db!!.db?.collection("User")?.document(User!!)?.get()
                 ?.addOnSuccessListener {
-                    val res = it.get("fav")
+                    val res = it.get("fav") as ArrayList<Long>
 //                    val res2 = res.//a.result//!!.get("doc")
                     Log.e("fav", "$res")
-                    for (k in (res as ArrayList<String>)) {
+                    for (k in res) {
                         Log.e("fav", "$k")
-                        key.add(k)
+                        key.add(k.toBigInteger().toInt())
                     }
                     findData2()
                 }
         }
     }
 
+    var flag = 0
     fun findData2() {
-        val isExist = db!!.db?.collection("Travel")?.get()
-            ?.addOnSuccessListener {
-
-                var i = 0
-                for (k in it) {
-                    Log.e("fav2", "$k")
-                    val e = k.get("t_id")
-                    Log.e("fav 찾기", "$e")
-                    if (key[i] == "travel" + e.toString()) {
-                        data.add(
-                            FavData(
-                                key[i], k.get("t_when").toString(),
-                                k.get("t_where").toString(), k.get("t_who").toString() + "명"
-                            )
-                        )
-                        i++
-                        if (i == key.size)
-                            break;
-                    }
+        val isExist = db!!.db?.collection("Travel")?.whereEqualTo("t_id",key[flag])?.get()
+            ?.addOnCompleteListener {task->
+                Log.e("즐겨찾기", "접속")
+                for( k in task.result!!) {
+                    Log.e("즐겨찾기", "$k")
+                    data.add(FavData(k.get("t_id").toString().toInt(), k.get("t_when").toString(), k.get("t_where").toString(),
+                        k.get("t_who").toString() + "명"))
                 }
-                initAdapter()
+                flag++
+                if(flag != key.size){
+                    findData2()
+                }
+                else{
+                    initAdapter()
+                }
             }
     }
-
 
     fun initAdapter() {
         if (activity != null) {
@@ -108,19 +108,4 @@ class FavFragment : Fragment() {
             // recyclerView를 위한 매니저이므로, 붙여줌
         }
     }
-
-//    fun test(){
-//        db!!.db!!.collection("cities")
-//            .whereEqualTo("capital", true)
-//            .get()
-//            .addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-//                if (task.isSuccessful) {
-//                    for (document in task.result!!) {
-//                        Log.d(TAG, document.id + " => " + document.data)
-//                    }
-//                } else {
-//                    Log.d(TAG, "Error getting documents: ", task.exception)
-//                }
-//            })
-//    }
 }
