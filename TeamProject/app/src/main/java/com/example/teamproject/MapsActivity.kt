@@ -42,6 +42,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.widget.Button;
 import android.widget.TextView;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.BitmapDescriptorFactory.*
 
 import java.io.IOException;
 import java.util.List;
@@ -262,7 +264,14 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
         for(i in 0..place_info.size-1){
             val marketStr = place_info.get(keySet.get(i))!!.location
             Log.e("나 위치 들어왔어!", marketStr.latitude.toString()+","+marketStr.longitude.toString())
-            mMap.addMarker(MarkerOptions().position(marketStr).title(place_info.get(keySet.get(i))!!.name))
+            var strOpen = HUE_ROSE
+            if(place_info.get(keySet.get(i))!!.open_now)
+                strOpen = HUE_ROSE
+            else
+                strOpen = HUE_GREEN
+            val markerstore = MarkerOptions().position(marketStr).title(place_info.get(keySet.get(i))!!.name)
+                .icon(BitmapDescriptorFactory.defaultMarker(strOpen))
+            mMap.addMarker(markerstore)
         }
     }
 
