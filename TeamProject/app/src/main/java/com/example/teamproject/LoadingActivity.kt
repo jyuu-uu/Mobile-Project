@@ -24,12 +24,17 @@ class LoadingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_loading)
 
         my_intent=Intent(this, Receiver::class.java)
-        alarm()
+        //alarm()
 
         Log.e("로딩 창 생성","로딩창")
+//        val sqlite2 = SQLite(this,"Alarm")
+//        sqlite2.openDatabase("USER")
+//        sqlite2.alarm(this)
+
         val sqlite = SQLite(this,"Login")
         // 데이터베이스를 오픈
         sqlite.openDatabase("USER")
+        sqlite.readAlarm(this)
         val auto = sqlite.AutoLogin()
 
         startLoading()
@@ -60,8 +65,7 @@ class LoadingActivity : AppCompatActivity() {
         val sqlite = SQLite(this,"Alarm")
         sqlite.openDatabase("USER")
         my_intent.putExtra("state","alarm on");
-        pendingIntent = PendingIntent.getBroadcast(this, 0, my_intent,
-            PendingIntent.FLAG_UPDATE_CURRENT)
+
         var readalarm= sqlite.readAlarm()
         if(readalarm==null){
             return
@@ -74,6 +78,8 @@ class LoadingActivity : AppCompatActivity() {
         my_intent.putExtra("a_id",id)
         my_intent.putExtra("todo",todo)
         my_intent.putExtra("what",what)
+        pendingIntent = PendingIntent.getBroadcast(this, 0, my_intent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
         Log.e("id",id)
 
         var separate1 = date.split("-") //년-월-일 배열

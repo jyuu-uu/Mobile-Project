@@ -85,7 +85,7 @@ class List1Fragment : Fragment(){
                         if (db != null) {
                             var new: MutableMap<String, Any>? = null
                             new = mutableMapOf()
-                            new["s_id"] = schedules.size
+                            new["s_id"] = schedules.size+1
                             new["s_todo"] =dialogwhat.text.toString()
                             new["s_time"] = dialogwhen.text.toString()
                             new["s_alarm"] =false

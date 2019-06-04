@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat.startForegroundService
 import android.support.v4.app.NotificationCompat.getExtras
-
+import android.util.Log
 
 
 class Receiver : BroadcastReceiver() {
@@ -20,6 +20,7 @@ class Receiver : BroadcastReceiver() {
         val a_id=p1!!.getExtras().getString("a_id")
         val todo=p1!!.getExtras().getString("todo")
         val what=p1!!.getExtras().getString("what")
+        Log.e("reciever",a_id.toString())
         // RingtonePlayingService 서비스 intent 생성
         val service_intent = Intent(p0, NewIntentService::class.java)
 
