@@ -16,10 +16,15 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.nav_header_main.*
+import kotlinx.android.synthetic.main.nav_header_main.view.*
+import org.w3c.dom.Text
 
 lateinit var sqlite :SQLite
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -33,7 +38,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        supportActionBar!!.setIcon(R.drawable.title_logo)
+        supportActionBar!!.setSubtitle("여행을 위한 가방")
 
         sqlite = SQLite(this,"Login")
         val toggle = ActionBarDrawerToggle(
@@ -52,17 +57,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun initPermission(){
         if(!checkAppPermission (permissionArray)){ //권한이 있는지 확인
             val builder = AlertDialog.Builder(this)
-            builder.setMessage("반드시 파일 접근에 대한 권한이 허용되어야 합니다.")
-                .setTitle("권한 허용")
-                .setIcon(R.drawable.abc_ic_star_black_48dp)
+            builder.setMessage("해당 앱은 위치 기반 서비스를 포함하고 있습니다.")
+                .setTitle("여-Bag 서비스 승인")
+                .setIcon(R.drawable.ic_flight_takeoff_black_24dp)
             builder.setPositiveButton("OK") { _, _ ->
                 askPermission (permissionArray, REQUEST_PERMISSION );
             }
             val dialog = builder.create()
             dialog.show() // 다이얼로그 생성 (권한 승인 요청창)
         }else{
-            Toast.makeText ( getApplicationContext(),
-                "권한이 승인되었습니다." , Toast . LENGTH_SHORT ). show ();
+ //           Toast.makeText ( getApplicationContext(),
+ //             "권한이 승인되었습니다." , Toast . LENGTH_SHORT ). show ();
         }
     }
 
@@ -90,9 +95,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_PERMISSION -> if (checkAppPermission(permissions)) { //퍼미션 동의했을 때 할 일
-                Toast.makeText(this, "권한이 승인됨", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "해당 권한이 승인되었습니다", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "권한이 거절됨", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "서비스 이용을 거부하셨습니다", Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
@@ -103,23 +108,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-//        menuInflater.inflate(R.menu.main, menu)
-        // 오른쪽옵션생성 창을 없애버림
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        when (item.itemId) {
-            R.id.action_settings -> return true
-            else -> return super.onOptionsItemSelected(item)
         }
     }
 
@@ -158,7 +146,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    companion object{
     var User:String?=null
+    }
     val code = 100
     var firestore :Firestore? = null
 
@@ -169,6 +159,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (resultCode == Activity.RESULT_OK) { // 결과로 보내준 상태가 OK 코드면
                 User = data?.getStringExtra("id") //값을 받아옴
                 Log.e("Main","$User")
+
+//                findViewById<TextView>(R.id.id_view).setText(User)
                 sqlite = SQLite(this,"Schedule")
                 // 만들어둔 테이블 정보
 
@@ -189,6 +181,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         else {
             User = intent.getStringExtra("id") // 아이디 저장
+//            findViewById<TextView>(R.id.id_view).setText(User)
+ //           drawer_layout.findViewById<TextView>(R.id.id_view).setText(User)
         }
     }
 

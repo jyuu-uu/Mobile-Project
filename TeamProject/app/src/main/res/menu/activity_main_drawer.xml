@@ -10,11 +10,11 @@
                 android:title="메인 화면"/>
         <item
                 android:id="@+id/nav_list"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@drawable/ic_flight_takeoff_black_24dp"
                 android:title="내 여행 리스트"/>
         <item
                 android:id="@+id/bookmark"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_star_black_24dp"
                 android:title="후기 : 즐겨찾기"/>
     </group>
 
@@ -22,11 +22,11 @@
         <menu>
             <item
                     android:id="@+id/near_market"
-                    android:icon="@drawable/ic_menu_gallery"
+                    android:icon="@drawable/ic_store_mall_directory_black_24dp"
                     android:title="근처 마켓 탐색"/>
             <item
                     android:id="@+id/embassy_phone"
-                    android:icon="@drawable/ic_menu_slideshow"
+                    android:icon="@drawable/ic_help_black_24dp"
                     android:title="대사관 전화번호"/>
         </menu>
     </item>
@@ -35,7 +35,7 @@
         <menu>
                 <item
                         android:id="@+id/logout"
-                        android:icon="@drawable/ic_menu_slideshow"
+                        android:icon="@drawable/ic_power_settings_new_black_24dp"
                         android:title="로그아웃"/>
         </menu>
     </item>
