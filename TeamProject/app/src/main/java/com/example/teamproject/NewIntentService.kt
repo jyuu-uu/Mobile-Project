@@ -16,10 +16,7 @@ import android.support.v4.app.NotificationCompat
 import io.grpc.internal.SharedResourceHolder.release
 import android.support.v4.app.NotificationCompat.getExtras
 import android.app.PendingIntent
-
-
-
-
+import android.util.Log
 
 
 class NewIntentService : Service() {
@@ -33,9 +30,14 @@ class NewIntentService : Service() {
     }
 
     override fun onCreate() {
+
         super.onCreate()
         val intent1 = Intent(this, MainActivity::class.java) //인텐트 생성.
         intent1.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        var a_id:String
+        var todo:String
+        var what:String
 
         if (Build.VERSION.SDK_INT >= 26) {
             val CHANNEL_ID = "default"
@@ -58,10 +60,16 @@ class NewIntentService : Service() {
                 .build()
 
             startForeground(1, notification)
+
+//            val sqlite = SQLite(this,"Alarm")
+//            sqlite.openDatabase("USER")
+//            sqlite.deleterow(id.toInt(),"Alarm")
+//            alarm()
         }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startid: Int): Int {
+        Log.e("service","onstartcommand")
 
         val getState = intent!!.getExtras().getString("state")!!
 

@@ -97,7 +97,7 @@ class SQLite(val v:Context, val tableName: String) {
                 }
                 "Alarm"->{
                     val sql =
-                        "create table if not exists $tableName(a_id integer autoincrement, date date, time time, schedule text, what text)"
+                        "create table if not exists $tableName(a_id integer PRIMARY KEY autoincrement, date text, time text, schedule text, what text)"
                     database!!.execSQL(sql)
                 }
 
@@ -149,22 +149,7 @@ class SQLite(val v:Context, val tableName: String) {
             Log.e("SQLite", "데이터베이스를 먼저 오픈하시오")
         }
     }
-    fun insertData(date:Date, time:Time, schedule:String, what:String) {    //alarm
-        Log.e("SQLite","insertData() 호출됨.")
-        Log.e("SQLite","$date\t$time\t$schedule\t$what.")
-        if (database != null) {
 
-            val sql = "insert into " +
-                    /*삽입할 테이블 이름*/ "Alarm" + "(date, time, schedule, what) values(?, ?, ?, ?)"
-            val params = arrayOf(date, time, schedule, what)
-            database!!.execSQL(sql, params)
-            //이런식으로 두번쨰 파라미터로 이런식으로 객체를 전달하면 sql문의 ?를 이 params에 있는 데이터를 물음표를 대체해준다.
-            Log.e("SQLite", "데이터 추가함")
-
-        } else {
-            Log.e("SQLite", "데이터베이스를 먼저 오픈하시오")
-        }
-    }
     fun selectData(tableName: String) {
         Log.e("SQLite","selectData() 호출됨.")
         if (database != null) {
@@ -184,6 +169,26 @@ class SQLite(val v:Context, val tableName: String) {
             cursor.close() //cursor라는것도 실제 데이터베이스 저장소를 접근하는 것이기 때문에 자원이 한정되있다. 그러므로 웬만하면 마지막에 close를 꼭 해줘야한다.
         }
     }
+    fun selectData(context: Context, tableName: String) {
+        Log.e("SQLite","selectData() 호출됨.")
+        if (database != null) {
+            val sql = "select date, time, schedule, what from $tableName" //조건 기재
+            val cursor = database!!.rawQuery(sql, null) //파라미터는 없으니깐 null 값 넣어주면된다.
+            Log.e("SQLite","조회된 데이터개수 :" + cursor.count)
+
+            //for문으로해도되고 while 문으로 해도됨.
+            for (i in 0 until cursor.count) {
+                cursor.moveToNext()//이걸 해줘야 다음 레코드로 넘어가게된다.
+                val date = cursor.getString(0) //첫번쨰 칼럼을 뽑아줌
+                val time = cursor.getString(1)
+                val schedule = cursor.getString(2)
+                val what = cursor.getString(3)
+                Log.e("alarm data",date+time+schedule+what)
+                // 데이터 출력
+            }
+            cursor.close() //cursor라는것도 실제 데이터베이스 저장소를 접근하는 것이기 때문에 자원이 한정되있다. 그러므로 웬만하면 마지막에 close를 꼭 해줘야한다.
+        }
+    }
 
     fun deleteData(w_id:Int){
         Log.e("SQLite","deleteData() 호출됨.")
@@ -193,6 +198,14 @@ class SQLite(val v:Context, val tableName: String) {
             Log.e("SQLite","delete 성공.")
         }
     }
+//    fun deleteData(what: String, tableName: String){
+//        Log.e("SQLite","deleteData() 호출됨.")
+//        if (database != null) {
+//            val sql = "delete from "+ tableName+" where what="+what.toString() //조건 기재
+//            val cursor = database!!.rawQuery(sql, null) //파라미터는 없으니깐 null 값 넣어주면된다.
+//            Log.e("SQLite","delete 성공.")
+//        }
+//    }
 
     fun dropDB(){
         Log.e("SQLite","dropDB() 호출됨.")
@@ -200,6 +213,13 @@ class SQLite(val v:Context, val tableName: String) {
         v.deleteDatabase("USER.db")
     }
 
+    fun dropTable(TABLE_NAME:String){
+        var sql = "drop table " + TABLE_NAME;
+
+            database!!.execSQL(sql);
+            Log.e("database test", "Table delete");
+
+    }
     internal inner class DatabaseHelper(
         context: Context,
         name: String,
@@ -208,7 +228,7 @@ class SQLite(val v:Context, val tableName: String) {
     ) : SQLiteOpenHelper(context, name, factory, version) {
 
         override fun onCreate(db: SQLiteDatabase) {
-            //데이터베이스를 처음 생성해주는 경우(기존에 사용자가 데이터베이스를 사용하지 않았던 경우)
+            //데이터베이스를 처음 생성해 주는 경우(기존에 사용자가 데이터베이스를 사용하지 않았던 경우)
             Log.e("SQLite","createCreate() 호출됨.")
             val tableName = "USER"
             //이 함수에서 데이터베이스는 매개변수인 db를 써야한다.
@@ -243,5 +263,52 @@ class SQLite(val v:Context, val tableName: String) {
                 Log.e("SQLite","테이블 생성됨.")
             }
         }
+    }
+    fun deleterow(a_id:Int, tableName: String){         //alarm
+        if (database != null) {
+            val sql = "delete from "+ tableName+" where a_id="+a_id.toString() //조건 기재
+            database!!.execSQL(sql) //파라미터는 없으니깐 null 값 넣어주면된다.
+            Log.e("SQLite","delete 성공.")
+        }
+    }
+
+    fun insertData(date:String, time:String, schedule:String, what:String) {    //alarm
+        Log.e("SQLite","insertData() 호출됨.")
+        Log.e("SQLite","$date\t$time\t$schedule\t$what.")
+        //Log.e("SQLite","$date\t$schedule\t$what.")
+        if (database != null) {
+
+            val sql = "insert into " +
+                    /*삽입할 테이블 이름*/ "Alarm" + "(date, time, schedule, what) values(?, ?, ?, ?)"
+            ///*삽입할 테이블 이름*/ "Alarm" + "(date, schedule, what) values(?, ?, ?)"
+            val params = arrayOf(date, time, schedule, what)
+            database!!.execSQL(sql, params)
+            //이런식으로 두번쨰 파라미터로 이런식으로 객체를 전달하면 sql문의 ?를 이 params에 있는 데이터를 물음표를 대체해준다.
+            Log.e("SQLite", "데이터 추가함")
+
+        } else {
+            Log.e("SQLite", "데이터베이스를 먼저 오픈하시오")
+        }
+    }
+    fun readAlarm():ArrayList<String>?{
+        if (database != null) {
+            val sql = "select * from Alarm" //조건 기재
+            val cursor = database!!.rawQuery(sql, null) //파라미터는 없으니깐 null 값 넣어주면된다.
+            Log.e("SQLite2","조회된 데이터개수 :" + cursor.count)
+
+            if(cursor?.count != 0){
+                // 정보가 1개 이상 들어있단 이야기.
+                cursor.moveToNext()
+                Log.e("array",cursor.getString(0)+" "+cursor.getString(1)+" "+cursor.getString(2)+" "+cursor.getString(3)+" "+cursor.getString(4))
+                return arrayListOf(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4))
+                // 정보를 반환
+            }
+            else{  // 정보 없음. 로그인(회원가입) 필요
+                return null //null 반환
+            }
+            cursor.close() //cursor라는것도 실제 데이터베이스 저장소를 접근하는 것이기 때문에 자원이 한정되있다.
+            // 그러므로 웬만하면 마지막에 close를 꼭 해줘야한다.
+        }
+        return null // 생성 필요. null 반환
     }
 }

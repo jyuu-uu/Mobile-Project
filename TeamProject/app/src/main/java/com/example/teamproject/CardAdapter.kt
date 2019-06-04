@@ -30,10 +30,10 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
     lateinit var alarm_manager: AlarmManager
     lateinit var alarm_timepicker: TimePicker
     lateinit var alarm_datepicker: DatePicker
-    lateinit var date:String
-    var dates:MutableList<Int> = mutableListOf()
-    var times:MutableList<Int> = mutableListOf()
-    lateinit var time:String
+    //lateinit var date:String
+    //var dates:MutableList<Int> = mutableListOf()
+    //var times:MutableList<Int> = mutableListOf()
+    //lateinit var time:String
 
     var check1=false
     var check2=false
@@ -111,10 +111,22 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
                             //알람시간 calendar에 set해주기
                             //calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 20, 27, 0)
                             calendar.set(alarm_datepicker.year, alarm_datepicker.month, alarm_datepicker.dayOfMonth, alarm_timepicker.hour, alarm_timepicker.minute, 0)
+                            var sqlite = SQLite(context,"Alarm")
+                            sqlite.openDatabase("USER")
+                            //val dateFormat = SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+                            //val timeFormat = SimpleDateFormat("hh:mm", java.util.Locale.getDefault())
+                            //val date = dateFormat.parse(alarm_datepicker.year.toString()+"-"+alarm_datepicker.month+"-"+alarm_datepicker.dayOfMonth)
+                            //val time = dateFormat.parse(alarm_timepicker.hour.toString()+":"+alarm_timepicker.minute+":00")
 
+                            var date=alarm_datepicker.year.toString()+"-"+alarm_datepicker.month+"-"+alarm_datepicker.dayOfMonth
+                            var time=alarm_timepicker.hour.toString()+":"+alarm_timepicker.minute//+":00"
+                            Log.e("datepicker",date)
+                            Log.e("timepicker",time)
+                            sqlite.insertData(date,time,items.get(position).todo,dialogwhat.text.toString())
+                            //sqlite.dropTable("Alarm")
+                            //	db date type 2008-11-11 / time hh:mm:ss
                             // 알람셋팅
-                            alarm_manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                                pendingIntent);
+                            //alarm_manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent)
                             Toast.makeText(context,"알람 추가",Toast.LENGTH_SHORT).show()
                             items.get(position).alarm=true
                         }else{
