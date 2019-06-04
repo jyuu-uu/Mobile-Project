@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,12 +7,9 @@
         android:layout_height="match_parent"
         tools:context=".LoadingActivity">
 
-    <TextView
-            android:textSize="40sp"
-            android:text="로딩중인 화면 ^^ㅋ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView13" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="315dp"
-            app:layout_constraintEnd_toEndOf="parent"/>
-</android.support.constraint.ConstraintLayout>
+    <ImageView android:layout_width="match_parent" android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:id="@+id/loding"
+               android:src="@drawable/logo"
+    />
+</LinearLayout>

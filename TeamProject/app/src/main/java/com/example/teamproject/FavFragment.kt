@@ -108,4 +108,19 @@ class FavFragment : Fragment() {
             // recyclerView를 위한 매니저이므로, 붙여줌
         }
     }
+
+//    fun test(){
+//        db!!.db!!.collection("cities")
+//            .whereEqualTo("capital", true)
+//            .get()
+//            .addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+//                if (task.isSuccessful) {
+//                    for (document in task.result!!) {
+//                        Log.d(TAG, document.id + " => " + document.data)
+//                    }
+//                } else {
+//                    Log.d(TAG, "Error getting documents: ", task.exception)
+//                }
+//            })
+//    }
 }
