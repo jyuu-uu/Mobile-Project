@@ -1,8 +1,11 @@
 package com.example.teamproject
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
@@ -21,6 +24,7 @@ import kotlinx.android.synthetic.main.activity_maps.*
 import com.google.android.gms.maps.MapView
 import android.widget.Toast
 import android.support.annotation.NonNull
+import android.support.annotation.Nullable
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -33,9 +37,11 @@ import java.io.InputStream
 class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener {
 
+    lateinit var locationManager: LocationManager
 
     lateinit var mapView:MapView
     lateinit var country:LatLng
+    lateinit var mylocation:Location
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -57,7 +63,6 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
         super.onActivityCreated(savedInstanceState)
         if (mapView != null) {
             mapView.onCreate(savedInstanceState)
-            country = LatLng(-33.852, 151.211)
         }
         init()
     }
@@ -193,6 +198,19 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
         //맵에 마커 넣기
         mMap = p0!!
 
+        mMap.setMyLocationEnabled(true)
+        mMap.setOnMyLocationButtonClickListener(this)
+        mMap.setOnMyLocationClickListener(this)
+        locationManager = this.activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val location_recently = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+            0, 0.1f, gpsLocationListener())
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+            0, 0.1f, gpsLocationListener())
+
+        country = LatLng(10.0, 10.0)
+        mylocation = Location("")
+        gpsLocationListener().onLocationChanged(location_recently)
         // Add a marker in Sydney and move the camera
         mMap.addMarker(MarkerOptions().position(country).title("Here You find"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(country))
@@ -201,13 +219,30 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
         // TODO: Before enabling the My Location layer, you must request
         // location permission from the user. This sample does not include
         // a request for location permission.
-        mMap.setMyLocationEnabled(true)
-        mMap.setOnMyLocationButtonClickListener(this)
-        mMap.setOnMyLocationClickListener(this)
 
         onbtnClick(p0)
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+    inner class gpsLocationListener():LocationListener {
+        override fun onLocationChanged(loc:Location) {
+            var provider = loc.getProvider();
+            mylocation.longitude = loc.getLongitude();
+            mylocation.latitude = loc.getLatitude();
+            var altitude = loc.getAltitude();
+            country = LatLng(mylocation.latitude, mylocation.longitude)
+        }
+
+        override fun onStatusChanged(provider:String, status:Int, extras:Bundle) {
+
+        }
+        override fun onProviderEnabled(provider:String) {
+
+        }
+        override fun onProviderDisabled(provider:String) {
+
+        }
+    }
+
     override fun onMyLocationClick(location: Location) {
         //Toast.makeText(this, "Current location:"+location, Toast.LENGTH_LONG).show()
     }
