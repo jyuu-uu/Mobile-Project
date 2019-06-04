@@ -33,6 +33,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        supportActionBar!!.setIcon(R.drawable.title_logo)
+
         sqlite = SQLite(this,"Login")
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
@@ -146,6 +148,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.logout->{
                 sqlite?.dropDB()
+                makeMain()
                 val intent = Intent(this, login::class.java)
                 startActivityForResult(intent, code)
             }

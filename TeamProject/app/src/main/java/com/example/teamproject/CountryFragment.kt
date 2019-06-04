@@ -116,7 +116,6 @@ class CountryFragment : Fragment() {
                         // 마지막 정보까지 다 읽었으면
                         changeSet[krName]=dataSet.size
                         dataSet.add(CountryData(part, enName, krName, countryId, flag))
-                        autoSet.add(krName)
                         status = 3
                     }
                 }

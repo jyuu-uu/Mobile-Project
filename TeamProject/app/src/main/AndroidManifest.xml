@@ -13,6 +13,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.Design.Light.NoActionBar">
+        <activity android:name=".DReviewActivity">
+        </activity>
         <activity android:name=".CIntentActivity">
         </activity>
         <activity
@@ -47,12 +49,13 @@
         <receiver
                 android:name=".Receiver"
                 android:enabled="true"
-                android:exported="false" >
+                android:exported="false">
         </receiver>
+
         <service
                 android:name=".NewIntentService"
                 android:enabled="true"
-                android:exported="false" >
+                android:exported="false">
         </service>
     </application>
 

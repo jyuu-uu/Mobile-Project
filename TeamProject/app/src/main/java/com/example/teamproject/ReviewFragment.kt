@@ -3,6 +3,7 @@ package com.example.teamproject
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.myreportaftertravel.MyCafe
 import com.example.myreportaftertravel.MyCafeAdapter
+import com.example.teamproject.ReviewFragment.Companion.autoSet
 import com.koushikdutta.ion.Ion
 import kotlinx.android.synthetic.main.activity_review.*
 import kotlinx.android.synthetic.main.fragment_country.*
@@ -53,7 +55,10 @@ class ReviewFragment: Fragment() {
         initLayout()
         initSwipe()
         rcClick(review_listView)
-        readApiFile()
+        if(autoSet.size== 0)
+            readApiFile()
+        else
+            settingView()
     }
 
     fun rcClick(v: View) {    //recycleview 에서 클릭한거 페이지 띄우기
@@ -106,58 +111,43 @@ class ReviewFragment: Fragment() {
     }
 
     fun parsingXML(result: InputStream) {
+        Log.e("오토 체크","파싱중..")
         var factory = XmlPullParserFactory.newInstance()
         factory.isNamespaceAware = true //네임 스페이스
         val xpp = factory.newPullParser()
         xpp.setInput(result, "utf-8") //한글 모드를 읽을 방법 설정
         var eventType = xpp.eventType
 
-        var status = 0
-        var i = 0 // 배열 정보를 찾을 반복문 인덱스
-
-        var krName = ""
-
+        var check = 0
+        var status = false
         while (eventType != XmlPullParser.END_DOCUMENT) {
-
             when (eventType) {
                 XmlPullParser.START_DOCUMENT -> {
                 }
-
                 XmlPullParser.START_TAG -> {
+                    check++
                     val tagname = xpp.name
-                    if (tagname.equals("body"))
-                    // 내용을 불러와야 할 공간에 접근
-                        status = 1
-                    else if (tagname.equals("item"))
-                        if (status == 1)
-                            status = 2
-                        else
-                            status = 3
-                    else if (tagname.equals("countryName")) //한글이름
-                        status = 6
-
+    //                Log.e("뭐가들었니","$tagname")
+                    if (tagname.equals("countryName")) //한글이름
+                        status = true
                 }
                 XmlPullParser.TEXT -> {
-                    if (status > 3)
-                        when (status) {
-                            6 -> krName = xpp.text
-                        }
-                } // 하나의 객체 추가 끝
-                XmlPullParser.END_TAG -> {
-                    if (status == 8) {
-                        // 마지막 정보까지 다 읽었으면
-                        autoSet.add(krName)
-                        status = 3
+                    if(status){
+                        autoSet.add(xpp.text)
+                        status = false
                     }
                 }
+                XmlPullParser.END_TAG -> {}
             }
             eventType = xpp.next() // 다음으로 넘어감
         }
+        Log.e("xml 갯수",check.toString())
         settingView()
     }
 
     fun settingView() {
 
+        Log.e("오토 갯수",autoSet.size.toString())
         val aAdapter = ArrayAdapter(
             activity!!.applicationContext,
             android.R.layout.simple_dropdown_item_1line, autoSet
@@ -169,8 +159,9 @@ class ReviewFragment: Fragment() {
         }
 
         r_find.setOnClickListener {
-            //            val i = Intent(context,)
-            Toast.makeText(context, r_country.text, Toast.LENGTH_SHORT).show()
+            val i = Intent(context,DReviewActivity::class.java)
+            i.putExtra("find",r_country.text.toString())
+            startActivity(i)
         }
     }
 
