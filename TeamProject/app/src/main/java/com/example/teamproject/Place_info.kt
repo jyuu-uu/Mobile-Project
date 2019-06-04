@@ -1,4 +1,6 @@
 package com.example.teamproject
 
-data class Place_info(var name:String, var formatted_address:String, var location:String, var open_now:Boolean) {
+import com.google.android.gms.maps.model.LatLng
+
+data class Place_info(var name:String, var formatted_address:String, var location: LatLng, var open_now:Boolean) {
 }

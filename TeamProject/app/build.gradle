@@ -41,5 +41,6 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1'
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation 'com.koushikdutta.ion:ion:2.2.1'
+    implementation 'noman.placesapi:placesAPI:1.+'
 }
 apply plugin: 'com.google.gms.google-services'

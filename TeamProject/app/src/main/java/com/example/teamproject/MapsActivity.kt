@@ -28,14 +28,87 @@ import android.support.annotation.Nullable
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
+import com.google.android.gms.maps.model.Marker
+import com.koushikdutta.async.util.StreamUtility.readFile
 import com.koushikdutta.ion.Ion
+import noman.googleplaces.*
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.widget.Button;
+import android.widget.TextView;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 
 class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButtonClickListener,
-    GoogleMap.OnMyLocationClickListener {
+    GoogleMap.OnMyLocationClickListener, PlacesListener {
+
+
+    var previous_marker = mutableListOf<Marker>();
+    override fun onPlacesFailure(e: PlacesException?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onPlacesSuccess(places: MutableList<Place>?) {
+        if (places != null) {
+            for (place in places) {
+
+                var latLng = LatLng(place.getLatitude()
+                    , place.getLongitude())
+
+                var markerSnippet:String = Location("me").provider
+                var markerOptions = MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title(place.getName());
+                markerOptions.snippet(markerSnippet);
+                var item = mMap.addMarker(markerOptions)
+                previous_marker.add(item)
+
+            }
+        }
+
+        //중복 마커 제거
+        var hashSet = HashSet<Marker>();
+        hashSet.addAll(previous_marker)
+        previous_marker.clear()
+        previous_marker.addAll(hashSet)
+
+        previous_marker = ArrayList<Marker>()
+        showPlaceInformation(LatLng(location_recently.latitude, location_recently.longitude))
+    }
+    // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    override fun onPlacesFinished() {
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onPlacesStart() {
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+    fun showPlaceInformation(location:LatLng)
+    {
+        mMap.clear();//지도 클리어
+
+        if (previous_marker != null)
+            previous_marker.clear();//지역정보 마커 클리어
+
+        NRPlaces.Builder()
+            .listener(this)
+            .key("AIzaSyARjEdHGJxyp7iLr6GYMAJWWhDQADh8hGc")
+            .latlng(location.latitude, location.longitude)//현재 위치
+            .radius(500) //500 미터 내에서 검색
+            .type(PlaceType.CONVENIENCE_STORE) //음식점
+            .build()
+            .execute()
+    }
 
     lateinit var locationManager: LocationManager
 
@@ -71,22 +144,22 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
         val mapFragment = AppCompatActivity().supportFragmentManager
             .findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
-        readFile()
     }
 
 
 
-    lateinit var keySet: ArrayList<String>
+    var keySet = mutableListOf<String>()
     var place_info: HashMap<String, Place_info> = HashMap()
     fun readFile() {
         val str_key = getString(R.string.google_api_key)
-        Ion.with( this ).load( "https://maps.googleapis.com/maps/api/place/textsearch/xml?query=restaurants+in+Sydney&key="+str_key)
+        Ion.with( this ).load( "https://maps.googleapis.com/maps/api/place/textsearch/xml?query=편의점+in+광진구&key=AIzaSyARjEdHGJxyp7iLr6GYMAJWWhDQADh8hGc")
             .asInputStream()
             .setCallback { e, result ->
                 if(result!=null) {
                     parsingXML(result)
                 }
-                //else
+                else
+                    Log.e("result", "result")
                 //Toast.makeText(applicationContext, "뉴스를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
     }
@@ -94,19 +167,21 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
     fun parsingXML( result:InputStream ) {
         var factory = XmlPullParserFactory.newInstance()
         factory.isNamespaceAware=true
+        Log.e("result", result.toString())
         val xpp = factory.newPullParser()
-        xpp.setInput(result, "utf-8")
+        xpp.setInput(result, "UTF-8")
         var eventType = xpp.eventType
 
         var isItem = false
         var dataSet = false
         var status = 0
+        var location_boolean = false
         var i=0
-
+        var latResult=0.0
+        var lngResult=0.0
         while (eventType != XmlPullParser.END_DOCUMENT) {
             var name =""
             var formatted_address=""
-            var location=""
             var open_now = false
             when(eventType){
                 XmlPullParser.START_DOCUMENT->{}
@@ -114,7 +189,9 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
                 XmlPullParser.START_TAG -> {
                     val tagname = xpp.name
                     if(isItem){
-                        if(tagname.equals("title")||tagname.equals("link")||tagname.equals("description")) {
+                        if(tagname.equals("status"))
+                            status = 6
+                        if(tagname.equals("name")||tagname.equals("formatted_address")||tagname.equals("location")||tagname.equals("lat")||tagname.equals("lng")||tagname.equals("open_now")) {
                             dataSet = true
                             when (tagname) {
                                 "name" -> {
@@ -124,10 +201,16 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
                                     status = 2
                                 }
                                 "location" -> {
+                                    location_boolean = true
+                                }
+                                "lat"->{
                                     status = 3
                                 }
-                                "open_now"->{
+                                "lng"->{
                                     status = 4
+                                }
+                                "open_now"->{
+                                    status = 5
                                 }
                             }
                         }
@@ -141,15 +224,21 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
                     if ( dataSet ) {
                         if ( status == 1 ) {
                             name = xpp .text
-                            place_info.put( name , Place_info( name , "" , "" , false))
+                            place_info.put( name , Place_info( name , "" , LatLng(0.0, 0.0) , false))
                             keySet.add (name)
                         } else if ( status == 2 ) {
                             formatted_address = xpp.text
                             place_info.get( keySet.get(i))!!.formatted_address=formatted_address
                         } else if ( status == 3 ) {
-                            location = xpp.text
-                            place_info.get(keySet.get(i))!!.location= location
-                        } else if(status == 4){
+                            if(location_boolean)
+                                latResult = xpp.text.toDouble()
+                        } else if(status == 4) {
+                            if(location_boolean){
+                                lngResult = xpp.text.toDouble()
+                                place_info.get(keySet.get(i))!!.location = LatLng(latResult, lngResult)
+                                location_boolean = false
+                            }
+                        } else if(status == 5){
                             if(xpp.text.equals("true")||xpp.text.equals("TRUE"))
                                 open_now = true
                             else if(xpp.text.equals("false")||xpp.text.equals("FALSE"))
@@ -158,14 +247,22 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
                             status = 0
                             i ++
                             isItem = false
+                        }else if(status == 6){
+                            status = 0
+                            isItem = false
                         }
-                        dataSet = false ;
+                        dataSet = false
                     }
                 }
                 XmlPullParser.END_TAG->{
                 }
             }
             eventType = xpp.next()
+        }
+        for(i in 0..place_info.size-1){
+            val marketStr = place_info.get(keySet.get(i))!!.location
+            Log.e("나 위치 들어왔어!", marketStr.latitude.toString()+","+marketStr.longitude.toString())
+            mMap.addMarker(MarkerOptions().position(marketStr).title(place_info.get(keySet.get(i))!!.name))
         }
     }
 
@@ -181,7 +278,7 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
                         if(i != 0)
                             str_result += str_result[i]
                     }
-                    var str_first:List<String> = emptyList()
+                    var str_first = mutableListOf<String>()
                     str_first.contains(str[0])
                     str_first.contains(str_result)
                     str = str_first
@@ -194,6 +291,7 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
         }
     }
 
+    lateinit var location_recently:Location
     override fun onMapReady(p0: GoogleMap?) {
         //맵에 마커 넣기
         mMap = p0!!
@@ -202,7 +300,7 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
         mMap.setOnMyLocationButtonClickListener(this)
         mMap.setOnMyLocationClickListener(this)
         locationManager = this.activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val location_recently = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        location_recently = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
             0, 0.1f, gpsLocationListener())
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
@@ -210,10 +308,12 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
 
         country = LatLng(10.0, 10.0)
         mylocation = Location("")
+        readFile()
         gpsLocationListener().onLocationChanged(location_recently)
         // Add a marker in Sydney and move the camera
-        mMap.addMarker(MarkerOptions().position(country).title("Here You find"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(country))
+        //mMap.addMarker(MarkerOptions().position(LatLng(mylocation.latitude, mylocation.longitude)).title("Here You find"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(mylocation.latitude, mylocation.longitude)))
+        mMap.setMinZoomPreference(15.0f)
 
         //내 위치 받기
         // TODO: Before enabling the My Location layer, you must request
