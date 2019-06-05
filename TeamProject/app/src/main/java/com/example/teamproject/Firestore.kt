@@ -32,12 +32,12 @@ class Firestore {
     fun addData(_id:String,_pw:String, _age:Int, _gender:Boolean) { // 회원계정 버전
         //데이터준비
         if (db != null) {
-            var user: MutableMap<String, String>? = null
+            var user: MutableMap<String, Any>? = null
             user = mutableMapOf()
             user["u_id"] = _id
             user["u_pw"] = _pw
-            user["u_age"] = _age.toString()
-            user["u_gender"] = _gender.toString()
+            user["u_age"] = _age
+            user["u_gender"] = _gender
 
 //        val newCount = String.format("%03d", count + 1)
             db!!.collection("User").document(_id)
