@@ -25,7 +25,7 @@ class DTabAdapter(fm: FragmentManager,val num:Int,val t_id:Int,val t_where:Strin
             0-> return DReviewFrag1.start(t_where,t_when,t_who,t_cost, isfav,t_id)
             1-> return DReviewFrag2.start(t_id)
             2-> return DReviewFrag3.start(t_id)
-            3-> return DReviewFrag4()
+            3-> return DReviewFrag4.start(t_id)
         }
         return null
     }

@@ -53,7 +53,7 @@ class ItemAdapter(val items:ArrayList<Item>) :
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         p0.name.text = items.get(p1).i_name.toString()//adapter에서는 data class의 data와 xml을 연결
         //p0.text.text = items.get(p1).
-        p0.icon.setImageResource(items.get(p1).i_drawable)
+//        p0.icon.setImageResource(items.get(p1).i_drawable)
         p0.cardView.setTag(p1)
         p0.cardView.setOnTouchListener(this)
         p0.cardView.setOnDragListener(listener)

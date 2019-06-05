@@ -65,7 +65,7 @@ class MainFragment : Fragment() {
             if (tabLayer!!.tabCount ==0) {
                 //탭 추가
                 tabLayer?.addTab(tabLayer!!.newTab().setText("리뷰 검색"))
-                tabLayer?.addTab(tabLayer!!.newTab().setText("Tab 2"))
+                tabLayer?.addTab(tabLayer!!.newTab().setText("최근 스케줄"))
 //                tabLayer?.addTab(tabLayer!!.newTab().setText("리뷰"))
             }
 

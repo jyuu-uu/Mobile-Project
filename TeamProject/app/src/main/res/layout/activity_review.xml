@@ -31,7 +31,7 @@
                 android:id="@+id/r_find"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="검색"/>
+                android:text="초기화"/>
 
     </LinearLayout>
     <android.support.v7.widget.RecyclerView

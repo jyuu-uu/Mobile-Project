@@ -45,11 +45,10 @@ class main_second : Fragment() {
         loadDB()
     }
 
-    fun initOne() {
+       fun initOne() {
 //        area1 = activity!!.findViewById(R.id.pane1)
 //        area1.setOnDragListener(DragListener())
         item1 = ArrayList()
-        item1.add(Item(0, "a", 1, true, 5))
         val listView1 = v!!.findViewById<RecyclerView>(R.id.ws_list)
         val layoutManager1 = LinearLayoutManager(context)
 
@@ -91,7 +90,6 @@ class main_second : Fragment() {
                     {
                         item1.add(Item(1, k.get("i_name").toString(), k.get("i_tnum").toString().toInt()
                             , k.get("i_ugender").toString().toBoolean(), k.get("i_uage").toString().toInt()))
-
                     }
                     itemAdapter1.notifyDataSetChanged()
                 }
