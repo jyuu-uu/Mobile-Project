@@ -23,18 +23,18 @@ class ItemAdapter(val items:ArrayList<Item>) :
 
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        when(event?.action){
-            MotionEvent.ACTION_MOVE->{
-                val data = ClipData.newPlainText("","")
-                val shadow = View.DragShadowBuilder(v)
-                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
-                    v?.startDragAndDrop(data, shadow, v, 0)
-                }else{
-                    v?.startDrag(data, shadow, v, 0)
-                }
-                return true
-            }
-        }
+//        when(event?.action){
+//            MotionEvent.ACTION_MOVE->{
+//                val data = ClipData.newPlainText("","")
+//                val shadow = View.DragShadowBuilder(v)
+//                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
+//                    v?.startDragAndDrop(data, shadow, v, 0)
+//                }else{
+//                    v?.startDrag(data, shadow, v, 0)
+//                }
+//                return true
+//            }
+//        }
         return false
     }
 

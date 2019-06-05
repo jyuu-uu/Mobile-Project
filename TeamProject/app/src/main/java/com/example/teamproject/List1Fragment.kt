@@ -33,6 +33,17 @@ import kotlin.collections.ArrayList
 class List1Fragment : Fragment(){
     lateinit var schedule:MutableList<schedule>
     lateinit var adapter:CardAdapter
+
+
+    var index = -1
+    companion object{
+        fun start(index:Int):List1Fragment{
+            val f = List1Fragment()
+            f.index = index
+            return f
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

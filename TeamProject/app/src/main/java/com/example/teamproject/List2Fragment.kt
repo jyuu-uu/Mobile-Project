@@ -13,19 +13,33 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import com.bumptech.glide.Glide.init
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.android.synthetic.main.activity_add_travel.*
 import kotlinx.android.synthetic.main.fragment_list2.*
 
 class List2Fragment : Fragment() {
     lateinit var item1:ArrayList<Item>
-    lateinit var item2:ArrayList<Item>
+ //   lateinit var item2:ArrayList<Item>
     lateinit var itemAdapter1: ItemAdapter
     lateinit var itemAdapter2: ItemAdapter
     lateinit var newItem:Item
+
+    lateinit var item: ArrayList<Item>
     var v:View? = null
+    lateinit var items:ArrayList<Item>
+    var t_num = -1
+
+    companion object{
+        fun start(t_num:Int):List2Fragment{
+            val f = List2Fragment()
+            f.t_num = t_num
+            return f
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,9 +52,11 @@ class List2Fragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         item1 = arrayListOf()
-        item2 = arrayListOf()
-        init()
+//        item = arrayListOf()
+        items = ArrayList()
 
+        init()
+        initData()
     }
 
     fun init(){
@@ -54,7 +70,7 @@ class List2Fragment : Fragment() {
 
             override fun onSwiped(p0: RecyclerView.ViewHolder, p1: Int) {
                 val dragged_item_pos = item1[p0.adapterPosition]
-                item2.add(dragged_item_pos)
+                items.add(dragged_item_pos)
                 item1.removeAt(p0.adapterPosition)
                 itemAdapter1.notifyItemRemoved(p0.adapterPosition)
                 itemAdapter2.notifyDataSetChanged()
@@ -70,11 +86,12 @@ class List2Fragment : Fragment() {
             }
 
             override fun onSwiped(p0: RecyclerView.ViewHolder, p1: Int) {
-                val dragged_item_pos = item2[p0.adapterPosition]
+                val dragged_item_pos = items[p0.adapterPosition]
                 item1.add(dragged_item_pos)
-                item2.removeAt(p0.adapterPosition)
+                items.removeAt(p0.adapterPosition)
                 itemAdapter1.notifyDataSetChanged()
                 itemAdapter2.notifyItemRemoved(p0.adapterPosition)
+
             }
         }
         val itemTouchHelper2 = ItemTouchHelper(touchHelper2)
@@ -102,10 +119,8 @@ class List2Fragment : Fragment() {
 //        area2.setOnDragListener(DragListener())
         val listView2 = v!!.findViewById<RecyclerView>(R.id.listView2)
         val layoutManager2 = LinearLayoutManager(context)
-
-        item2.addAll(item)
         listView2.layoutManager = layoutManager2
-        itemAdapter2 = ItemAdapter(item2)
+        itemAdapter2 = ItemAdapter(items)
         listView2.adapter = itemAdapter2
         itemAdapter2.itemClickListener = object :ItemAdapter.OnItemClickListener{
             override fun OnItemClick(holder: ItemAdapter.ViewHolder, view: View, data: Item, position: Int) {
@@ -126,7 +141,7 @@ class List2Fragment : Fragment() {
             var imgload = dialogView.findViewById<ImageView>(R.id.img_load)
             var imgname = dialogView.findViewById<EditText>(R.id.itemname)
             ad.setView(dialogView)
-                .setPositiveButton("추가") { dialog, id->
+                .setPositiveButton("추가") { dialog, id ->
                     imgload.setOnClickListener {
                         //====================icon 추가
                         Toast.makeText(context, "빈칸을 채워주세요.", Toast.LENGTH_LONG).show()
@@ -136,24 +151,29 @@ class List2Fragment : Fragment() {
                         Toast.makeText(context, "빈칸을 채워주세요.", Toast.LENGTH_LONG).show()
                     } else {
                         //var uid:String? = null
-                        if(db != null){
+                        if (db != null) {
                             db?.db?.collection("User")!!.document(MainActivity.User.toString()).get()
                                 .addOnSuccessListener {
                                     var gender = it.get("u_gender").toString().toBoolean()
                                     var age = it.get("u_age").toString().toInt()
-                                    newItem = Item(R.drawable.ic_1_black, imgname.text.toString(), item_tnum, gender, age)
-                                    db?.db?.collection("Item")!!.document("item" + (items.size + 1).toString())
+                                    newItem =
+                                        Item(R.drawable.ic_1_black, imgname.text.toString(), t_num, gender, age)
+                                    addItem(newItem)
+                                    db?.db?.collection("Item")!!.document()
                                         .set(newItem)
-                                        .addOnSuccessListener { Log.e("database", "DocumentSnapshot successfully written!") }
+                                        .addOnSuccessListener {
+                                            Log.e(
+                                                "database",
+                                                "DocumentSnapshot successfully written!"
+                                            )
+                                        }
                                         .addOnFailureListener { e -> Log.e("database", "Error writing document") }
 
-                                    addItem(newItem)
 
                                 }
 
                             Toast.makeText(context, "일정 추가 완료! ", Toast.LENGTH_SHORT).show()
-                        }
-                        else{
+                        } else {
                         }
                     }
                 }
@@ -164,8 +184,29 @@ class List2Fragment : Fragment() {
         }
     }
     fun addItem(plusitem:Item){
-        item2.add(plusitem)
+        items.add(plusitem)
         listView2.adapter!!.notifyDataSetChanged()
     }
 
+
+    fun initData(){
+        var i_iname:String
+        var i_tnum:Int
+        var i_uage:Int
+        var i_ugender:Boolean
+        db = Firestore.create(activity!!.applicationContext)
+
+        db!!.db!!.collection("Item").whereEqualTo("i_tnum", t_num).get().addOnSuccessListener {
+            val a = it.documents
+            for(k in a){
+                Log.e("database", "$k 읽는 중 item")
+                i_iname=k.get("i_name").toString()
+                i_tnum=k.get("i_tnum").toString().toInt()
+                i_uage=k.get("i_uage").toString().toInt()
+                i_ugender=k.get("i_ugender").toString().toBoolean()
+                items.add(Item(R.drawable.ic_1_black, i_iname, i_tnum, i_ugender, i_uage))
+            }
+            itemAdapter2.notifyDataSetChanged()
+        }
+    }
 }
