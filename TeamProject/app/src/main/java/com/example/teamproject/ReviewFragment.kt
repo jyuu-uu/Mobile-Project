@@ -24,6 +24,14 @@ import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
 import java.util.*
 import kotlin.collections.ArrayList
+import android.view.MotionEvent
+import android.R.attr.onClick
+import android.content.Context
+import android.text.method.Touch.onTouchEvent
+import android.view.GestureDetector
+import com.example.teamproject.ReviewFragment.ClickListener
+
+
 
 class ReviewFragment: Fragment() {
 
@@ -51,7 +59,6 @@ class ReviewFragment: Fragment() {
         db = Firestore.create(context!!)
         readDB()
         initLayout()
-        initSwipe()
         rcClick(review_listView)
         if(autoSet.size== 0)
             readApiFile()
@@ -60,31 +67,7 @@ class ReviewFragment: Fragment() {
     }
 
     fun rcClick(v: View) {    //recycleview 에서 클릭한거 페이지 띄우기
-        //            val i = Intent(context,DReviewActivity::class.java)
-//            i.putExtra("find",r_country.text.toString())
-//            startActivity(i)
-    }
 
-    fun initSwipe() {
-        val simpleItemTouchCallBack =
-            object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
-                override fun onMove(
-                    p0: RecyclerView,
-                    p1: RecyclerView.ViewHolder,
-                    p2: RecyclerView.ViewHolder
-                ): Boolean {
-                    //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-
-                    return false
-                }
-
-                override fun onSwiped(p0: RecyclerView.ViewHolder, p1: Int) {
-                    //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                   false
-                }
-            }   //객체 생성
-        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallBack)
-        itemTouchHelper.attachToRecyclerView(review_listView)
     }
 
     fun initLayout() {
@@ -93,6 +76,8 @@ class ReviewFragment: Fragment() {
 
         adapter = MyCafeAdapter(data)
         review_listView.adapter = adapter
+
+        onClickSet()
     }
 
     fun readApiFile() {
@@ -193,5 +178,59 @@ class ReviewFragment: Fragment() {
                 }
                 adapter.notifyDataSetChanged()
             }
+    }
+
+    fun onClickSet(){
+        review_listView.addOnItemTouchListener(
+            RecyclerTouchListener(view!!.context, review_listView,
+                object : ClickListener {
+                    override fun onClick(view: View, position: Int) {
+                        val dict = data.get(position)
+                        val i = Intent(view!!.context,DReviewActivity::class.java)
+                        i.putExtra("where",dict.country)
+                        startActivity(i)
+                    }
+                    override fun onLongClick(view: View, position: Int) {}
+                })
+        )
+    }
+
+    interface ClickListener {
+        fun onClick(view: View, position: Int)
+
+        fun onLongClick(view: View, position: Int)
+    }
+
+    class RecyclerTouchListener(context: Context, recyclerView: RecyclerView,
+                                private val clickListener: ReviewFragment.ClickListener?) : RecyclerView.OnItemTouchListener {
+
+        private val gestureDetector: GestureDetector
+
+        init {
+            gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+                override fun onSingleTapUp(e: MotionEvent): Boolean {
+                    return true
+                }
+
+                override fun onLongPress(e: MotionEvent) {
+                    val child = recyclerView.findChildViewUnder(e.x, e.y)
+                    if (child != null && clickListener != null) {
+                        clickListener!!.onLongClick(child, recyclerView.getChildAdapterPosition(child))
+                    }
+                }
+            })
+        }
+
+        override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+            val child = rv.findChildViewUnder(e.x, e.y)
+            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+                clickListener!!.onClick(child, rv.getChildAdapterPosition(child))
+            }
+            return false
+        }
+
+        override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+
+        override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
     }
 }
