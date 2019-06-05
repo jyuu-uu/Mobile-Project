@@ -10,6 +10,9 @@ import kotlinx.android.synthetic.main.login_layout.*
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.text.Typography.quote
+import android.util.DisplayMetrics
+
+
 
 
 class login: AppCompatActivity() {
@@ -19,6 +22,7 @@ class login: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_layout)
+        main_linearlayout.setBackgroundResource(R.drawable.airplane)
 
         init()
 
