@@ -66,7 +66,7 @@ class List1Fragment : Fragment(){
             intent0.putExtra("tno",
                 travels[index].where.toString())    //나라
             startActivity(intent0)
-            review_country.text = travels[index].where
+            //review_country.text = travels[index].where
 
         }
     }
