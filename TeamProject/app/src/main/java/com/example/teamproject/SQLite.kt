@@ -300,26 +300,6 @@ class SQLite(val v:Context, val tableName: String) {
             Log.e("SQLite", "데이터베이스를 먼저 오픈하시오")
         }
     }
-    fun readAlarm():ArrayList<String>?{
-        if (database != null) {
-            val sql =  "select * from Alarm order by date,time"
-            val cursor = database!!.rawQuery(sql, null) //파라미터는 없으니깐 null 값 넣어주면된다.
-            Log.e("SQLite2","조회된 데이터개수 :" + cursor.count)
-            if(cursor?.count != 0){
-                // 정보가 1개 이상 들어있단 이야기.
-                cursor.moveToNext()
-                Log.e("array",cursor.getString(0)+" "+cursor.getString(1)+" "+cursor.getString(2)+" "+cursor.getString(3)+" "+cursor.getString(4))
-                return arrayListOf(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4))
-                // 정보를 반환
-            }
-            else{  // 정보 없음. 로그인(회원가입) 필요
-                return null //null 반환
-            }
-            cursor.close() //cursor라는것도 실제 데이터베이스 저장소를 접근하는 것이기 때문에 자원이 한정되있다.
-            // 그러므로 웬만하면 마지막에 close를 꼭 해줘야한다.
-        }
-        return null // 생성 필요. null 반환
-    }
 
     lateinit var my_intent : Intent
     lateinit var pendingIntent: PendingIntent
@@ -401,74 +381,5 @@ class SQLite(val v:Context, val tableName: String) {
         }
         return -1
 
-    }
-    fun alarm(context: Context){
-        my_intent=Intent(context, Receiver::class.java)
-        alarm_manager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        if (database != null) {
-            var readalarm= readAlarm()
-            if(readalarm==null){
-                return
-            }
-            //dropTable("Alarm")
-            var id=readalarm[0]
-            var date=readalarm[1]
-            var time=readalarm[2]
-            var todo=readalarm[3]
-            var what=readalarm[4]
-            my_intent.putExtra("state","alarm on");
-            my_intent.putExtra("a_id",id)
-            my_intent.putExtra("todo",todo)
-            my_intent.putExtra("what",what)
-            pendingIntent = PendingIntent.getBroadcast(context, 0, my_intent,
-                PendingIntent.FLAG_UPDATE_CURRENT)
-            Log.e("id",id)
-
-            var separate1 = date.split("-") //년-월-일 배열
-            var separate2 = time.split(":") //시-분 배열
-
-            val calendar = Calendar.getInstance()
-            //알람시간 calendar에 set해주기
-            //calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 20, 27, 0)
-            calendar.set(separate1[0].toInt(), separate1[1].toInt(), separate1[2].toInt(), separate2[0].toInt(), separate2[1].toInt(), 0)
-            //calendar.set(separate1[0].toInt(), separate1[1].toInt(), separate1[2].toInt(), 16, 13, 0)
-            alarm_manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent)
-
-
-        }
-//        val sqlite = SQLite(context,"Alarm")
-//        sqlite.openDatabase("USER")
-//        my_intent.putExtra("state","alarm on");
-//
-//        var readalarm= sqlite.readAlarm()
-//        if(readalarm==null){
-//            return
-//        }
-//        var id=readalarm[0]
-//        var date=readalarm[1]
-//        var time=readalarm[2]
-//        var todo=readalarm[3]
-//        var what=readalarm[4]
-//        my_intent.putExtra("a_id",id)
-//        my_intent.putExtra("todo",todo)
-//        my_intent.putExtra("what",what)
-//        pendingIntent = PendingIntent.getBroadcast(context, 0, my_intent,
-//            PendingIntent.FLAG_UPDATE_CURRENT)
-//        Log.e("id",id)
-//
-//        var separate1 = date.split("-") //년-월-일 배열
-//        var separate2 = time.split(":") //시-분 배열
-//
-//        val calendar = Calendar.getInstance()
-//        //알람시간 calendar에 set해주기
-//        //calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 20, 27, 0)
-//        calendar.set(separate1[0].toInt(), separate1[1].toInt(), separate1[2].toInt(), separate2[0].toInt(), separate2[1].toInt(), 0)
-//        //calendar.set(separate1[0].toInt(), separate1[1].toInt(), separate1[2].toInt(), 16, 13, 0)
-//        alarm_manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent)
-//
-//        //sqlite.dropTable("Alarm")
-////        sqlite.deleterow(id.toInt(),"Alarm")
-////        alarm()
-//        //Log.e("alarm delete",id+" alarm deleted")
     }
 }

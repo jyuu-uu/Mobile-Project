@@ -174,7 +174,7 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
                             var time=alarm_timepicker.hour.toString()+":"+alarm_timepicker.minute//+":00"
                             Log.e("datepicker",date)
                             Log.e("timepicker",time)
-                            sqlite.insertData(date,time,items.get(position).todo,dialogwhat.text.toString(),schedules.get(position).sno.toString())
+                            sqlite.insertData(date,time,items.get(position).todo,dialogwhat.text.toString(),items.get(position).sno.toString())
                             sqlite.readAlarm(context)
                             //sqlite.dropTable("Alarm")
                             //	db date type 2008-11-11 / time hh:mm:ss

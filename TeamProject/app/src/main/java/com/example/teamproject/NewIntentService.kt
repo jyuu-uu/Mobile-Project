@@ -130,6 +130,7 @@ class NewIntentService : Service() {
                             var temp=doc.get("s_id").toString()
                             if(temp==sno){
                                 sindex=doc.get("s_id").toString().toInt()
+                                Log.e("sindex sno", sindex.toString()+sno)
                                 if (db != null) {
                                     var new2: MutableMap<String, Any>? = null
                                     new2 = mutableMapOf()
