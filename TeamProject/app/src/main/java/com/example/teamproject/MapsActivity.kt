@@ -40,10 +40,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.support.v7.widget.LinearLayoutManager
 import android.widget.Button;
 import android.widget.TextView;
+import com.example.myreportaftertravel.MyCafeAdapter
+import com.example.myreportaftertravel.MyMarketAdapter
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory.*
+import kotlinx.android.synthetic.main.activity_review.*
 
 import java.io.IOException;
 import java.util.List;
@@ -53,6 +57,7 @@ import java.util.Locale;
 class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener, PlacesListener {
 
+    lateinit var adapter:MyMarketAdapter
 
     var previous_marker = mutableListOf<Marker>();
     override fun onPlacesFailure(e: PlacesException?) {
@@ -185,6 +190,7 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
             var name =""
             var formatted_address=""
             var open_now = false
+            var icon = ""
             when(eventType){
                 XmlPullParser.START_DOCUMENT->{}
 
@@ -192,8 +198,8 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
                     val tagname = xpp.name
                     if(isItem){
                         if(tagname.equals("status"))
-                            status = 6
-                        if(tagname.equals("name")||tagname.equals("formatted_address")||tagname.equals("location")||tagname.equals("lat")||tagname.equals("lng")||tagname.equals("open_now")) {
+                            status = 7
+                        if(tagname.equals("icon")||tagname.equals("name")||tagname.equals("formatted_address")||tagname.equals("location")||tagname.equals("lat")||tagname.equals("lng")||tagname.equals("open_now")) {
                             dataSet = true
                             when (tagname) {
                                 "name" -> {
@@ -214,6 +220,9 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
                                 "open_now"->{
                                     status = 5
                                 }
+                                "icon"->{
+                                    status = 6
+                                }
                             }
                         }
                     }
@@ -225,11 +234,11 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
                 XmlPullParser.TEXT->{
                     if ( dataSet ) {
                         if ( status == 1 ) {
-                            name = xpp .text
-                            place_info.put( name , Place_info( name , "" , LatLng(0.0, 0.0) , false))
+                            name = xpp.text
+                            place_info.put( name , Place_info( name , "" , LatLng(0.0, 0.0) , false, ""))
                             keySet.add (name)
                         } else if ( status == 2 ) {
-                            formatted_address = xpp.text
+                            formatted_address = xpp.text.toString().trim()
                             place_info.get( keySet.get(i))!!.formatted_address=formatted_address
                         } else if ( status == 3 ) {
                             if(location_boolean)
@@ -246,10 +255,13 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
                             else if(xpp.text.equals("false")||xpp.text.equals("FALSE"))
                                 open_now = false
                             place_info.get(keySet.get(i))!!.open_now = open_now
+                        }else if(status == 6){
+                            icon = xpp.text
+                            place_info.get(keySet.get(i))!!.icon = icon
                             status = 0
                             i ++
                             isItem = false
-                        }else if(status == 6){
+                        }else if(status == 7){
                             status = 0
                             isItem = false
                         }
@@ -263,7 +275,7 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
         }
         for(i in 0..place_info.size-1){
             val marketStr = place_info.get(keySet.get(i))!!.location
-            Log.e("나 위치 들어왔어!", marketStr.latitude.toString()+","+marketStr.longitude.toString())
+
             var strOpen = HUE_ROSE
             var close_blur = 0.3f
             if(place_info.get(keySet.get(i))!!.open_now){
@@ -278,32 +290,55 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
                 .icon(BitmapDescriptorFactory.defaultMarker(strOpen))
             mMap.addMarker(markerstore)
         }
+        initLayout()
     }
+    fun initLayout(){
+        val layoutManager = LinearLayoutManager(super.getContext(), LinearLayoutManager.VERTICAL, false)
 
-    fun onbtnClick(p0:GoogleMap?){
-        btnfindcountry.setOnClickListener {
-            Log.v("imin", "imin")
-            if(!findcountry.text.toString().equals("")){
-                var str = findcountry.text.toString().split(",")
-                if(str[1].toCharArray()[0].equals(" ")) {
-                    val str_second = str[1].toCharArray()
-                    var str_result = ""
-                    for(i in str_second.indices){
-                        if(i != 0)
-                            str_result += str_result[i]
-                    }
-                    var str_first = mutableListOf<String>()
-                    str_first.contains(str[0])
-                    str_first.contains(str_result)
-                    str = str_first
-                }
-                country = LatLng(str[0].toDouble(), str[1].toDouble())
-            }else{
-                country = LatLng(-33.852, 151.211)
-            }
-            this.onMapReady(p0)
+        market_list.layoutManager = layoutManager
+        var infoArr = mutableListOf<Place_info>()
+        for(i in 0..place_info.size-1){
+            infoArr.add(i, place_info.get(keySet.get(i))!!)
+            var mGC = Geocoder(this.activity)
+            var strAdd = mGC.getFromLocation(infoArr.get(i).location.latitude.toDouble()
+                , infoArr.get(i).location.longitude.toDouble(), 1).toString().trim()
+            var arrAdd = strAdd.split("\"")
+
+            if(arrAdd.size>=2)
+                infoArr.get(i).formatted_address = arrAdd[1]
         }
+
+        //adapter = MyMarketAdapter(infoArr, this)
+        market_list.adapter = MyMarketAdapter(infoArr, this, { partItem : Place_info -> partItemClicked(partItem) })
     }
+    fun partItemClicked(partItem : Place_info) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(partItem.location.latitude, partItem.location.longitude)))
+    }
+//
+//    fun onbtnClick(p0:GoogleMap?){
+//        btnfindcountry.setOnClickListener {
+//            Log.v("imin", "imin")
+//            if(!findcountry.text.toString().equals("")){
+//                var str = findcountry.text.toString().split(",")
+//                if(str[1].toCharArray()[0].equals(" ")) {
+//                    val str_second = str[1].toCharArray()
+//                    var str_result = ""
+//                    for(i in str_second.indices){
+//                        if(i != 0)
+//                            str_result += str_result[i]
+//                    }
+//                    var str_first = mutableListOf<String>()
+//                    str_first.contains(str[0])
+//                    str_first.contains(str_result)
+//                    str = str_first
+//                }
+//                country = LatLng(str[0].toDouble(), str[1].toDouble())
+//            }else{
+//                country = LatLng(-33.852, 151.211)
+//            }
+//            this.onMapReady(p0)
+//        }
+//    }
 
     lateinit var location_recently:Location
     override fun onMapReady(p0: GoogleMap?) {
@@ -334,7 +369,7 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
         // location permission from the user. This sample does not include
         // a request for location permission.
 
-        onbtnClick(p0)
+        //onbtnClick(p0)
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
     inner class gpsLocationListener():LocationListener {
