@@ -90,7 +90,7 @@ class List1Fragment : Fragment(){
             val dialogtext2 = dialogView.findViewById<TextView>(R.id.textv2)
             dialogtext1.setText("일정 제목")
             dialogtext2.setText("일정 시간")
-            var datetime=datePicker.year.toString()+"/"+datePicker.month+"/"+datePicker.dayOfMonth+"/"+timePicker.hour.toString()+":"+timePicker.minute
+            var datetime=datePicker.year.toString()+"/"+(datePicker.month+1)+"/"+datePicker.dayOfMonth+"/"+timePicker.hour.toString()+":"+timePicker.minute
 
             ad.setView(dialogView)
                 .setPositiveButton("확인") { dialogInterface, i ->
