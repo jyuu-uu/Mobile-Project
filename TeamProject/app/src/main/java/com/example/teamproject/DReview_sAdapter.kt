@@ -31,7 +31,6 @@ class DReview_sAdapter (context: Context, val resource:Int, var list:ArrayList<D
         val p = list.get(position)
         v!!.findViewById<TextView>(R.id.dreview_sTitle).text = p.title
         v!!.findViewById<TextView>(R.id.dreview_sTime).text = p.date
-
         return v // 만들었으니 만든거 return
         //return super.getView(position, convertView, parent)
     }

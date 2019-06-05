@@ -44,7 +44,6 @@ class DReviewFrag2 : Fragment() {
     }
 
     fun setData() {
-        Log.e("뀨", "뀨")
         if (!check) {
             check = true
             data = ArrayList<DReview_sData>()

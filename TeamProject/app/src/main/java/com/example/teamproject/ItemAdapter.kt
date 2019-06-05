@@ -2,6 +2,7 @@ package com.example.teamproject
 
 
 import android.content.ClipData
+import android.graphics.Color
 import android.os.Build
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.common.io.Resources.getResource
 
 class ItemAdapter(val items:ArrayList<Item>) :
     View.OnTouchListener,
@@ -54,6 +56,7 @@ class ItemAdapter(val items:ArrayList<Item>) :
         p0.name.text = items.get(p1).i_name.toString()//adapter에서는 data class의 data와 xml을 연결
         //p0.text.text = items.get(p1).
 //        p0.icon.setImageResource(items.get(p1).i_drawable)
+        p0.cardView.setCardBackgroundColor(Color.parseColor("#FFCF61"))
         p0.cardView.setTag(p1)
         p0.cardView.setOnTouchListener(this)
         p0.cardView.setOnDragListener(listener)

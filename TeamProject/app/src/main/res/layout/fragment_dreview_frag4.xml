@@ -7,25 +7,29 @@
         android:orientation="vertical"
              tools:context=".DReviewFrag4">
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp"
-                  android:orientation="horizontal" android:layout_weight="1">
-        <TextView android:layout_width="0dp" android:layout_height="match_parent"
-                  android:id="@+id/dr_textname" android:layout_weight="3"
-                  android:textSize="35sp"
+    <LinearLayout android:layout_width="match_parent" android:layout_height="60dp"
+                  android:orientation="horizontal" android:layout_gravity="center"
+                  android:gravity="center"
+                  android:background="@color/colorCustom4"
+    >
+        <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
+                  android:layout_marginLeft="20dp"
+                  android:id="@+id/dr_textname" android:layout_weight="1" android:gravity="center_vertical"
+                  android:textSize="35sp" android:textColor="@color/colorCustom5"
                   android:text="213"/>
-        <TextView android:layout_width="0dp" android:layout_height="match_parent"
-                  android:layout_weight="1"
-                  android:textSize="24sp"
+        <TextView android:layout_width="50dp" android:layout_height="50dp"
+                  android:gravity="bottom"
+                  android:textSize="24sp" android:textColor="@color/colorCustom2"
                                                     android:id="@+id/dr_score" android:text="1sd"/>
     </LinearLayout>
 
-    <TextView android:layout_width="match_parent" android:layout_height="0dp"
-              android:layout_weight="4" android:text="213"
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:layout_weight="5" android:text="213"
               android:textSize="17sp"
     android:id="@+id/dr_text"/>
     <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
-                                                 android:layout_height="0dp"
+                                                 android:layout_height="wrap_content"
                                                  android:id="@+id/dr_list"
-                                                 android:layout_weight="5">
+                                                 android:layout_weight="1">
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>
