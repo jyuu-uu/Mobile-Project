@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 makeCountry()
             }
             R.id.logout->{
-                sqlite?.dropDB()
+                sqlite?.dropTable("Login")
                 makeMain()
                 val intent = Intent(this, login::class.java)
                 startActivityForResult(intent, code)
