@@ -17,6 +17,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.activity_list.*
+import kotlinx.android.synthetic.main.fragment_list1.*
+
 var index=-1
 lateinit var travels:MutableList<MyTravel>
 lateinit var schedules:MutableList<schedule>
@@ -55,6 +57,15 @@ class ListFragment : Fragment() {
             adapter = MyAdapter(activity!!.applicationContext, R.layout.list_row, ArrayList(travel))
             listView.adapter = adapter
             swipe.setRefreshing(false);
+        }
+
+        review_write.setOnClickListener {
+
+            var intent0 = Intent(activity!!.applicationContext, ReviewRegisterView::class.java)
+            intent0.putExtra("tno",
+                travels[index].where)    //나라
+            startActivity(intent0)
+
         }
     }
 
