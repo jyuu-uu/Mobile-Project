@@ -197,5 +197,6 @@ class List1Fragment : Fragment(){
         list1View.layoutManager=layoutManager
         adapter=CardAdapter(context!!,ArrayList(schedule))
         list1View.adapter=adapter
+        adapter.notifyDataSetChanged()
     }
 }

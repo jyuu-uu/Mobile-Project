@@ -20,6 +20,9 @@ class Receiver : BroadcastReceiver() {
         val a_id=p1!!.getExtras().getString("a_id")
         val todo=p1!!.getExtras().getString("todo")
         val what=p1!!.getExtras().getString("what")
+        val sno=p1!!.getExtras().getString("sno")
+        //Log.e("sno",sno)
+
         Log.e("reciever",a_id.toString())
         // RingtonePlayingService 서비스 intent 생성
         val service_intent = Intent(p0, NewIntentService::class.java)
@@ -29,6 +32,7 @@ class Receiver : BroadcastReceiver() {
         service_intent.putExtra("a_id", a_id)
         service_intent.putExtra("todo", todo)
         service_intent.putExtra("what", what)
+        service_intent.putExtra("sno", sno)
         // start the ringtone service
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

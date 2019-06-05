@@ -103,7 +103,7 @@ class SQLite(val v:Context, val tableName: String) {
                 }
                 "Alarm"->{
                     val sql =
-                        "create table if not exists $tableName(a_id integer PRIMARY KEY autoincrement, date text, time text, schedule text, what text)"
+                        "create table if not exists $tableName(a_id integer PRIMARY KEY autoincrement, date text, time text, schedule text, what text, sno integer)"
                     database!!.execSQL(sql)
                 }
 
@@ -284,16 +284,16 @@ class SQLite(val v:Context, val tableName: String) {
             Log.e("SQLite","delete 성공.")
         }
     }
-    fun insertData(date:String, time:String, schedule:String, what:String) {    //alarm
+    fun insertData(date:String, time:String, schedule:String, what:String, sno:String) {    //alarm
         Log.e("SQLite","insertData() 호출됨.")
-        Log.e("SQLite","$date\t$time\t$schedule\t$what.")
+        Log.e("SQLite","$date\t$time\t$schedule\t$what\t$sno.")
         //Log.e("SQLite","$date\t$schedule\t$what.")
         if (database != null) {
 
             val sql = "insert into " +
-                    /*삽입할 테이블 이름*/ "Alarm" + "(date, time, schedule, what) values(?, ?, ?, ?)"
+                    /*삽입할 테이블 이름*/ "Alarm" + "(date, time, schedule, what, sno) values(?, ?, ?, ?, ?)"
             ///*삽입할 테이블 이름*/ "Alarm" + "(date, schedule, what) values(?, ?, ?)"
-            val params = arrayOf(date, time, schedule, what)
+            val params = arrayOf(date, time, schedule, what, sno.toInt())
             database!!.execSQL(sql, params)
             //이런식으로 두번쨰 파라미터로 이런식으로 객체를 전달하면 sql문의 ?를 이 params에 있는 데이터를 물음표를 대체해준다.
             Log.e("SQLite", "데이터 추가함")
@@ -340,16 +340,19 @@ class SQLite(val v:Context, val tableName: String) {
                 // 정보가 1개 이상 들어있단 이야기.
                 cursor.moveToNext()
                 Log.e("array",cursor.getString(0)+" "+cursor.getString(1)+" "+cursor.getString(2)+" "+cursor.getString(3)+" "+cursor.getString(4))
-                var arrayList = arrayListOf(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4))
+                var arrayList = arrayListOf(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5))
                 var id=arrayList[0]
                 var date=arrayList[1]
                 var time=arrayList[2]
                 var todo=arrayList[3]
                 var what=arrayList[4]
+                var sno=arrayList[5]
                 my_intent.putExtra("state","alarm on");
                 my_intent.putExtra("a_id",id)
                 my_intent.putExtra("todo",todo)
                 my_intent.putExtra("what",what)
+                my_intent.putExtra("sno",sno)
+
                 pendingIntent = PendingIntent.getBroadcast(context, id.toInt(), my_intent,
                     PendingIntent.FLAG_UPDATE_CURRENT)
 

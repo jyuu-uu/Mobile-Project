@@ -34,6 +34,7 @@ class LoadingActivity : AppCompatActivity() {
         val sqlite = SQLite(this,"Login")
         // 데이터베이스를 오픈
         sqlite.openDatabase("USER")
+        //sqlite.dropTable("Alarm")
         sqlite.readAlarm(this)
         val auto = sqlite.AutoLogin()
 

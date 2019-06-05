@@ -44,6 +44,9 @@ class NewIntentService : Service() {
         var a_id:String=intent!!.getExtras().getString("a_id")!!
         var todo:String=intent!!.getExtras().getString("todo")!!
         var what:String=intent!!.getExtras().getString("what")!!
+        var sno:String=intent!!.getExtras().getString("sno")!!
+        //Log.e("sno",sno)
+
         Log.e("service",todo)
 
 
@@ -124,13 +127,13 @@ class NewIntentService : Service() {
                         Log.e("database", "schedulec")
                         for (doc in value) {
                             Log.e("database", "$doc 읽는 중2")
-                            var temp=doc.get("s_todo").toString()
-                            if(temp==todo){
+                            var temp=doc.get("s_id").toString()
+                            if(temp==sno){
                                 sindex=doc.get("s_id").toString().toInt()
                                 if (db != null) {
                                     var new2: MutableMap<String, Any>? = null
                                     new2 = mutableMapOf()
-                                    new2["alarm"] = false
+                                    new2["s_alarm"] = false
                                     db!!.collection("Schedule").document("schedule"+ sindex.toString())
                                         .set(new2, SetOptions.merge())
                                         .addOnSuccessListener { Log.e("database", "DocumentSnapshot successfully written!") }

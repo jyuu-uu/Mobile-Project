@@ -124,6 +124,8 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
                             my_intent.putExtra("state","alarm on");
                             my_intent.putExtra("todo",items.get(position).todo)
                             my_intent.putExtra("what",dialogwhat.text.toString())
+                            my_intent.putExtra("s_id",items.get(position).sno.toString())
+                            Log.e("sno",items.get(position).sno.toString())
                             //pendingIntent = PendingIntent.getBroadcast(context, 0, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
                             val calendar = Calendar.getInstance()
                             //알람시간 calendar에 set해주기
@@ -140,7 +142,7 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
                             var time=alarm_timepicker.hour.toString()+":"+alarm_timepicker.minute//+":00"
                             Log.e("datepicker",date)
                             Log.e("timepicker",time)
-                            sqlite.insertData(date,time,items.get(position).todo,dialogwhat.text.toString())
+                            sqlite.insertData(date,time,items.get(position).todo,dialogwhat.text.toString(),schedules.get(position).sno.toString())
                             sqlite.readAlarm(context)
                             //sqlite.dropTable("Alarm")
                             //	db date type 2008-11-11 / time hh:mm:ss
@@ -208,7 +210,7 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
                 if (db != null) {
                     var new2: MutableMap<String, Any>? = null
                     new2 = mutableMapOf()
-                    new2["alarm"] = false
+                    new2["s_alarm"] = false
                     // Add a new document with a generated ID
 
 //        val newCount = String.format("%03d", count + 1)
