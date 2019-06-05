@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.logout->{
                 sqlite = SQLite(this,"Login")
                 sqlite.openDatabase("USER")
-                sqlite?.dropTable("Login")
+                sqlite.dropTable("Login")
                 makeMain()
                 val intent = Intent(this, login::class.java)
                 startActivityForResult(intent, code)

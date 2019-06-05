@@ -63,14 +63,14 @@ class ListFragment : Fragment() {
             swipe.setRefreshing(false);
         }
 
-        review_write.setOnClickListener {
-
-            var intent0 = Intent(activity!!.applicationContext, ReviewRegisterView::class.java)
-            intent0.putExtra("tno",
-                travels[index].where)    //나라
-            startActivity(intent0)
-
-        }
+//        review_write.setOnClickListener {
+//
+//            var intent0 = Intent(activity!!.applicationContext, ReviewRegisterView::class.java)
+//            intent0.putExtra("tno",
+//                travels[index].where)    //나라
+//            startActivity(intent0)
+//
+//        }
     }
 
     fun init(){

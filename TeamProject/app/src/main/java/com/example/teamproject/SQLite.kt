@@ -68,7 +68,7 @@ class SQLite(val v:Context, val tableName: String) {
             val cursor = database!!.rawQuery(sql, null) //파라미터는 없으니깐 null 값 넣어주면된다.
             Log.e("SQLite","조회된 데이터개수 :" + cursor.count)
 
-            if(cursor?.count == 1){
+            if(cursor?.count!! >= 1){
                 // 정보가 1개 이상 들어있단 이야기.
                 // 자동로그인이 되어어야함
                 cursor.moveToNext()
