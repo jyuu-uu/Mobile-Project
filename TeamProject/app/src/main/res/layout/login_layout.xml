@@ -9,7 +9,6 @@
         android:id="@+id/main_linearlayout"
 >
     <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
-            android:background="@color/colorLogin"
     >
     <TableLayout
             android:layout_width="match_parent"
@@ -52,7 +51,6 @@
                             android:inputType="textPersonName"
                             android:ems="8"
                             android:id="@+id/identifier"
-                            android:gravity="center"
                             android:hint="ID 입력" android:textColorHighlight="#FFCF62"
                             android:background="@drawable/border_round_edit"
                             android:textColorLink="#EB453F" android:textColorHint="#CBFFFFFF" android:singleLine="false"
@@ -77,8 +75,7 @@
                             android:ems="8"
                             android:id="@+id/password"
                             android:hint="PW 입력"
-                            android:background="@drawable/border_round_edit"
-                            android:gravity="center" android:textColorHighlight="#FBCE67"
+                            android:background="@drawable/border_round_edit" android:textColorHighlight="#FBCE67"
                             android:textColorLink="#F06161" android:textColorHint="#CBFFFFFF"
                             android:textColor="#FFFFFF"/>
                 </LinearLayout>
@@ -103,7 +100,7 @@
                 android:layout_gravity="center"
                 app:layout_constraintStart_toStartOf="@+id/login"
                 android:background="@drawable/border_round_btn"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
         />
         </LinearLayout>
     </TableLayout>
