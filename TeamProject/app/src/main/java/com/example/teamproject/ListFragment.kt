@@ -205,7 +205,7 @@ class ListFragment : Fragment() {
                 travel.add(travels[i])
                 item_tnum = travels[i].tno
                 item_uid = auto!![0]
-
+                Log.e("item", item_uid+" "+ item_tnum+" "+auto!![0])
             }
             i++
         }
