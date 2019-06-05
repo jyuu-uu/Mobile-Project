@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,16 +38,12 @@ class List2Fragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        item1 = arrayListOf()
+        item2 = arrayListOf()
         init()
     }
 
     fun init(){
-        item1 = arrayListOf()
-        item2 = arrayListOf()
-
-        item1.add(Item(R.drawable.ic_1, "a", 1, false, 0))
-        item1.addAll(items)
-        
         initOne()
         initTwo()
 
@@ -90,6 +87,7 @@ class List2Fragment : Fragment() {
         val listView1 = v!!.findViewById<RecyclerView>(R.id.listView1)
         val layoutManager1 = LinearLayoutManager(context)
 
+        item1.addAll(item)
         listView1.layoutManager = layoutManager1
         itemAdapter1 = ItemAdapter(item1)
         listView1.adapter = itemAdapter1
