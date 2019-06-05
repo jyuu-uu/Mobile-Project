@@ -27,7 +27,7 @@
             <item
                     android:id="@+id/embassy_phone"
                     android:icon="@drawable/ic_help_black_24dp"
-                    android:title="대사관 전화번호"/>
+                    android:title="긴급 상황 연락처"/>
         </menu>
     </item>
 

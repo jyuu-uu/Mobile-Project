@@ -173,6 +173,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (requestCode == code) {
             if (resultCode == Activity.RESULT_OK) { // 결과로 보내준 상태가 OK 코드면
                 User = data?.getStringExtra("id") //값을 받아옴
+
+                val navigationView = findViewById(R.id.nav_view) as NavigationView
+                navigationView.setNavigationItemSelectedListener(this)
+
+//View nav_header_view = navigationView.inflateHeaderView(R.layout.nav_header_main);
+                val nav_header_view = navigationView.getHeaderView(0)
+
+                val nav_header_id_text = nav_header_view.findViewById(R.id.id_view) as TextView
+                nav_header_id_text.setText(User)
+
                 Log.e("Main","$User")
 
 //                findViewById<TextView>(R.id.id_view).setText(User)

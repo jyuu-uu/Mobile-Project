@@ -95,6 +95,17 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
             holder.icon.setImageResource(R.drawable.alarm_off)
         val ad = AlertDialog.Builder(context)
         val ad2 = AlertDialog.Builder(context)
+        var tperiod=travels[index].period
+        val separate= tperiod.split("~")
+        var date = mutableListOf<String>()
+        date.add(separate[0])
+        date.add(separate[1])
+        val separate1=date[0].split("/")
+        val separate2=date[1].split("/")
+        var cal1=Calendar.getInstance()
+        var cal2=Calendar.getInstance()
+        cal1.set(separate1[0].toInt(),separate1[1].toInt()-1,separate1[2].toInt())
+        cal2.set(separate2[0].toInt(),separate2[1].toInt()-1,separate2[2].toInt())
         var dialog=ad.create()
         holder.todo.setOnClickListener {
             val dialogView=layoutInflater.inflate(R.layout.add_alarm, null)
@@ -102,6 +113,8 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
             val dialogtext1 = dialogView.findViewById<TextView>(R.id.textv1)
             val dialogtext2 = dialogView.findViewById<TextView>(R.id.textv2)
             var datePicker = dialogView.findViewById<DatePicker>(R.id.date_picker)
+            datePicker.setMinDate(cal1.timeInMillis)
+            datePicker.setMaxDate(cal2.timeInMillis)
             var timePicker = dialogView.findViewById<TimePicker>(R.id.time_picker)
             dialogwhat.setText(items.get(position).todo)
             ad2.setView(dialogView)
@@ -110,7 +123,7 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
                     var edit: MutableMap<String, Any>? = null
                     edit = mutableMapOf()
                     edit["s_todo"] = dialogwhat.text.toString()
-                    edit["s_time"] = datePicker.year.toString()+"/"+datePicker.month+"/"+datePicker.dayOfMonth+"/"+timePicker.hour.toString()+":"+timePicker.minute
+                    edit["s_time"] = datePicker.year.toString()+"/"+(datePicker.month+1)+"/"+datePicker.dayOfMonth+"/"+timePicker.hour.toString()+":"+timePicker.minute
 
                     //데이터준비
                     if (db != null) {
