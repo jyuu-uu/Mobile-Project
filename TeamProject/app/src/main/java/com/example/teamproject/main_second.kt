@@ -37,7 +37,7 @@ class main_second : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        db = Firestore.create(v.context)
+        db = Firestore.create(activity!!.applicationContext)
 
         Log.e("db널이나 너?","a아 시발")
 
@@ -59,8 +59,7 @@ class main_second : Fragment() {
     }
 
     fun loadDB() {
-
-        db!!.db!!.collection("Travel").whereEqualTo("u_id", MainActivity.User!!)
+        db!!.db?.collection("Travel")!!.whereEqualTo("u_id", MainActivity.User.toString())
             .whereEqualTo("t_fin", false)
           //  .orderBy("t_when")
             .get()
