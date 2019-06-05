@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.example.myreportaftertravel.MyMarketAdapter
 import com.example.myreportaftertravel.MyObjectAdapter
 import kotlinx.android.synthetic.main.activity_maps.*
@@ -61,7 +62,7 @@ class DReviewFrag3 : Fragment() {
                             Log.e("나 들어왔어!", c.toString())
 
                         }
-                            }
+                    }
                     initLayout()
                 }
         }
@@ -80,7 +81,8 @@ class DReviewFrag3 : Fragment() {
 //        }
         infoArr = data
         //adapter = MyMarketAdapter(infoArr, this)
-        recycler_object.adapter = MyObjectAdapter(infoArr)
+        var cntobj = true
+        recycler_object.adapter = MyObjectAdapter(infoArr, cntobj)
     }
 
 

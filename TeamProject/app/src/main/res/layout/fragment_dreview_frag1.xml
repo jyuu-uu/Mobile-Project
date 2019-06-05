@@ -4,50 +4,60 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+        android:background="@color/colorCustom4"
              tools:context=".DReviewFrag1">
     <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal"     android:layout_margin="10dp"
+        >
             <TextView
                     android:text="where"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textColor="@color/colorCustom5"
                     android:layout_height="wrap_content" tools:layout_editor_absoluteY="42dp"
                     tools:layout_editor_absoluteX="38dp" android:id="@+id/dreview_where"
                     android:textSize="35sp"/>
-            <ToggleButton android:layout_width="0dp" android:layout_height="match_parent"
-                          android:layout_weight="1"
+            <ToggleButton android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/select_img"
+                          android:layout_gravity="center" android:textOff="" android:textOn=""
                           android:id="@+id/dreview_isfav"
                 android:gravity="right"/>
         </LinearLayout>
 
-           <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-           android:orientation="horizontal">
-    <ImageView android:layout_width="0dp" android:layout_height="wrap_content"
-               android:src="@mipmap/ic_launcher"
-        android:layout_weight="1"/>
+           <LinearLayout android:layout_width="match_parent" android:layout_height="70dp"
+                         android:layout_gravity="center" android:gravity="center"
+           android:orientation="horizontal" android:layout_margin="10dp" android:background="@color/colorCustom5">
+    <ImageView android:layout_width="50dp" android:layout_height="50dp" android:layout_margin="10dp"
+               android:background="@color/colorCustom2"
+               android:src="@drawable/ic_1"/>
                <TextView
                        android:text="기간~"
-                       android:layout_width="0dp"
-                       android:textSize="26sp"
-                       android:gravity="right"
-                       android:layout_weight="3"
-                       android:layout_height="wrap_content" tools:layout_editor_absoluteY="106dp"
-                       tools:layout_editor_absoluteX="38dp" android:id="@+id/dreview_when"/>
+                       android:layout_width="wrap_content"
+                       android:textSize="30dp" android:layout_marginLeft="5dp"
+                       android:gravity="center_vertical"
+                       android:layout_weight="1"
+                       android:textColor="@color/colorCustom2"
+                       android:layout_height="match_parent" android:id="@+id/dreview_when"/>
 
            </LinearLayout>
-        <LinearLayout android:layout_width="match_parent"
-                      android:orientation="horizontal" android:layout_height="wrap_content">
-            <ImageView android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_weight="1" android:src="@mipmap/ic_launcher"/>
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                      android:id="@+id/dreview_who"
+        <LinearLayout android:layout_width="match_parent" android:layout_margin="10dp"
+                      android:orientation="horizontal" android:layout_height="wrap_content"
+        >
+            <ImageView android:layout_width="50dp" android:layout_height="50dp"
+                       android:layout_gravity="center"
+                       android:src="@drawable/white_person"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
+                      android:id="@+id/dreview_who" android:layout_margin="10dp"
             android:layout_weight="1"/>
-            <ImageView android:layout_width="0dp" android:layout_height="wrap_content"
-                       android:layout_weight="1" android:src="@mipmap/ic_launcher"/>
-            <TextView android:layout_width="0dp"
-                      android:id="@+id/dreview_cost"
-                      android:layout_weight="1" android:layout_height="wrap_content"/>
+            <ImageView android:layout_width="50dp" android:layout_height="50dp"
+                       android:layout_gravity="center"
+                       android:src="@drawable/money_white"/>
+            <TextView android:layout_width="wrap_content"
+                      android:id="@+id/dreview_cost" android:layout_margin="10dp"
+                      android:layout_weight="1" android:layout_height="match_parent"/>
         </LinearLayout>
     </LinearLayout>
 

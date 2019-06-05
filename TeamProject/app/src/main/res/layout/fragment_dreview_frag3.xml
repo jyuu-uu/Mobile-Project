@@ -7,8 +7,16 @@
              tools:context=".DReviewFrag3">
 
     <!-- TODO: Update blank fragment layout -->
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:gravity="center"
+                  android:textSize="20dp"  android:text = "준비물 리스트"
+                  android:textStyle="bold" android:id="@+id/object_list"
+                  android:textColor="@color/colorCustom2"
+                  android:layout_margin="10dp"
+        />
     <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
+                                            android:layout_weight="1"
                                             android:id="@+id/recycler_object"
     >
     </android.support.v7.widget.RecyclerView>
