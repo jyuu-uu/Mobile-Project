@@ -137,10 +137,10 @@ class List1Fragment : Fragment(){
 //            val fragmentManager = activity!!.supportFragmentManager
 //            fragmentManager.beginTransaction().remove(this).commit()
 //            //fragmentManager.popBackStack()
-            val intent = Intent(activity, MainActivity::class.java)
-            intent.putExtra("success",true)
-
-            startActivity(intent)
+//            val intent = Intent(activity, MainActivity::class.java)
+//            intent.putExtra("success",true)
+//            startActivity(intent)
+            activity!!.finish()
         }
     }
 

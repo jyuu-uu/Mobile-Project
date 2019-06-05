@@ -93,7 +93,8 @@ class addTravel : AppCompatActivity() {
                 sqlite.openDatabase("USER")
                 val auto = sqlite.AutoLogin()
 
-                var newtravel=MyTravel(travels.size+1,auto!![0],editWhere.text.toString(),period.toString(),editPeople.text.toString().toInt(),editMoney.text.toString()+'원')
+                var newtravel=MyTravel(travels.size+1,auto!![0],editWhere.text.toString(),period.toString()
+                    ,editPeople.text.toString().toInt(),editMoney.text.toString()+'원')
 
                 //======================================================================================
                 val db = FirebaseFirestore.getInstance()

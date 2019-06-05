@@ -137,7 +137,8 @@ class ListFragment : Fragment() {
 
         sqlite.openDatabase("USER")
         val auto = sqlite.AutoLogin()
-
+        Log.e("autotest",auto!![0].toString())
+        Log.e("travelssize",travels.size.toString())
         while (i<travels.size){
             if(auto!![0]== travels[i].uno){
                 travel.add(travels[i])
