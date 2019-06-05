@@ -41,7 +41,25 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
     var check2=false
 
     fun removeitem(pos:Int){
+        Log.e("pos",pos.toString())
+        var sindex=items[pos].sno
         items.removeAt(pos)
+        schedules.removeAt(pos)
+
+        val db = FirebaseFirestore.getInstance()
+        var new: MutableMap<String, Any>? = null
+        new = mutableMapOf()
+        new["s_id"] = 0
+        new["s_todo"] = "null"
+        new["s_time"] = "null"
+        new["s_alarm"] =false
+        new["t_id"] = 0
+        //데이터준비
+        if (db != null) {
+//        val newCount = String.format("%03d", count + 1)
+            db!!.collection("Schedule").document("schedule"+ sindex.toString())
+                .set(new)
+        }
         notifyItemRemoved(pos)
     }
     fun moveitem(pos1:Int, pos2:Int){
@@ -67,7 +85,6 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
         var layoutInflater:LayoutInflater=context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         //val dialogView=layoutInflater.inflate(R.layout.add_alarm, null)
         //val dialogView=layoutInflater.inflate(R.layout.add_schedule_dialog, null)
-
 
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         holder.time.text=items.get(position).time.toString()
@@ -107,8 +124,7 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
                             my_intent.putExtra("state","alarm on");
                             my_intent.putExtra("todo",items.get(position).todo)
                             my_intent.putExtra("what",dialogwhat.text.toString())
-                            pendingIntent = PendingIntent.getBroadcast(context, 0, my_intent,
-                                PendingIntent.FLAG_UPDATE_CURRENT);
+                            //pendingIntent = PendingIntent.getBroadcast(context, 0, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
                             val calendar = Calendar.getInstance()
                             //알람시간 calendar에 set해주기
                             //calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 20, 27, 0)
@@ -125,6 +141,7 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
                             Log.e("datepicker",date)
                             Log.e("timepicker",time)
                             sqlite.insertData(date,time,items.get(position).todo,dialogwhat.text.toString())
+                            sqlite.readAlarm(context)
                             //sqlite.dropTable("Alarm")
                             //	db date type 2008-11-11 / time hh:mm:ss
                             // 알람셋팅
@@ -143,7 +160,7 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
                             if (db != null) {
                                 var new: MutableMap<String, Any>? = null
                                 new = mutableMapOf()
-                                new["alarm"] = true
+                                new["s_alarm"] = true
                                 // Add a new document with a generated ID
 
 //        val newCount = String.format("%03d", count + 1)
@@ -183,8 +200,7 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
                         break
                     }
                 }
-                pendingIntent = PendingIntent.getBroadcast(context, a_id, my_intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT)
+                pendingIntent = PendingIntent.getBroadcast(context, a_id, my_intent, PendingIntent.FLAG_UPDATE_CURRENT)
                 alarm_manager.cancel(pendingIntent)
 
                 val db = FirebaseFirestore.getInstance()

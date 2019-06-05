@@ -13,16 +13,13 @@ import android.support.v7.widget.helper.ItemTouchHelper.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.android.synthetic.main.fragment_list1.*
 import kotlinx.android.synthetic.main.fragment_list1_card.*
-import android.widget.EditText
 import android.content.DialogInterface
 import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
+import android.widget.*
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -72,14 +69,21 @@ class List1Fragment : Fragment(){
         setItem()
         //textView15.setText(schedules[1].todo)
         //val icon=activity!!.findViewById<ImageView>(R.id.listicon)
+        val ad = AlertDialog.Builder(context)
         add_schedule.setOnClickListener {
-            val dialogView=layoutInflater.inflate(R.layout.add_schedule_dialog, null)
+            val dialogView=layoutInflater.inflate(R.layout.add_alarm, null)
             val dialogwhat = dialogView.findViewById<EditText>(R.id.schedule_what)
-            val dialogwhen = dialogView.findViewById<EditText>(R.id.schedule_when)
-            val ad = AlertDialog.Builder(context)
+            val datePicker = dialogView.findViewById<DatePicker>(R.id.date_picker)
+            val timePicker=dialogView.findViewById<TimePicker>(R.id.time_picker)
+            val dialogtext1 = dialogView.findViewById<TextView>(R.id.textv1)
+            val dialogtext2 = dialogView.findViewById<TextView>(R.id.textv2)
+            dialogtext1.setText("일정 제목")
+            dialogtext2.setText("일정 시간")
+            var datetime=datePicker.year.toString()+"/"+datePicker.month+"/"+datePicker.dayOfMonth+"/"+timePicker.hour.toString()+":"+timePicker.minute
+
             ad.setView(dialogView)
                 .setPositiveButton("확인") { dialogInterface, i ->
-                    if(dialogwhat.text.toString()!=""&&dialogwhen.text.toString()!=""){
+                    if(dialogwhat.text.toString()!=""){
                         val db = FirebaseFirestore.getInstance()
                         //데이터준비
                         if (db != null) {
@@ -87,9 +91,10 @@ class List1Fragment : Fragment(){
                             new = mutableMapOf()
                             new["s_id"] = schedules.size+1
                             new["s_todo"] =dialogwhat.text.toString()
-                            new["s_time"] = dialogwhen.text.toString()
+                            new["s_time"] = datetime.toString()
                             new["s_alarm"] =false
                             new["t_id"] =travels[index].tno
+
                             // Add a new document with a generated ID
 
 //        val newCount = String.format("%03d", count + 1)
