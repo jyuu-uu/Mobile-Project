@@ -11,9 +11,15 @@ import kotlinx.android.synthetic.main.activity_join.*
 
 class JoinActivity : AppCompatActivity() {
 
+inner class GENDER{
+    val WOMAN = false
+    val MAN = true
+}
     lateinit var db:Firestore
     var id:String? = null
     var pw:String? = null
+    var age:Int? = null
+    var gender:Boolean? = null
     var check1:Boolean=false
     var check2:Boolean=false
 
@@ -80,7 +86,14 @@ class JoinActivity : AppCompatActivity() {
         j_join.setOnClickListener {
             id = j_id.text.toString()
             pw = j_pw.text.toString()
-            Log.e("join","$id\t$pw")
+            age = spinner.selectedItemPosition  //0: 10대 이하, 1:10대, 2: 20대 ...
+            when(toggleBtn.isChecked){
+                true->{ gender = GENDER().MAN }
+                false->{ gender = GENDER().WOMAN}
+            }
+
+            Log.e("join","$id\t$pw\t$age\t$gender")
+
             // 아이디 중복
             // 검사 실시
             findData()
@@ -103,7 +116,7 @@ class JoinActivity : AppCompatActivity() {
                     Log.e("firebase","$it\n$res")
                     val Exist = if(res != "null") true else false
                     if(!Exist){
-                        db!!.addData(id!!,pw!!)
+                        db!!.addData(id!!,pw!!, age!!, gender!!)
                         finish()
                     }
                     else

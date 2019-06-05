@@ -29,13 +29,15 @@ class Firestore {
 
     }
 
-    fun addData(_id:String,_pw:String) { // 회원계정 버전
+    fun addData(_id:String,_pw:String, _age:Int, _gender:Boolean) { // 회원계정 버전
         //데이터준비
         if (db != null) {
             var user: MutableMap<String, String>? = null
             user = mutableMapOf()
             user["u_id"] = _id
             user["u_pw"] = _pw
+            user["u_age"] = _age.toString()
+            user["u_gender"] = _gender.toString()
 
 //        val newCount = String.format("%03d", count + 1)
             db!!.collection("User").document(_id)
@@ -47,7 +49,7 @@ class Firestore {
         }
     }
 
-    fun findData(_id: String,_pw: String){
+    fun findData(_id: String,_pw: String, _age: Int, _gender: Boolean){
         if(db != null){
            val isExist = db!!.collection("User").document(_id).get()
                .addOnSuccessListener {
@@ -55,7 +57,7 @@ class Firestore {
                     Log.e("firebase","$it\n$res")
                     val Exist = if(res != "null") true else false
                     if(Exist){
-                        addData(_id,_pw)
+                        addData(_id,_pw,_age, _gender)
                     }
                     else
                         Toast.makeText(activity,"이미 존재하는 아이디입니다",Toast.LENGTH_SHORT).show()

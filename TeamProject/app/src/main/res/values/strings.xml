@@ -9,6 +9,14 @@
 
     <string name="title_activity_maps">Map</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="spin_prompt">나이대를 선택해주세요</string>
+    <string-array name="spin_arr">
+        <item>10대 이하</item>
+        <item>10대</item>
+        <item>20대</item>
+        <item>30대</item>
+        <item>40대</item>
+        <item>50대</item>
+        <item>60대</item>
+    </string-array>
 </resources>
