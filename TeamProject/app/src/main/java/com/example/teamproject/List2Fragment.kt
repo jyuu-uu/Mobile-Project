@@ -44,14 +44,9 @@ class List2Fragment : Fragment() {
         item1 = arrayListOf()
         item2 = arrayListOf()
 
-        item1.add(Item(R.drawable.ic_1, "a", "a-"))
-        item1.add(Item(R.drawable.ic_1, "b", "b-"))
-        item1.add(Item(R.drawable.ic_1, "c", "c-"))
-
-        item2.add(Item(R.drawable.ic_1, "d", "d-"))
-        item2.add(Item(R.drawable.ic_1, "e", "e-"))
-        item2.add(Item(R.drawable.ic_1, "f", "f-"))
-
+        item1.add(Item(R.drawable.ic_1, "a", 1, false, 0))
+        item1.addAll(items)
+        
         initOne()
         initTwo()
 

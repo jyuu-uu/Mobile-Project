@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_list.*
 var index=-1
 lateinit var travels:MutableList<MyTravel>
 lateinit var schedules:MutableList<schedule>
+lateinit var items: MutableList<Item>//===============================================
 
 class ListFragment : Fragment() {
     lateinit var adapter: MyAdapter
@@ -62,6 +63,8 @@ class ListFragment : Fragment() {
         schedules= mutableListOf()
         travels= mutableListOf()
         travel= mutableListOf()
+        items = mutableListOf()//===============================================
+
         readData()
         setItem()
         addListener()
@@ -110,6 +113,44 @@ class ListFragment : Fragment() {
                     }
                 }
             })
+
+        //===========================================================================
+
+        var i_iname:String
+        var i_tnum:Int
+        var i_uage:Int
+        var i_ugender:Boolean
+
+
+        db!!.collection("Item")
+            .addSnapshotListener(object : EventListener<QuerySnapshot> {
+                override fun onEvent(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
+                    items.clear()
+                    Log.e("database", "item in")
+                    if (e != null) {
+                        Log.e("database", "database Listen failed.item")
+                        return
+                    }
+                    val count = value?.size()
+                    var flag = false
+                    // list.clear()//일딴 초기화 해줘야 한다. 안 그럼 기존 데이터에 반복해서 뒤에 추가된다.
+                    if (value==null)Log.e("database", "item in2")
+                    if (value != null) {
+                        Log.e("database", "item in3")
+                        for (doc in value) {
+                            Log.e("database", "$doc 읽는 중 item")
+                            i_iname=doc.get("i_iname").toString()
+                            i_tnum=doc.get("i_tnum").toString().toInt()
+                            i_uage=doc.get("i_uage").toString().toInt()
+                            i_ugender=doc.get("i_ugender").toString().toBoolean()
+                            items.add(Item(R.drawable.ic_1_black, i_iname, i_tnum, i_ugender, i_uage))
+                        }
+//                     adapter.notifyDataSetChanged()
+                    }
+                }
+            })
+        //===============================================================================
+
 //        travels.add(MyTravel(0,-1,"미국","2017/1/23일~2017/2/11일",2,"500만원"))
 //        travels.add(MyTrael(1,-1,"호주","2018/7/15일~2018/7/28일",2,"300만원"))
 //        schedules.add(schedule(2,1,"2019/6/1/10:00","공원",false))

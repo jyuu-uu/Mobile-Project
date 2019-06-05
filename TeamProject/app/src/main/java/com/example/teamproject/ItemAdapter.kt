@@ -51,7 +51,7 @@ class ItemAdapter(val items:ArrayList<Item>) :
     override fun onBindViewHolder(p0: ViewHolder, p1: Int) {//데이터하고 view하고 연결
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         p0.name.text = items.get(p1).iname.toString()//adapter에서는 data class의 data와 xml을 연결
-        p0.text.text = items.get(p1).itext
+        //p0.text.text = items.get(p1).
         p0.icon.setImageResource(items.get(p1).idrawable)
         p0.cardView.setTag(p1)
         p0.cardView.setOnTouchListener(this)
