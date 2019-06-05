@@ -110,12 +110,13 @@ inner class GENDER{
 
     fun findData(){
         if(db != null){
-            val isExist = db!!.db!!.collection("User").document(id!!).get()
+            val isExist = db!!.db!!.collection("User").whereEqualTo("u_id",id!!)
+                .get()
                 .addOnSuccessListener {
-                    val res = it.get("doc")//a.result//!!.get("doc")
+                    val res = it//a.result//!!.get("doc")
                     Log.e("firebase","$it\n$res")
-                    val Exist = if(res != "null") true else false
-                    if(!Exist){
+                    val Exist = if(res.isEmpty) true else false
+                    if(Exist){
                         db!!.addData(id!!,pw!!, age!!, gender!!)
                         finish()
                     }
@@ -123,7 +124,6 @@ inner class GENDER{
                         Toast.makeText(this,"이미 존재하는 아이디입니다",Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener {  }
-
         }
     }
 }
