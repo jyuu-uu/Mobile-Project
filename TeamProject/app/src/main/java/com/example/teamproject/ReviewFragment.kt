@@ -32,7 +32,6 @@ import android.view.GestureDetector
 import com.example.teamproject.ReviewFragment.ClickListener
 
 
-
 class ReviewFragment: Fragment() {
 
     companion object {

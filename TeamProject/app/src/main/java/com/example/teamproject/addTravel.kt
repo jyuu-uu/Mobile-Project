@@ -7,15 +7,26 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
+import com.koushikdutta.ion.Ion
 import kotlinx.android.synthetic.main.activity_add_travel.*
+import kotlinx.android.synthetic.main.activity_review.*
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserFactory
+import java.io.InputStream
+import java.util.*
 
 class addTravel : AppCompatActivity() {
+    companion object {
+        var autoSet = mutableListOf<String>()
+    }
     lateinit var period:String
     lateinit var period1:String
     lateinit var period2:String
+    lateinit var where:String
     var check1=false
     var check2=false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +47,9 @@ class addTravel : AppCompatActivity() {
     }
 
     override fun onCreateDialog(id: Int): Dialog {
+        var calendar=Calendar.getInstance(Locale.KOREA)
+
+        Log.e("calendar",calendar.get(Calendar.YEAR).toString()+calendar.get(Calendar.MONTH).toString()+calendar.get(Calendar.DAY_OF_MONTH).toString())
         when(id){
             1->
                 return DatePickerDialog(
@@ -51,7 +65,7 @@ class addTravel : AppCompatActivity() {
                         check1=true
                     }, // 사용자가 날짜설정 후 다이얼로그 빠져나올때
                     //    호출할 리스너 등록
-                    2019, 5, 25
+                    calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
                 )
             2->
                 return DatePickerDialog(
@@ -67,7 +81,7 @@ class addTravel : AppCompatActivity() {
                         check2=true
                     }, // 사용자가 날짜설정 후 다이얼로그 빠져나올때
                     //    호출할 리스너 등록
-                    2019, 5, 25
+                    calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)+1
                 )
         }
         return super.onCreateDialog(id)
@@ -75,17 +89,31 @@ class addTravel : AppCompatActivity() {
     }
 
     fun init(){
+        val aAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_dropdown_item_1line, ReviewFragment.autoSet
+        )
+        editWhere.setAdapter(aAdapter) // 해당 위젯(객체)에 어뎁터 연결
+        // 이후 autoCompleteTextView의 속성 중, completionThreshold 값을 지정해줘야 함
+        editWhere.setOnItemClickListener { parent, view, position, id ->
+            where = parent.getItemAtPosition(position).toString()
+            textWhere.setText(where)
+
+        }
         cancel.setOnClickListener {
             finish()
         }
         add()
 
     }
-
     fun add(){
         add.setOnClickListener {
-            if(editWhere.text.toString()==""||editMoney.text.toString()==""||editPeople.text.toString()==""||check1==false||check2==false){
+
+            if(textWhere.text.toString()==""||editMoney.text.toString()==""||editPeople.text.toString()==""||check1==false||check2==false){
                 Toast.makeText(this,"빈칸을 모두 채워주세요.",Toast.LENGTH_LONG).show()
+                if (textWhere.text.toString()==""){
+                    Toast.makeText(this,"검색에서 나라를 선택해주세요.",Toast.LENGTH_LONG).show()
+                }
             }else{
                 period=period1+"~"+period2
                 val sqlite = SQLite(this,"Login")
@@ -93,7 +121,7 @@ class addTravel : AppCompatActivity() {
                 sqlite.openDatabase("USER")
                 val auto = sqlite.AutoLogin()
 
-                var newtravel=MyTravel(travels.size+1,auto!![0],editWhere.text.toString(),period.toString()
+                var newtravel=MyTravel(travels.size+1,auto!![0],textWhere.text.toString(),period.toString()
                     ,editPeople.text.toString().toInt(),editMoney.text.toString()+'원')
 
                 //======================================================================================
@@ -108,6 +136,7 @@ class addTravel : AppCompatActivity() {
                     new["t_when"] = newtravel.period
                     new["t_who"] = newtravel.people
                     new["t_cost"] = newtravel.money
+                    new["t_fin"]=false
                     // Add a new document with a generated ID
 
 //        val newCount = String.format("%03d", count + 1)
@@ -126,6 +155,4 @@ class addTravel : AppCompatActivity() {
 
         }
     }
-
-
 }
