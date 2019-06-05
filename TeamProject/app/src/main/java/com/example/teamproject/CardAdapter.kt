@@ -94,7 +94,39 @@ class CardAdapter(val context: Context,val items:ArrayList<schedule>)
         else
             holder.icon.setImageResource(R.drawable.alarm_off)
         val ad = AlertDialog.Builder(context)
+        val ad2 = AlertDialog.Builder(context)
         var dialog=ad.create()
+        holder.todo.setOnClickListener {
+            val dialogView=layoutInflater.inflate(R.layout.add_alarm, null)
+            val dialogwhat = dialogView.findViewById<EditText>(R.id.schedule_what)
+            val dialogtext1 = dialogView.findViewById<TextView>(R.id.textv1)
+            val dialogtext2 = dialogView.findViewById<TextView>(R.id.textv2)
+            var datePicker = dialogView.findViewById<DatePicker>(R.id.date_picker)
+            var timePicker = dialogView.findViewById<TimePicker>(R.id.time_picker)
+            dialogwhat.setText(items.get(position).todo)
+            ad2.setView(dialogView)
+                .setPositiveButton("수정"){ dialogInterface, i ->
+                    val db = FirebaseFirestore.getInstance()
+                    var edit: MutableMap<String, Any>? = null
+                    edit = mutableMapOf()
+                    edit["s_todo"] = dialogwhat.text.toString()
+                    edit["s_time"] = datePicker.year.toString()+"/"+datePicker.month+"/"+datePicker.dayOfMonth+"/"+timePicker.hour.toString()+":"+timePicker.minute
+
+                    //데이터준비
+                    if (db != null) {
+//        val newCount = String.format("%03d", count + 1)
+                        db!!.collection("Schedule").document("schedule"+ items.get(position).sno.toString())
+                            .set(edit, SetOptions.merge())
+                    }
+                }
+                .setNegativeButton("취소") { dialogInterface, i ->
+                    /* 취소일 때 아무 액션이 없으므로 빈칸 */
+                    Toast.makeText(context,"취소",Toast.LENGTH_SHORT).show()
+                    //dialogInterface.dismiss()
+                    dialog.dismiss()
+                }
+                .show()
+        }
         holder.icon.setOnClickListener {        //알람설정
             val dialogView=layoutInflater.inflate(R.layout.add_alarm, null)
             val dialogwhat = dialogView.findViewById<EditText>(R.id.schedule_what)

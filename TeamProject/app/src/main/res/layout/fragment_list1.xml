@@ -44,6 +44,13 @@
             android:id="@+id/textView14" android:layout_marginTop="46dp"
             android:layout_marginBottom="8dp" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/swiperefresh" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="16dp"/>
+            android:layout_marginEnd="112dp"/>
+    <Button
+            android:text="여행 삭제"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/delete"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toEndOf="@+id/textView14"
+            app:layout_constraintBottom_toTopOf="@+id/swiperefresh" android:layout_marginBottom="8dp"/>
 
 </android.support.constraint.ConstraintLayout>

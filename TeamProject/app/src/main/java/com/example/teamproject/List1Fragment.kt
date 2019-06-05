@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.android.synthetic.main.fragment_list1.*
 import kotlinx.android.synthetic.main.fragment_list1_card.*
 import android.content.DialogInterface
+import android.support.v4.app.FragmentManager
 import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
 import android.widget.*
@@ -116,7 +117,31 @@ class List1Fragment : Fragment(){
                 .show()
 
         }
+        delete.setOnClickListener {
 
+            val db = FirebaseFirestore.getInstance()
+            var del: MutableMap<String, Any>? = null
+            del = mutableMapOf()
+            del["t_id"] = 0
+            del["t_cost"] = "null"
+            del["t_when"] = "null"
+            del["t_where"] = "null"
+            del["t_who"] = 0
+            del["u_id"] = "null"
+            //데이터준비
+            if (db != null) {
+//        val newCount = String.format("%03d", count + 1)
+                db!!.collection("Travel").document("travel"+ travels[index].tno.toString())
+                    .set(del)
+            }
+//            val fragmentManager = activity!!.supportFragmentManager
+//            fragmentManager.beginTransaction().remove(this).commit()
+//            //fragmentManager.popBackStack()
+            val intent = Intent(activity, MainActivity::class.java)
+            intent.putExtra("success",true)
+
+            startActivity(intent)
+        }
     }
 
     fun readData(){

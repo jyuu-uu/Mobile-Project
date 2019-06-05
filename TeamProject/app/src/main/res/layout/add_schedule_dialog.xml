@@ -10,8 +10,10 @@
     <EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/schedule_what"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="일정 날짜"
               android:id="@+id/textv2"/>
-    <DatePicker
-            android:id="@+id/date_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:datePickerMode="calendar"></DatePicker>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/schedule_when"/>
 </LinearLayout>
