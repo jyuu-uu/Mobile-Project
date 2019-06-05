@@ -3,48 +3,68 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="horizontal">
-<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
     <LinearLayout
-            android:id="@+id/pane1"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_margin="10dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-        <TextView
-                android:text="기존"
-                android:gravity="center"
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-                android:id="@+id/listView1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+        <LinearLayout
+                android:id="@+id/pane1"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_margin="10dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <TextView
+                    android:text="기존"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/listView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/pane2"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <TextView
+                    android:text="추가"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <FrameLayout
+                    android:layout_width="fill_parent" android:layout_height="fill_parent">
+                <android.support.v7.widget.RecyclerView
+                        android:id="@+id/listView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                <LinearLayout
+                        android:gravity="bottom||right"
+                        android:layout_width="fill_parent" android:layout_height="fill_parent">
+                    <FrameLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content">
+                        <at.markushi.ui.CircleButton
+                                android:id="@+id/additemBtn"
+                                android:layout_width="64dip"
+                                android:layout_height="64dip"
+                                android:src="@drawable/add_circle"
+                                app:cb_color="#99CC00"
+                                app:cb_pressedRingWidth="8dip"/>
+                    </FrameLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+        </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-            android:id="@+id/pane2"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-        <TextView
-                android:text="추가"
-                android:gravity="center"
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        <android.support.v7.widget.RecyclerView
-                android:id="@+id/listView2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-    </LinearLayout>>
-</LinearLayout>
 
 </LinearLayout>
