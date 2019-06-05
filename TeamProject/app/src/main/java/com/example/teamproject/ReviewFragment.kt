@@ -158,9 +158,8 @@ class ReviewFragment: Fragment() {
  //               Log.e("리뷰", "접속")
                 for (k in task.result!!) {
  //                   Log.e("리뷰", "$k")
-                    if(k.get("t_id").toString() != null)
-                    data.add(MyCafe(k.get("t_id").toString().toInt(),k.get("t_where").toString(),k.get("t_when").toString(),k.get("t_who").toString()))
-                }
+                    if(k.get("t_id").toString() != "null"&& k.get("t_fin").toString().toBoolean())
+                        data.add(MyCafe(k.get("t_id").toString().toInt(),k.get("t_where").toString(),k.get("t_when").toString(),k.get("t_who").toString()))               }
                 adapter.notifyDataSetChanged()
             }
     }

@@ -19,6 +19,7 @@ class ItemAdapter(val items:ArrayList<Item>) :
     val listener= DragListener()
     lateinit var itemListener:DragItemListener
 
+
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         when(event?.action){
             MotionEvent.ACTION_MOVE->{
