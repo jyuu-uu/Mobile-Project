@@ -111,7 +111,9 @@ class List1Fragment : Fragment(){
 //        val newCount = String.format("%03d", count + 1)
                             db!!.collection("Schedule").document("schedule"+ (schedules.size+1).toString())
                                 .set(new)
-                                .addOnSuccessListener { Log.e("database", "DocumentSnapshot successfully written!") }
+                                .addOnSuccessListener {
+                                    adapter.notifyDataSetChanged()
+                                    Log.e("database", "DocumentSnapshot successfully written!") }
                                 .addOnFailureListener { e -> Log.e("database", "Error writing document") }
                         }
 
@@ -143,6 +145,9 @@ class List1Fragment : Fragment(){
 //        val newCount = String.format("%03d", count + 1)
                 db!!.collection("Travel").document("travel"+ travels[index].tno.toString())
                     .set(del)
+                    .addOnSuccessListener {
+                        adapter.notifyDataSetChanged()
+                    }
             }
 //            val fragmentManager = activity!!.supportFragmentManager
 //            fragmentManager.beginTransaction().remove(this).commit()
@@ -187,7 +192,7 @@ class List1Fragment : Fragment(){
                             s_alarm=doc.get("s_alarm").toString().toBoolean()
                             schedules.add(schedule(s_id,t_id,s_time,s_todo,s_alarm))
                         }
-//                     adapter.notifyDataSetChanged()
+                     adapter.notifyDataSetChanged()
                     }
                 }
             })

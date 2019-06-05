@@ -126,7 +126,7 @@ class ListFragment : Fragment() {
                             t_cost=doc.get("t_cost").toString()
                             travels.add(MyTravel(t_id,u_id,t_where,t_when,t_who,t_cost))
                         }
-//                     adapter.notifyDataSetChanged()
+                     adapter.notifyDataSetChanged()
                     }
                 }
             })
@@ -161,7 +161,7 @@ class ListFragment : Fragment() {
                             i_ugender=doc.get("i_ugender").toString().toBoolean()
                             items.add(Item(R.drawable.ic_1_black, i_iname, i_tnum, i_ugender, i_uage))
                         }
-//                     adapter.notifyDataSetChanged()
+                     adapter.notifyDataSetChanged()
                     }
                 }
             })
