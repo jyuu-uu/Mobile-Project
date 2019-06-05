@@ -13,6 +13,7 @@
             android:layout_width="match_parent" android:layout_height="wrap_content">
             <EditText
                     android:id="@+id/itemname"
+                    android:text="@null"
                     android:hint="이름을 입력해주세요"
                     android:gravity="center"
                     android:layout_width="match_parent" android:layout_height="match_parent"/>

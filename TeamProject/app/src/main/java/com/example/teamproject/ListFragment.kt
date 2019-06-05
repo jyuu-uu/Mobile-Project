@@ -24,7 +24,9 @@ lateinit var travels:MutableList<MyTravel>
 lateinit var schedules:MutableList<schedule>
 lateinit var items: MutableList<Item>
 lateinit var item: MutableList<Item>
-var item_tnum:Int=0//===============================================
+var item_tnum:Int=0
+var item_uid:String?=null
+
 
 
 class ListFragment : Fragment() {
@@ -78,7 +80,7 @@ class ListFragment : Fragment() {
         travels= mutableListOf()
         travel= mutableListOf()
         items = mutableListOf()
-        item = mutableListOf()//===============================================
+        item = mutableListOf()
 
         readData()
         setItem()
@@ -189,6 +191,8 @@ class ListFragment : Fragment() {
     fun setItem(){
         var i=0
         travel.clear()
+        item.clear()
+
         val sqlite = SQLite(activity!!.applicationContext,"Login")
 
         sqlite.openDatabase("USER")
@@ -200,6 +204,8 @@ class ListFragment : Fragment() {
             if(auto!![0]== travels[i].uno){
                 travel.add(travels[i])
                 item_tnum = travels[i].tno
+                item_uid = auto!![0]
+
             }
             i++
         }

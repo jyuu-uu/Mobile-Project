@@ -1,5 +1,6 @@
 package com.example.teamproject
 
+import android.app.AlertDialog
 import android.content.ClipData
 import android.content.Context
 import android.net.Uri
@@ -14,7 +15,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.android.synthetic.main.activity_add_travel.*
 import kotlinx.android.synthetic.main.activity_list.*
+import kotlinx.android.synthetic.main.add_item.*
 import kotlinx.android.synthetic.main.fragment_list2.*
 import kotlinx.android.synthetic.main.fragment_list2.view.*
 
@@ -24,8 +31,6 @@ class List2Fragment : Fragment() {
     lateinit var item2:ArrayList<Item>
     lateinit var itemAdapter1: ItemAdapter
     lateinit var itemAdapter2: ItemAdapter
-    lateinit var area1: LinearLayout
-    lateinit var area2: LinearLayout
     var v:View? = null
 
     override fun onCreateView(
@@ -41,11 +46,13 @@ class List2Fragment : Fragment() {
         item1 = arrayListOf()
         item2 = arrayListOf()
         init()
+
     }
 
     fun init(){
         initOne()
         initTwo()
+
 
         var touchHelper1 = object : ItemTouchHelper.SimpleCallback( 3, ItemTouchHelper.RIGHT){
             override fun onMove(p0: RecyclerView, p1: RecyclerView.ViewHolder, p2: RecyclerView.ViewHolder): Boolean {
@@ -112,6 +119,80 @@ class List2Fragment : Fragment() {
                 Toast.makeText(view.context, data.iname, Toast.LENGTH_SHORT).show()
             }
         }
+        add()
+
 //        listView2.setOnDragListener(itemAdapter2.getDragInstance())
     }
+    fun add() {
+        val ad = AlertDialog.Builder(context)
+        additemBtn.setOnClickListener {
+            val dialogView = layoutInflater.inflate(R.layout.add_item, null)
+            ad.setView(dialogView)
+                .setPositiveButton("추가") { dialogInterface, i ->
+                    img_load.setOnClickListener {
+                        //====================icon 추가
+                    }
+
+                    if (itemname.text.toString() == "") {
+                        Toast.makeText(context, "빈칸을 채워주세요.", Toast.LENGTH_LONG).show()
+                    } else {
+//                        val sqlite = SQLite(v!!.context, "Login")
+//                        // 데이터베이스를 오픈
+//                        sqlite.openDatabase("USER")
+//                        val auto = sqlite.AutoLogin()
+//=======================================================================
+                        val db = FirebaseFirestore.getInstance()
+                        //데이터준비
+
+                        var age: Int? = null
+                        var gender: Boolean? = null
+                        //var uid:String? = null
+
+                        db!!.collection("User")
+                            .addSnapshotListener(object : EventListener<QuerySnapshot> {
+                                override fun onEvent(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
+                                    Log.e("database", "item in-!!!!!!!!!!!!!!!")
+                                    if (e != null) {
+                                        Log.e("database", "database Listen failed.item-")
+                                        return
+                                    }
+                                    if (value == null) Log.e("database", "item in2-")
+                                    if (value != null) {
+                                        Log.e("database", "item in3-")
+                                        for (doc in value) {
+                                            if (doc.get("u_id").toString() == item_uid) {
+                                                Log.e("database", "$doc 읽는 중 item-user")
+                                                age = doc.get("u_age").toString().toInt()
+                                                gender = doc.get("u_gender").toString().toBoolean()
+                                            }
+                                        }
+                                    }
+                                }
+                            })
+
+                        var newItem = Item(0, itemname.toString(), item_tnum, gender!!, age!!)
+
+                        if (db != null) {
+                            db!!.collection("Item").document("item" + (items.size + 1).toString())
+                                .set(newItem)
+                                .addOnSuccessListener { Log.e("database", "DocumentSnapshot successfully written!") }
+                                .addOnFailureListener { e -> Log.e("database", "Error writing document") }
+
+                            addItem(newItem)
+
+                            Toast.makeText(activity, "일정 추가 완료! ", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                .setNegativeButton("취소") { dialogInterface, i ->
+                    /* 취소일 때 아무 액션이 없으므로 빈칸 */
+                }
+                .show()
+        }
+    }
+    fun addItem(plusitem:Item){
+        item2.add(plusitem)
+        listView2.adapter!!.notifyDataSetChanged()
+    }
+
 }
