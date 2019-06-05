@@ -159,7 +159,7 @@ class ReviewFragment: Fragment() {
  //               Log.e("리뷰", "접속")
                 for (k in task.result!!) {
  //                   Log.e("리뷰", "$k")
-                    data.add(MyCafe(k.get("t_where").toString(),k.get("t_when").toString(),k.get("t_who").toString()))
+                    data.add(MyCafe(k.get("t_id").toString().toInt(),k.get("t_where").toString(),k.get("t_when").toString(),k.get("t_who").toString()))
                 }
                 adapter.notifyDataSetChanged()
             }
@@ -171,10 +171,10 @@ class ReviewFragment: Fragment() {
                 get()?.addOnCompleteListener { task ->
                 //               Log.e("리뷰", "접속")
                 for (k in task.result!!) {
-                    var t =MyCafe(k.get("t_where").toString(),k.get("t_when").toString(),k.get("t_who").toString())
-                    Log.e("리뷰", "$t")
+//                    var t =MyCafe(k.get("t_id").toString().toInt(),k.get("t_where").toString(),k.get("t_when").toString(),k.get("t_who").toString())
+//                    Log.e("리뷰", "$t")
 
-                    data.add(MyCafe(k.get("t_where").toString(),k.get("t_when").toString(),k.get("t_who").toString()))
+                    data.add(MyCafe(k.get("t_id").toString().toInt(),k.get("t_where").toString(),k.get("t_when").toString(),k.get("t_who").toString()))
                 }
                 adapter.notifyDataSetChanged()
             }
@@ -187,7 +187,7 @@ class ReviewFragment: Fragment() {
                     override fun onClick(view: View, position: Int) {
                         val dict = data.get(position)
                         val i = Intent(view!!.context,DReviewActivity::class.java)
-                        i.putExtra("where",dict.country)
+                        i.putExtra("t_id",dict.id)
                         startActivity(i)
                     }
                     override fun onLongClick(view: View, position: Int) {}
