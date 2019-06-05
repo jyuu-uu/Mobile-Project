@@ -36,7 +36,6 @@ class DReviewFrag1 : Fragment() {
         }
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,7 +53,6 @@ class DReviewFrag1 : Fragment() {
         v.dreview_who.text = t_who.toString() + " 명"
         v.dreview_cost.text = t_cost
         v.dreview_isfav.isChecked = isfav
-        t_id = id
         v.dreview_isfav.setOnCheckedChangeListener { buttonView, isChecked ->
             if (!isChecked) {
                 db!!.db!!.collection("User").document(MainActivity.User.toString()).get()
@@ -68,6 +66,7 @@ class DReviewFrag1 : Fragment() {
                             updat.add(k.toInt())
                         }
                         updat.remove(t_id)
+                        Log.e("asbd","$t_id")
                         db!!.db!!.collection("User").document(MainActivity.User!!)
                             .update("fav", FieldValue.delete())
                         db!!.db!!.collection("User").document(MainActivity.User!!)
@@ -77,19 +76,26 @@ class DReviewFrag1 : Fragment() {
             else {
                 db!!.db!!.collection("User").document(MainActivity.User.toString()).get()
                     .addOnCompleteListener {
-                        val a = it?.result!!.data?.get("fav") as ArrayList<Long>
+                        val v = it?.result!!.data?.get("fav")
                         val updat = ArrayList<Int>()
-                        Log.e("배열값", "$a")
-                        var isfav = false
+                        if (v != null) {
+                            val a =  v as ArrayList<Long>
 
-                        for (k in a) {
-                            updat.add(k.toInt())
+                            Log.e("배열값", "$a")
+                            var isfav = false
+                            Log.e("asbd","$t_id")
+                            for (k in a) {
+                                updat.add(k.toInt())
+                            }
+                            db!!.db!!.collection("User").document(MainActivity.User!!)
+                                .update("fav", FieldValue.delete())
+
                         }
-                        updat.add(t_id)
-                        db!!.db!!.collection("User").document(MainActivity.User!!)
-                            .update("fav", FieldValue.delete())
-                        db!!.db!!.collection("User").document(MainActivity.User!!)
-                            .update("fav", updat)
+                            updat.add(t_id)
+
+                            db!!.db!!.collection("User").document(MainActivity.User!!)
+                                .update("fav", updat)
+
                     }
             }
         }

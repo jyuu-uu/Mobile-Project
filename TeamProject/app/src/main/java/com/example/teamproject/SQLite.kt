@@ -108,8 +108,6 @@ class SQLite(val v:Context, val tableName: String) {
                 }
 
             }
-
-
             Log.e("SQLite","$tableName 테이블 생성됨.")
         } else {
             Log.e("SQLite","데이터베이스를 먼저 오픈하십쇼")
@@ -220,7 +218,7 @@ class SQLite(val v:Context, val tableName: String) {
     }
 
     fun dropTable(TABLE_NAME:String){
-        var sql = "drop table " + TABLE_NAME;
+        var sql = "drop table " + TABLE_NAME+";"
 
             database!!.execSQL(sql);
             Log.e("database test", "Table delete");
