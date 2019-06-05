@@ -26,13 +26,11 @@ class DReviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dreview)
-        init()
+        db = Firestore.create(applicationContext)
         setData()
     }
 
-    fun init() {
-
-        db = Firestore.create(applicationContext)
+    fun init(fav:Boolean) {
         var tabLayer: TabLayout? = null
 
         tabLayer = findViewById(R.id.dreview_tab)
@@ -46,7 +44,7 @@ class DReviewActivity : AppCompatActivity() {
         }
 
 
-        val adapter = DTabAdapter(supportFragmentManager, tabLayer!!.tabCount)
+        val adapter = DTabAdapter(supportFragmentManager, tabLayer!!.tabCount,t_id,t_where,t_when,t_who,t_cost, fav)
         // 이게 문제였다니
         dreview_frame.adapter = adapter
         dreview_frame.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayer))
@@ -81,16 +79,20 @@ class DReviewActivity : AppCompatActivity() {
     fun initFav(){
         db!!.db!!.collection("User").document(MainActivity.User.toString()).get()
             .addOnCompleteListener {
-                val a = it?.result!!.data?.get("fav") as ArrayList<Long>
-                Log.e("배열값","$a")
+                val v = it?.result?.data?.get("fav")
+
                 var isfav = false
-                for(k in a){
-                    if(k.toInt() == t_id){
-                        isfav = true
-                        break
+
+                if(v != null) {
+                    val a = v as ArrayList<Long>
+                    for (k in a) {
+                        if (k.toInt() == t_id) {
+                            isfav = true
+                            break
+                        }
                     }
                 }
-                DReviewFrag1.start(t_where,t_when,t_who,t_cost, isfav)
+                init(isfav)
             }
     }
 }
