@@ -97,8 +97,8 @@
     <ToggleButton
             android:text="@null"
             android:background="@drawable/btnstyle"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_width="152dp"
+            android:layout_height="39dp"
             android:id="@+id/toggleBtn" android:textOff="@null"
             android:textOn="@null"
             app:layout_constraintStart_toEndOf="@+id/textView19" app:layout_constraintEnd_toEndOf="parent"
