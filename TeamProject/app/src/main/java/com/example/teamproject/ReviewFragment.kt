@@ -23,17 +23,15 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ReviewFragment: Fragment() {
 
     companion object {
         var autoSet = mutableListOf<String>()
     }
-
     var data: ArrayList<MyCafe> = ArrayList()
     lateinit var adapter: MyCafeAdapter
-    lateinit var auto_adapter: ArrayAdapter<String>
-    val list = arrayListOf("ababab", "babca", "cabse", "dsefsw", "esesw")
     lateinit var db :Firestore
 
     override fun onCreateView(
@@ -62,6 +60,9 @@ class ReviewFragment: Fragment() {
     }
 
     fun rcClick(v: View) {    //recycleview 에서 클릭한거 페이지 띄우기
+        //            val i = Intent(context,DReviewActivity::class.java)
+//            i.putExtra("find",r_country.text.toString())
+//            startActivity(i)
     }
 
     fun initSwipe() {
@@ -73,13 +74,13 @@ class ReviewFragment: Fragment() {
                     p2: RecyclerView.ViewHolder
                 ): Boolean {
                     //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    adapter.moveItem(p1.adapterPosition, p2.adapterPosition)
-                    return true
+
+                    return false
                 }
 
                 override fun onSwiped(p0: RecyclerView.ViewHolder, p1: Int) {
                     //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    adapter.removeItem(p0.adapterPosition)
+                   false
                 }
             }   //객체 생성
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallBack)
@@ -88,8 +89,8 @@ class ReviewFragment: Fragment() {
 
     fun initLayout() {
         val layoutManager = LinearLayoutManager(super.getContext(), LinearLayoutManager.VERTICAL, false)
-
         review_listView.layoutManager = layoutManager
+
         adapter = MyCafeAdapter(data)
         review_listView.adapter = adapter
     }
@@ -155,22 +156,39 @@ class ReviewFragment: Fragment() {
         r_auto.setAdapter(aAdapter) // 해당 위젯(객체)에 어뎁터 연결
         // 이후 autoCompleteTextView의 속성 중, completionThreshold 값을 지정해줘야 함
         r_auto.setOnItemClickListener { parent, view, position, id ->
-            r_country.text = parent.getItemAtPosition(position).toString()
+            var str = parent.getItemAtPosition(position).toString()
+            if(r_country.text != str) {
+                r_country.text = str
+                    readDBPart(str)
+            }
         }
-
         r_find.setOnClickListener {
-            val i = Intent(context,DReviewActivity::class.java)
-            i.putExtra("find",r_country.text.toString())
-            startActivity(i)
+            readDB()
         }
     }
 
     fun readDB() {
+        data.clear()
         val isExist = db!!.db?.collection("Travel")?.get()
             ?.addOnCompleteListener { task ->
-                Log.e("리뷰", "접속")
+ //               Log.e("리뷰", "접속")
                 for (k in task.result!!) {
-                    Log.e("리뷰", "$k")
+ //                   Log.e("리뷰", "$k")
+                    data.add(MyCafe(k.get("t_where").toString(),k.get("t_when").toString(),k.get("t_who").toString()))
+                }
+                adapter.notifyDataSetChanged()
+            }
+    }
+
+    fun readDBPart(str:String){
+        data.clear()
+         db!!.db?.collection("Travel")?.whereEqualTo("t_where",str)?.
+                get()?.addOnCompleteListener { task ->
+                //               Log.e("리뷰", "접속")
+                for (k in task.result!!) {
+                    var t =MyCafe(k.get("t_where").toString(),k.get("t_when").toString(),k.get("t_who").toString())
+                    Log.e("리뷰", "$t")
+
                     data.add(MyCafe(k.get("t_where").toString(),k.get("t_when").toString(),k.get("t_who").toString()))
                 }
                 adapter.notifyDataSetChanged()

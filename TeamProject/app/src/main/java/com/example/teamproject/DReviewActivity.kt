@@ -22,28 +22,7 @@ class DReviewActivity : AppCompatActivity() {
     }
 
     fun init(){
-        val layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-
-        d_review.layoutManager = layoutManager
-        adapter = MyCafeAdapter(data)
-        d_review.adapter = adapter
-
         db = Firestore.create(applicationContext)
-        val i = intent.getStringExtra("find")
-        if(i != null){
-            readDB(i)
-        }
-    }
 
-    fun readDB(i:String) {
-        val isExist = db!!.db?.collection("Travel")?.whereEqualTo("t_where",i)?.get()
-            ?.addOnCompleteListener { task ->
-                Log.e("리뷰", "접속")
-                for (k in task.result!!) {
-                    Log.e("리뷰", "$k")
-                    data.add(MyCafe(k.get("t_where").toString(),k.get("t_when").toString(),k.get("t_who").toString()))
-                }
-                adapter.notifyDataSetChanged()
-            }
     }
 }

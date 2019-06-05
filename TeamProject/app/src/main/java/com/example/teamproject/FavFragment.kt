@@ -1,29 +1,18 @@
 package com.example.teamproject
 
-import android.content.Context
-import android.net.Uri
+
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
-import com.example.myreportaftertravel.MyCafe
-import com.example.myreportaftertravel.MyCafeAdapter
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.QuerySnapshot
-import kotlinx.android.synthetic.main.fragment_fav.*
 import kotlinx.android.synthetic.main.fragment_fav.view.*
-import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.android.gms.tasks.Task
-import android.support.annotation.NonNull
-import com.google.android.gms.tasks.OnCompleteListener
-
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
+import com.google.firebase.firestore.*
+import kotlin.collections.ArrayList
 
 
 class FavFragment : Fragment() {
@@ -64,9 +53,9 @@ class FavFragment : Fragment() {
                 ?.addOnSuccessListener {
                     val res = it.get("fav") as ArrayList<Long>
 //                    val res2 = res.//a.result//!!.get("doc")
-                    Log.e("fav", "$res")
+  //                  Log.e("fav", "$res")
                     for (k in res) {
-                        Log.e("fav", "$k")
+ //                       Log.e("fav", "$k")
                         key.add(k.toBigInteger().toInt())
                     }
                     findData2()
@@ -78,9 +67,9 @@ class FavFragment : Fragment() {
     fun findData2() {
         val isExist = db!!.db?.collection("Travel")?.whereEqualTo("t_id",key[flag])?.get()
             ?.addOnCompleteListener {task->
-                Log.e("즐겨찾기", "접속")
+  //              Log.e("즐겨찾기", "접속")
                 for( k in task.result!!) {
-                    Log.e("즐겨찾기", "$k")
+ //                   Log.e("즐겨찾기", "$k")
                     data.add(FavData(k.get("t_id").toString().toInt(), k.get("t_when").toString(), k.get("t_where").toString(),
                         k.get("t_who").toString() + "명"))
                 }
@@ -100,12 +89,37 @@ class FavFragment : Fragment() {
             val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
             v!!.fav_list.layoutManager = layoutManager
 
-            Log.e("fav오댭토", "$data")
+ //           Log.e("fav오댭토", "$data")
             adapter = FavAdapter(data, activity!!.applicationContext, User!!)
             v!!.fav_list.adapter = adapter //data 정보를 갖는 어댑터를 생성하여 붙여줌
             // Context 정보, 수평수직 정보, 순서 정보
             v!!.fav_list.layoutManager = layoutManager
             // recyclerView를 위한 매니저이므로, 붙여줌
+
+            initSwipe()
         }
+    }
+
+    fun initSwipe(){
+        var touchHelper1 = object : ItemTouchHelper.SimpleCallback( 3, ItemTouchHelper.RIGHT){
+            override fun onMove(p0: RecyclerView, p1: RecyclerView.ViewHolder, p2: RecyclerView.ViewHolder): Boolean {
+                return false
+            }
+
+            override fun onSwiped(p0: RecyclerView.ViewHolder, p1: Int) {
+                val drag = p0.adapterPosition
+                Log.e("선택뷰 좌표","$drag")
+                key.removeAt(drag)
+                data.removeAt(drag)
+                db!!.db!!.collection("User").document(User!!)
+                    .update("fav", FieldValue.delete())
+                db!!.db!!.collection("User").document(User!!)
+                    .update("fav",key)
+
+                adapter!!.notifyItemRemoved(drag)
+            }
+        }
+        val itemTouchHelper1 = ItemTouchHelper(touchHelper1)
+        itemTouchHelper1.attachToRecyclerView(v!!.fav_list)
     }
 }
