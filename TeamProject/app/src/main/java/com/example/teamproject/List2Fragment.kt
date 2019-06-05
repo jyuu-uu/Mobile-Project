@@ -87,7 +87,6 @@ class List2Fragment : Fragment() {
         val listView1 = v!!.findViewById<RecyclerView>(R.id.listView1)
         val layoutManager1 = LinearLayoutManager(context)
 
-        item1.addAll(item)
         listView1.layoutManager = layoutManager1
         itemAdapter1 = ItemAdapter(item1)
         listView1.adapter = itemAdapter1
@@ -104,6 +103,7 @@ class List2Fragment : Fragment() {
         val listView2 = v!!.findViewById<RecyclerView>(R.id.listView2)
         val layoutManager2 = LinearLayoutManager(context)
 
+        item2.addAll(item)
         listView2.layoutManager = layoutManager2
         itemAdapter2 = ItemAdapter(item2)
         listView2.adapter = itemAdapter2
