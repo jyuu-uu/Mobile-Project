@@ -63,6 +63,7 @@ class List1Fragment : Fragment(){
         review_write.setOnClickListener {
 
             var intent0 = Intent(activity!!.applicationContext, ReviewRegisterView::class.java)
+            intent0.putExtra("t_id", travels[index].tno)
             intent0.putExtra("tno",
                 travels[index].where.toString())    //나라
             startActivity(intent0)
