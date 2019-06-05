@@ -4,6 +4,7 @@ package com.example.teamproject
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -138,40 +139,29 @@ class ListFragment : Fragment() {
         var i_ugender:Boolean
 
 
-        db!!.collection("Item")
-            .addSnapshotListener(object : EventListener<QuerySnapshot> {
-                override fun onEvent(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
-                    items.clear()
-                    Log.e("database", "item in")
-                    if (e != null) {
-                        Log.e("database", "database Listen failed.item")
-                        return
-                    }
-                    val count = value?.size()
-                    var flag = false
-                    // list.clear()//일딴 초기화 해줘야 한다. 안 그럼 기존 데이터에 반복해서 뒤에 추가된다.
-                    if (value==null)Log.e("database", "item in2")
-                    if (value != null) {
-                        Log.e("database", "item in3")
-                        for (doc in value) {
-                            Log.e("database", "$doc 읽는 중 item")
-                            i_iname=doc.get("i_iname").toString()
-                            i_tnum=doc.get("i_tnum").toString().toInt()
-                            i_uage=doc.get("i_uage").toString().toInt()
-                            i_ugender=doc.get("i_ugender").toString().toBoolean()
-                            items.add(Item(R.drawable.ic_1_black, i_iname, i_tnum, i_ugender, i_uage))
-                        }
-                     adapter.notifyDataSetChanged()
-                    }
-                }
-            })
+        db!!.collection("Item").whereEqualTo("i_tnum", item_tnum).get().addOnSuccessListener {
+           val a = it.documents
+            for(k in a){
+                Log.e("database", "$k 읽는 중 item")
+                i_iname=k.get("i_name").toString()
+                i_tnum=k.get("i_tnum").toString().toInt()
+                i_uage=k.get("i_uage").toString().toInt()
+                i_ugender=k.get("i_ugender").toString().toBoolean()
+                items.add(Item(R.drawable.ic_1_black, i_iname, i_tnum, i_ugender, i_uage))
+            }
+
+            adapter.notifyDataSetChanged()
+        }
+    }
+
+
         //===============================================================================
 
 //        travels.add(MyTravel(0,-1,"미국","2017/1/23일~2017/2/11일",2,"500만원"))
 //        travels.add(MyTrael(1,-1,"호주","2018/7/15일~2018/7/28일",2,"300만원"))
 //        schedules.add(schedule(2,1,"2019/6/1/10:00","공원",false))
 //        schedules.add(schedule(3,2,"2018/12/11/12:00","박물관",false))
-    }
+
     fun addListener(){
         //여행 리스트 중 하나 클릭하면 그 여행 정보랑 준비물리스트 보여주는 창으로 넘어감
         listView.setOnItemClickListener { parent, view, position, id ->
@@ -210,7 +200,7 @@ class ListFragment : Fragment() {
             i++
         }
         for(i in 0 until items.size){
-            if(items[i].itnum == item_tnum){
+            if(items[i].i_tnum == item_tnum){
                 item.add(items[i])
             }
         }
