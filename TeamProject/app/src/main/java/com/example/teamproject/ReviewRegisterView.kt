@@ -9,17 +9,18 @@ import kotlinx.android.synthetic.main.review_register.*
 class ReviewRegisterView:AppCompatActivity() {
 
     var weather = 0
+    var i=intent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.review_register)
-        var i=intent
-        index=i.getIntExtra("tno",-1)
         //Toast.makeText(this, index.toString(),Toast.LENGTH_SHORT).show()
 
         init()
     }
     fun init(){
-        review_country.text = index.toString()
+//        review_country.text = i.getStringExtra("tno")
+        review_country.text = intent.getExtras().getString("tno")
+        review_weather_img.setImageResource(R.drawable.sun)
         review_weather.setOnClickListener {
             when(weather){
                 0->{

@@ -15,6 +15,7 @@
             android:theme="@style/Theme.Design.Light.NoActionBar">
         <activity android:name=".DReviewActivity">
         </activity>
+        <activity android:name=".ReviewRegisterView"/>
         <activity android:name=".CIntentActivity">
         </activity>
         <activity

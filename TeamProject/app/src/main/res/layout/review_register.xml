@@ -13,13 +13,13 @@
                   android:layout_gravity="center" android:gravity="center"
         />
         <LinearLayout android:layout_width="50dp" android:layout_height="50dp"
-                android:id="@+id/review_weather"
-                android:background="@color/colorCustom2"
+                      android:id="@+id/review_weather"
+                      android:background="@color/colorCustom2"
                       android:orientation="vertical"
-                android:layout_gravity="center" android:gravity="center"
+                      android:layout_gravity="center" android:gravity="center"
         >
             <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
-            android:layout_margin="10dp" android:background="@drawable/sun" android:id="@+id/review_weather_img"
+                       android:layout_margin="10dp" android:id="@+id/review_weather_img"
             />
         </LinearLayout>
         <EditText android:layout_width="match_parent" android:layout_height="match_parent"
@@ -31,13 +31,13 @@
             android:orientation="horizontal"
             android:layout_width="match_parent" android:layout_height="wrap_content"
     >
-        <TextView android:layout_width="0dp" android:layout_height="50dp"
+        <EditText android:layout_width="0dp" android:layout_height="50dp"
                   android:layout_weight="1"
-                  android:text="준비물" android:id="@+id/review_object"
+                  android:hint="준비물" android:id="@+id/review_object"
                   android:textColor="@color/colorCustom5"
                   android:background="@drawable/border_round_review_object"
                   android:layout_gravity="center" android:gravity="center_vertical"
-        />
+                  android:textColorHint="#FFFFFF"/>
         <Button android:layout_width="50dp" android:layout_height="50dp"
                 android:layout_gravity="right" android:gravity="center"
                 android:text="0" android:id="@+id/review_star"
@@ -47,16 +47,16 @@
     <EditText android:layout_width="match_parent" android:layout_height="0dp"
               android:layout_weight="1"
               android:background="@color/colorCustom3"
-        android:id="@+id/review_text"
+              android:id="@+id/review_text"
     />
-        <Button android:layout_width="60dp" android:layout_height="30dp"
-                android:id="@+id/btn_register_review"
-                android:background="@drawable/border_round_review_btn"
-                android:text = "등록"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textColor="@color/colorCustom2"
-        />
+    <Button android:layout_width="60dp" android:layout_height="wrap_content"
+            android:id="@+id/btn_register_review"
+            android:background="@drawable/border_round_review_btn"
+            android:text = "등록"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/colorCustom2"
+    />
 
 
 </LinearLayout>

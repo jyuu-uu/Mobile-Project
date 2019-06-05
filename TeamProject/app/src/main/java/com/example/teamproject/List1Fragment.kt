@@ -25,6 +25,7 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.android.synthetic.main.review_register.*
 import kotlin.collections.ArrayList
 
 
@@ -58,6 +59,15 @@ class List1Fragment : Fragment(){
             setItem()
             initLayout()
             swipe.setRefreshing(false);
+        }
+        review_write.setOnClickListener {
+
+            var intent0 = Intent(activity!!.applicationContext, ReviewRegisterView::class.java)
+            intent0.putExtra("tno",
+                travels[index].where.toString())    //나라
+            startActivity(intent0)
+            review_country.text = travels[index].where
+
         }
     }
     fun init(){
