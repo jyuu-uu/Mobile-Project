@@ -265,11 +265,16 @@ class MapsActivity() : OnMapReadyCallback, Fragment(),GoogleMap.OnMyLocationButt
             val marketStr = place_info.get(keySet.get(i))!!.location
             Log.e("나 위치 들어왔어!", marketStr.latitude.toString()+","+marketStr.longitude.toString())
             var strOpen = HUE_ROSE
-            if(place_info.get(keySet.get(i))!!.open_now)
+            var close_blur = 0.3f
+            if(place_info.get(keySet.get(i))!!.open_now){
+                close_blur = 0.3f
                 strOpen = HUE_ROSE
-            else
+            }
+            else{
                 strOpen = HUE_GREEN
-            val markerstore = MarkerOptions().position(marketStr).title(place_info.get(keySet.get(i))!!.name)
+                close_blur = 1.0f
+            }
+            val markerstore = MarkerOptions().position(marketStr).alpha(close_blur).title(place_info.get(keySet.get(i))!!.name)
                 .icon(BitmapDescriptorFactory.defaultMarker(strOpen))
             mMap.addMarker(markerstore)
         }
