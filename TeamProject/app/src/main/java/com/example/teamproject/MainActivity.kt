@@ -25,6 +25,9 @@ import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import org.w3c.dom.Text
+import com.example.teamproject.R
+
+
 
 lateinit var sqlite :SQLite
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -37,6 +40,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        var u = intent.getStringExtra("id")
+        Log.e("idddddddd",u)
+        val navigationView = findViewById(R.id.nav_view) as NavigationView
+        navigationView.setNavigationItemSelectedListener(this)
+
+//View nav_header_view = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        val nav_header_view = navigationView.getHeaderView(0)
+
+        val nav_header_id_text = nav_header_view.findViewById(R.id.id_view) as TextView
+        nav_header_id_text.setText(u)
 
         supportActionBar!!.setSubtitle("여행을 위한 가방")
 

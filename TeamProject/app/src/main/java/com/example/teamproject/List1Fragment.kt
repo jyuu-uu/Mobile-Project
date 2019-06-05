@@ -26,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.review_register.*
+import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -76,7 +77,17 @@ class List1Fragment : Fragment(){
         Log.e("index", travels[index].tno.toString())
         Log.e("index", travels.size.toString())
         textView15.setText(travels[index].where+"의 일정")
-
+        var tperiod=travels[index].period
+        val separate= tperiod.split("~")
+        var date = mutableListOf<String>()
+        date.add(separate[0])
+        date.add(separate[1])
+        val separate1=date[0].split("/")
+        val separate2=date[1].split("/")
+        var cal1=Calendar.getInstance()
+        var cal2=Calendar.getInstance()
+        cal1.set(separate1[0].toInt(),separate1[1].toInt()-1,separate1[2].toInt())
+        cal2.set(separate2[0].toInt(),separate2[1].toInt()-1,separate2[2].toInt())
         readData()
         setItem()
         //textView15.setText(schedules[1].todo)
@@ -86,6 +97,8 @@ class List1Fragment : Fragment(){
             val dialogView=layoutInflater.inflate(R.layout.add_alarm, null)
             val dialogwhat = dialogView.findViewById<EditText>(R.id.schedule_what)
             val datePicker = dialogView.findViewById<DatePicker>(R.id.date_picker)
+            datePicker.setMinDate(cal1.timeInMillis)
+            datePicker.setMaxDate(cal2.timeInMillis)
             val timePicker=dialogView.findViewById<TimePicker>(R.id.time_picker)
             val dialogtext1 = dialogView.findViewById<TextView>(R.id.textv1)
             val dialogtext2 = dialogView.findViewById<TextView>(R.id.textv2)
