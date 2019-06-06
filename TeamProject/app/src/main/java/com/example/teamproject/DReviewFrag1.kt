@@ -1,6 +1,7 @@
 package com.example.teamproject
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.firestore.FieldValue
 import kotlinx.android.synthetic.main.fragment_dreview_frag1.view.*
+import kotlinx.android.synthetic.main.fragment_list1.*
 
 class DReviewFrag1 : Fragment() {
 

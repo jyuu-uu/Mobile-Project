@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.nav_header_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import org.w3c.dom.Text
 import com.example.teamproject.R
-
+import kotlinx.android.synthetic.main.fragment_list1.*
 
 
 lateinit var sqlite :SQLite

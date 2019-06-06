@@ -1,6 +1,7 @@
 package com.example.teamproject
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -131,3 +132,11 @@ class FavFragment : Fragment() {
         itemTouchHelper1.attachToRecyclerView(v!!.fav_list)
     }
 }
+
+
+//var intent0 = Intent(this, DReviewActivity::class.java)
+//intent0.putExtra("t_id", travels[index].tno)
+//intent0.putExtra("tno",
+//travels[index].where.toString())    //나라
+//startActivity(intent0)
+////review_country.text = travels[index].where
