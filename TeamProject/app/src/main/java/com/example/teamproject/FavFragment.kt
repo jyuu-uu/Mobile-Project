@@ -51,38 +51,46 @@ class FavFragment : Fragment() {
         if (db != null) {
             val isExist = db!!.db?.collection("User")?.document(User!!)?.get()
                 ?.addOnSuccessListener {
-                    val res = it.get("fav") as ArrayList<Long>
-//                    val res2 = res.//a.result//!!.get("doc")
-  //                  Log.e("fav", "$res")
-                    for (k in res) {
- //                       Log.e("fav", "$k")
-                        key.add(k.toBigInteger().toInt())
+
+                    val a = it.get("fav")
+                    if(a != null) {
+                        var res = a as ArrayList<Long>
+                        for (k in res) {
+                            //                       Log.e("fav", "$k")
+                            key.add(k.toBigInteger().toInt())
+                        }
+                        findData2()
                     }
-                    findData2()
                 }
         }
     }
 
     var flag = 0
     fun findData2() {
-        val isExist = db!!.db?.collection("Travel")?.whereEqualTo("t_id",key[flag])?.get()
-            ?.addOnCompleteListener {task->
-  //              Log.e("즐겨찾기", "접속")
-                for( k in task.result!!) {
- //                   Log.e("즐겨찾기", "$k")
-                    data.add(FavData(k.get("t_id").toString().toInt(), k.get("t_when").toString(), k.get("t_where").toString(),
-                        k.get("t_who").toString() + "명"))
+        if (key.size != 0) {
+            db!!.db?.collection("Travel")?.whereEqualTo("t_id", key[flag])?.get()
+                ?.addOnCompleteListener { task ->
+                    //              Log.e("즐겨찾기", "접속")
+                    for (k in task.result!!) {
+                        //                   Log.e("즐겨찾기", "$k")
+                        data.add(
+                            FavData(
+                                k.get("t_id").toString().toInt(),
+                                k.get("t_when").toString(),
+                                k.get("t_where").toString(),
+                                k.get("t_who").toString() + "명"
+                            )
+                        )
+                    }
+                    flag++
+                    if (flag != key.size) {
+                        findData2()
+                    } else {
+                        initAdapter()
+                    }
                 }
-                flag++
-                if(flag != key.size){
-                    findData2()
-                }
-                else{
-                    initAdapter()
-                }
-            }
+        }
     }
-
     fun initAdapter() {
         if (activity != null) {
             //레이아웃을 관리하는 매니저 객체가 필요

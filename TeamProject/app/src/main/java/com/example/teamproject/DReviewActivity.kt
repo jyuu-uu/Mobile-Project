@@ -55,7 +55,7 @@ class DReviewActivity : AppCompatActivity() {
                 dreview_frame.currentItem = tab.position
             }
         })
-   //     dreview_frame!!.adapter!!.notifyDataSetChanged()
+        dreview_frame!!.adapter!!.notifyDataSetChanged()
     }
 
     fun setData(){

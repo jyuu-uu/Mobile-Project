@@ -83,7 +83,7 @@ class main_second : Fragment() {
         }
         else{
             Log.e("일정 있어","ㅇㅅㅇ")
-            db!!.db!!.collection("Item").whereEqualTo("t_id",t_id).get()
+            db!!.db!!.collection("Item").whereEqualTo("i_tnum",t_id).get()
                 .addOnSuccessListener {
                     val v = it.documents
                     for(k in v)

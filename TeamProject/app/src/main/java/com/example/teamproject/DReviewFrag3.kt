@@ -46,7 +46,7 @@ class DReviewFrag3 : Fragment() {
         return v
     }
     fun setData() {
-        if (!check) {
+
             check = true
             data = ArrayList<String>()
             db!!.db!!.collection("Review").whereEqualTo("t_id", t_id).get()
@@ -65,7 +65,7 @@ class DReviewFrag3 : Fragment() {
                     }
                     initLayout()
                 }
-        }
+
     }
 
     fun initLayout(){

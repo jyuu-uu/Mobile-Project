@@ -58,6 +58,8 @@ class DReviewFrag2 : Fragment() {
                     initAdapter()
                 }
         }
+        else
+            initAdapter()
     }
 
     fun initAdapter(){
