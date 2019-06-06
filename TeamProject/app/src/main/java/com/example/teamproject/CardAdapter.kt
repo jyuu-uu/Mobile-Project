@@ -25,7 +25,7 @@ import org.w3c.dom.Text
 import java.security.AccessController.getContext
 
 
-class CardAdapter(val context: Context,val items:ArrayList<schedule>)
+class CardAdapter(val context: Context,val items:ArrayList<schedule>,var index:Int)
     :RecyclerView.Adapter<CardAdapter.ViewHolder>(){
     val my_intent = Intent(this.context, Receiver::class.java)
     lateinit var pendingIntent: PendingIntent

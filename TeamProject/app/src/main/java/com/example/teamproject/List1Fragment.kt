@@ -260,7 +260,7 @@ class List1Fragment : Fragment(){
     fun initLayout(){
         var layoutManager= LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         list1View.layoutManager=layoutManager
-        adapter=CardAdapter(context!!,ArrayList(schedule))
+        adapter=CardAdapter(context!!,ArrayList(schedule),index)
         list1View.adapter=adapter
         adapter.notifyDataSetChanged()
     }
